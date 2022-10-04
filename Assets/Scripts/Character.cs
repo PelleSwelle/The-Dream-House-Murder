@@ -74,21 +74,14 @@ public class Character : MonoBehaviour
     {
         addToCharactersPanel(this);
     }
-    /// <summary>
-    /// run when the player meets the character. fills the biopage for the given character
-    /// </summary>
-    void populateBio(Character character)
-    {
-        print("NOT IMPLEMENTED: instantiateBio");
-        // get image
-        // get values
-        print($"{character}'s bio can now be viewed");
-
-        // instantiate the biopage
-    }
     public void setIndex(int index)
     {
         this.index = index;
+    }
+
+    public void OnMouseDown()
+    {
+        print("clicked on character");
     }
 
     /// <summary>
