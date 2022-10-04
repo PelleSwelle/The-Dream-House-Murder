@@ -11,13 +11,13 @@ public class Player : MonoBehaviour
     public Character[] charactersKnown;
     CanvasGroup conversationPanel;
     CharactersPanel charactersPanel;
+    public UiComponent uiComponent;
 
     public string[] standardLines;
 
 
     void Start()
     {
-        notebook = GameObject.Find("NotebookPanel").GetComponent<Notebook>();
         charactersPanel = GameObject.Find("CharactersPanel").GetComponent<CharactersPanel>();
         conversationPanel = GameObject.Find("ConversationPanel").GetComponent<CanvasGroup>();
         standardLines = new string[]
@@ -80,22 +80,22 @@ public class Player : MonoBehaviour
         // CHARACTERS
         else if (Input.GetKeyDown(KeyCode.U))
         {
-            this.notebook.goToPage(this.notebook.pages[0]);
+            this.uiComponent.goToPage(this.notebook.pages[0]);
         }
         // CLUES
         else if (Input.GetKeyDown(KeyCode.I))
         {
-            this.notebook.goToPage(this.notebook.pages[1]);
+            this.uiComponent.goToPage(this.notebook.pages[1]);
         }
         // CONVERSATIONS
         else if (Input.GetKeyDown(KeyCode.O))
         {
-            this.notebook.goToPage(this.notebook.pages[2]);
+            this.uiComponent.goToPage(this.notebook.pages[2]);
         }
         // BIO
         else if (Input.GetKeyDown(KeyCode.P))
         {
-            this.notebook.goToPage(this.notebook.pages[3]);
+            this.uiComponent.goToPage(this.notebook.pages[3]);
         }
 
         // TOGGLE NOTEBOOK
@@ -106,6 +106,14 @@ public class Player : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.J))
         {
             charactersPanel.populateButton(GameObject.Find("averageBob").GetComponent<Character>());
+        }
+        else if (Input.GetKeyDown(KeyCode.K))
+        {
+            charactersPanel.populateButton(GameObject.Find("shortKathy").GetComponent<Character>());
+        }
+        else if (Input.GetKeyDown(KeyCode.H))
+        {
+            charactersPanel.populateButton(GameObject.Find("oldReginald").GetComponent<Character>());
         }
     }
 }
