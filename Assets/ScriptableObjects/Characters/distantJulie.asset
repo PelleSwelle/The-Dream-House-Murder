@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9979803480095c34394e10ab95ea2678, type: 3}
+  m_Name: distantJulie
+  m_EditorClassIdentifier: 
+  hasBeenTalkedTo: 0
+  bioPage: {fileID: 0}
+  fields: []
+  photo: {fileID: 21300000, guid: 6d6e969be081b9c4888d8a97f950688b, type: 3}
+  firstName: Julie
+  middleName: Henry
+  lastName: Gardener
+  nickName: Distant Julie
+  dateOfBirth: 129219
+  nationality: Swedish
+  description: She is a person
+  longDescription: Yes, she sure is a person
+  ethnicity: black
+  religion: protestant
+  sexuality: bisexual
+  educationLevel: middle school
+  educationField: tech
+  politicalLeaning: left
+  inARelationship: 0
+  partner: {fileID: 0}
+  careerPath: management
+  positiveCharacteristics:
+  - is a person
+  - can read
+  negativeCharacteristics:
+  - bad posture
+  - only two eyes
+  diet: only farts
+  extrovert: very
+  stable: very
+  loyal: very
+  compassionate: very
+  iq: 9000
+  badHabits:
+  - sees dead people
+  hobbies:
+  - sleeping
+  - napping
+  favoriteFoods:
+  - bones
+  lines: []
+  openingLine: 
+  notebook: {fileID: 0}
+  charactersPage: {fileID: 0}
+  index: 0
