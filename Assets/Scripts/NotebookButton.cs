@@ -18,12 +18,12 @@ public class NotebookButton : MonoBehaviour
         if (notebook.activeInHierarchy)
         {
             notebook.SetActive(false);
-            Debug.Log("closed notebook");
+            print("closed notebook");
         }
         else if (!notebook.activeInHierarchy)
         {
             notebook.SetActive(true);
-            Debug.Log("opened notebook");
+            print("opened notebook");
         }
     }
 }

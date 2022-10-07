@@ -3,6 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Character")]
 public class Character : ScriptableObject
 {
+    public GameObject model;
     public bool hasBeenTalkedTo = false;
     public GameObject bioPage;
     public GameObject[] fields; // coupling

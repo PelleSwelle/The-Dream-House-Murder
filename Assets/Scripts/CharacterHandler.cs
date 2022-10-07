@@ -4,12 +4,7 @@ using UnityEngine;
 
 public class CharacterHandler : MonoBehaviour
 {
-    Character character;
-    // Start is called before the first frame update
-    void Awake()
-    {
-        character = ScriptableObject.CreateInstance<Character>();
-    }
+    public Character character;
 
     /// <summary>
     /// collection of functions to run, when the player meets the character for the first time.
@@ -18,14 +13,10 @@ public class CharacterHandler : MonoBehaviour
     {
         // addToCharactersPanel(this);
     }
-    public void setIndex(int index)
-    {
-        // this.index = index;
-    }
 
     public void OnMouseDown()
     {
-        Debug.Log($"clicked on character {this.name}");
+        print($"clicked on character {this.name}");
     }
 
     /// <summary>
@@ -36,6 +27,6 @@ public class CharacterHandler : MonoBehaviour
     void addToCharactersPanel(Character character)
     {
         // charactersPanel.populateButton(this);
-        Debug.Log($"added {character} to characters panel");
+        print($"added {character} to characters panel");
     }
 }
