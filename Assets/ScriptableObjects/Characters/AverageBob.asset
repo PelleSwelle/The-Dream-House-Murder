@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9979803480095c34394e10ab95ea2678, type: 3}
   m_Name: AverageBob
   m_EditorClassIdentifier: 
+  model: {fileID: 2609115444147682989, guid: 933da6726e5141648b723391ef88d86f, type: 3}
   hasBeenTalkedTo: 0
   bioPage: {fileID: 0}
   fields: []
@@ -59,5 +60,5 @@ MonoBehaviour:
   - I did not do it. I didn't even know the guy
   openingLine: what do you want?
   notebook: {fileID: 0}
-  charactersPanel: {fileID: 0}
+  charactersPage: {fileID: 0}
   index: 0

@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// The Notebook class contains the player's current knowledge
@@ -13,30 +12,16 @@ using TMPro;
 /// </summary>
 public class Notebook : MonoBehaviour
 {
-    // TODO: the bio page should show all the stuff about the character.
-
-    [SerializeField]
-
     // BUTTONS
     public Button conversationsButton, cluesButton, CharactersButton;
 
-    // the buttons in the character screen. 
-    // TODO: should not be active before the person is met.
-    public Button[] char1button, char2button, char3button, char4button, char5button, char6button;
-
-
     // canvas groups for controlling the alpha and interactability
-    public GameObject
-        notebook,
-        buttonGroup,
-        cluesPage, conversationsPage, charactersPage,
-        bioPage;
+    public GameObject notebook, cluesPage, conversationsPage, charactersPage, bioPage;
 
     public GameObject[] pages;
     public GameObject[] bios;
     void OnValidate()
     {
-
         // canvas groups
         notebook = this.gameObject;
 
@@ -78,32 +63,30 @@ public class Notebook : MonoBehaviour
             else if (_page == page)
             {
                 _page.SetActive(true);
+                StartCoroutine(openPage(.5f, page));
                 // setGroupActive(_page);
                 print("opened: " + page.ToString());
             }
         }
     }
 
-    // helper functions for toggling canvasgroups
+    // TODO: this should be in uiHandler
     /// <summary>
-    /// sets alpha to 1 and enables raycasting for the group
+    /// The animation for the notebook page turning
     /// </summary>
-    /// <param name="group"></param>
-    // public void setGroupActive(CanvasGroup group)
-    // {
-    //     // set the alpha all the way up, so it is visible
-    //     group.alpha = 1f;
-    //     // make the group interactable
-    //     group.blocksRaycasts = true;
-    // }
-    /// <summary>
-    /// sets alpha to 0 and disables raycasting for the group
-    /// </summary>
-    /// <param name="group"></param>
-    // public void setGroupInactive(CanvasGroup group)
-    // {
-    //     group.alpha = 0f; // make the group invisible
-    //     group.blocksRaycasts = false; // make the group uninteractable
-    // }
-
+    /// <param name="duration"></param>
+    /// <param name="page"></param>
+    /// <returns></returns>
+    private IEnumerator openPage(float duration, GameObject page)
+    {
+        Vector3 targetPos = new Vector3(700, 1400, 0);
+        Vector3 startPos = new Vector3(0, 0, 0);
+        float t = 0f;
+        while (t < duration)
+        {
+            page.transform.position = Vector3.Lerp(startPos, targetPos, t / duration);
+            t += Time.deltaTime;
+            yield return null;
+        }
+    }
 }

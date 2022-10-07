@@ -44,9 +44,9 @@ public class Player : MonoBehaviour
             addCharacterToNotebook();
             // character.onFirstConversation();
         }
-        Conversation conversation = new Conversation(_character);
+        // Conversation conversation = new Conversation(_character);
         // pop up the conversation UI with an image of the character
-        conversation.displayConversation();
+        // conversation.displayConversation();
     }
     void addCharacterToNotebook()
     {

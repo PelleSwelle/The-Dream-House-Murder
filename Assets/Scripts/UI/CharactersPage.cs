@@ -43,7 +43,7 @@ public class CharactersPage : MonoBehaviour
     {
         button.transform.GetChild(0).GetComponent<Image>().sprite = character.photo;
         button.GetComponentInChildren<Text>().text = character.nickName;
-        Debug.Log($"populated button: {button} with character {character}");
+        print($"populated button: {button} with character {character}");
         button.GetComponent<CharacterTile>().onPopulate();
     }
 

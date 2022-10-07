@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.ARFoundation;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,15 +10,31 @@ public class GameManager : MonoBehaviour
     public UiHandler notebookHandler;
     public GameObject notebook;
 
-    void start()
-    {
-        // notebook handler
-    }
+    // TODO: delete this on release
+    public Button debugButton;
+    public GameObject debugMenu;
+    public Conversation[] conversations; // conversations that has happened 
+    public GameObject objectToPlace;
+    public ARRaycastManager raycastManager;
+
     void Update()
     {
-        testInput();
+        handleTouch();
     }
-
+    void handleTouch()
+    {
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            print("touched");
+            List<ARRaycastHit> hits = new List<ARRaycastHit>();
+            raycastManager.Raycast(Input.GetTouch(0).position, hits, UnityEngine.XR.ARSubsystems.TrackableType.Planes);
+            if (hits.Count > 0)
+            {
+                GameObject.Instantiate(objectToPlace, hits[0].pose.position, hits[0].pose.rotation);
+                print("Spawned the thing");
+            }
+        }
+    }
 
     public void spawnCharacter()
     {
@@ -25,6 +43,10 @@ public class GameManager : MonoBehaviour
 
     void testInput()
     {
+        // if (Input.GetMouseButtonDown(0))
+        // {
+        //     // spawnCharacter()
+        // }
         // CONVERSATION WITH AVERAGE BOB
         if (Input.GetKeyDown(KeyCode.A))
         {

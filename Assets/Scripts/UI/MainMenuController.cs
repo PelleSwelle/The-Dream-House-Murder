@@ -62,6 +62,6 @@ public class MainMenuController : MonoBehaviour
     void enterGame()
     {
         SceneManager.LoadScene("MainScene", LoadSceneMode.Single);
-        Debug.Log("start game");
+        print("start game");
     }
 }
