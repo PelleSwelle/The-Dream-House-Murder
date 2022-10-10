@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CharacterHandler : MonoBehaviour
 {
+    public bool metBefore = false;
     public GameObject characterModel;
     public Character character;
 
@@ -12,7 +13,19 @@ public class CharacterHandler : MonoBehaviour
     /// </summary>
     public void onFirstConversation()
     {
-        // addToCharactersPanel(this);
+        print($"met character: {this.name} for the first time");
+    }
+
+    public void onTalkedTo()
+    {
+        if (metBefore)
+        {
+            // Do met before conversation
+        }
+        else
+        {
+            // Do first conversation
+        }
     }
 
     public void OnMouseDown()

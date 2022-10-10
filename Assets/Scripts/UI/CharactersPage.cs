@@ -46,19 +46,4 @@ public class CharactersPage : MonoBehaviour
         print($"populated button: {button} with character {character}");
         button.GetComponent<CharacterTile>().onPopulate();
     }
-
-    // TODO: this should live in the bio script
-    // public void populateBio(Character character)
-    // {
-    //     // get all the neccesary fields
-    //     bioImageField.GetComponent<Image>().sprite = character.photo; // image
-    //     bioNameField.GetComponent<TMPro.TextMeshProUGUI>().text = character.name; // name
-    //     // TODO: should only have one nickname
-    //     bioNicknameField.GetComponent<TMPro.TextMeshProUGUI>().text = character.nickName; // nickname
-    //     bioDOBField.GetComponent<TMPro.TextMeshProUGUI>().text = character.dateOfBirth.ToString(); // date of birth
-    //     bioOccupationField.GetComponent<TMPro.TextMeshProUGUI>().text = character.careerPath; // occupation
-    //     bioDescriptionField.GetComponent<TMPro.TextMeshProUGUI>().text = character.description; // description
-    //     bioFavFoodsField.GetComponent<TMPro.TextMeshProUGUI>().text = character.favoriteFoods[0]; // favorite foods
-    //     bioReligionField.GetComponent<TMPro.TextMeshProUGUI>().text = character.religion; // religion
-    // }
 }

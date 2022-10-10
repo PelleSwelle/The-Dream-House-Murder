@@ -18,14 +18,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        standardLines = new string[]
-        {
-            // TODO make these real lines, that actually further the story
-            "Did you do it?",
-            "Are you in a relationship with anyone?",
-            "Do you have any bad habits?",
-            "what are your hobbies?"
-        };
+
     }
 
     /// <summary>
