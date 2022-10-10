@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ConversationUI : MonoBehaviour
 {
-    public bool isOpen;
+    public UiHandler uiHandler;
     public Button[] questionButtons;
     // CanvasGroups for the whole UI, the player and the character
     public CanvasGroup conversationGroup, playerGroup, characterGroup;
@@ -91,25 +91,23 @@ public class ConversationUI : MonoBehaviour
     {
         conversationGroup.alpha = 1f;
         conversationGroup.blocksRaycasts = true;
-        this.isOpen = true;
     }
     public void setConversationInactive()
     {
         conversationGroup.alpha = 0f;
         conversationGroup.blocksRaycasts = false;
-        this.isOpen = false;
     }
 
     public void toggleConversation()
     {
-        if (!this.isOpen)
-        {
-            setConversationActive();
-        }
-        else if (this.isOpen)
-        {
-            setConversationInactive();
-        }
+        // if (!this.isOpen)
+        // {
+        //     setConversationActive();
+        // }
+        // else if (this.isOpen)
+        // {
+        //     setConversationInactive();
+        // }
     }
 
 }

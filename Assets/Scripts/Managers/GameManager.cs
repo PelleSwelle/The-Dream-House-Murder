@@ -6,9 +6,11 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public GameObject cursor;
     public Character[] charactersMet;
     public UiHandler notebookHandler;
     public GameObject notebook;
+    public bool cursorIsVisible = true;
 
     // TODO: delete this on release
     public Button debugButton;
@@ -17,22 +19,56 @@ public class GameManager : MonoBehaviour
     public GameObject objectToPlace;
     public ARRaycastManager raycastManager;
 
+    public void OnValidate()
+    {
+        cursor = this.transform.GetChild(0).gameObject;
+    }
+
+    void Start()
+    {
+        cursor.SetActive(true);
+    }
+
     void Update()
     {
         handleTouch();
     }
     void handleTouch()
     {
+        if (cursorIsVisible)
+        {
+            updateCursor();
+        }
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
-            print("touched");
-            List<ARRaycastHit> hits = new List<ARRaycastHit>();
-            raycastManager.Raycast(Input.GetTouch(0).position, hits, UnityEngine.XR.ARSubsystems.TrackableType.Planes);
-            if (hits.Count > 0)
+            if (cursorIsVisible)
             {
-                GameObject.Instantiate(objectToPlace, hits[0].pose.position, hits[0].pose.rotation);
-                print("Spawned the thing");
+                print("cursor is visible");
+                GameObject.Instantiate(objectToPlace, transform.position, transform.rotation);
             }
+            else
+            {
+                print("something something raycast manager");
+                List<ARRaycastHit> hits = new List<ARRaycastHit>();
+                raycastManager.Raycast(Input.GetTouch(0).position, hits, UnityEngine.XR.ARSubsystems.TrackableType.Planes);
+                if (hits.Count > 0)
+                {
+                    GameObject.Instantiate(objectToPlace, hits[0].pose.position, hits[0].pose.rotation);
+                }
+            }
+        }
+    }
+
+    void updateCursor()
+    {
+        Vector2 screenPosition = Camera.main.ViewportToScreenPoint(new Vector2(.5f, .5f));
+        List<ARRaycastHit> hits = new List<ARRaycastHit>();
+        raycastManager.Raycast(screenPosition, hits, UnityEngine.XR.ARSubsystems.TrackableType.Planes);
+
+        if (hits.Count > 0)
+        {
+            transform.position = hits[0].pose.position;
+            transform.rotation = hits[0].pose.rotation;
         }
     }
 

@@ -16,34 +16,44 @@ public class AnchorCreator : MonoBehaviour
 {
     // This is the prefab that will appear every time an anchor is created.
     [SerializeField]
-    GameObject m_AnchorPrefab;
+    GameObject anchorPrefab;
+
+    static List<ARRaycastHit> hits = new List<ARRaycastHit>();
+
+    List<ARAnchor> anchorPoints;
+
+    ARRaycastManager raycastManager;
+
+    ARAnchorManager anchorManager;
+
+    ARPlaneManager planeManager;
 
     public GameObject AnchorPrefab
     {
-        get => m_AnchorPrefab;
-        set => m_AnchorPrefab = value;
+        get => anchorPrefab;
+        set => anchorPrefab = value;
     }
 
     // Removes all the anchors that have been created.
     public void RemoveAllAnchors()
     {
-        foreach (var anchor in m_AnchorPoints)
+        foreach (var anchor in anchorPoints)
         {
             Destroy(anchor);
         }
-        m_AnchorPoints.Clear();
+        anchorPoints.Clear();
     }
 
-    // On Awake(), we obtains a reference to all the required components.
+    // On Awake(), we obtain a reference to all the required components.
     // The ARRaycastManager allows us to perform raycasts so that we know where to place an anchor.
     // The ARPlaneManager detects surfaces we can place our objects on.
     // The ARAnchorManager handles the processing of all anchors and updates their position and rotation.
     void Awake()
     {
-        m_RaycastManager = GetComponent<ARRaycastManager>();
-        m_AnchorManager = GetComponent<ARAnchorManager>();
-        m_PlaneManager = GetComponent<ARPlaneManager>();
-        m_AnchorPoints = new List<ARAnchor>();
+        raycastManager = GetComponent<ARRaycastManager>();
+        anchorManager = GetComponent<ARAnchorManager>();
+        planeManager = GetComponent<ARPlaneManager>();
+        anchorPoints = new List<ARAnchor>();
     }
 
     void Update()
@@ -56,20 +66,20 @@ public class AnchorCreator : MonoBehaviour
         if (touch.phase != TouchPhase.Began)
             return;
 
-        if (m_RaycastManager.Raycast(touch.position, s_Hits, TrackableType.PlaneWithinPolygon))
+        if (raycastManager.Raycast(touch.position, hits, TrackableType.PlaneWithinPolygon))
         {
             // Raycast hits are sorted by distance, so the first one
             // will be the closest hit.
-            var hitPose = s_Hits[0].pose;
-            var hitTrackableId = s_Hits[0].trackableId;
-            var hitPlane = m_PlaneManager.GetPlane(hitTrackableId);
+            var hitPose = hits[0].pose;
+            var hitTrackableId = hits[0].trackableId;
+            var hitPlane = planeManager.GetPlane(hitTrackableId);
 
             // This attaches an anchor to the area on the plane corresponding to the raycast hit,
             // and afterwards instantiates an instance of your chosen prefab at that point.
             // This prefab instance is parented to the anchor to make sure the position of the prefab is consistent
             // with the anchor, since an anchor attached to an ARPlane will be updated automatically by the ARAnchorManager as the ARPlane's exact position is refined.
-            var anchor = m_AnchorManager.AttachAnchor(hitPlane, hitPose);
-            Instantiate(m_AnchorPrefab, anchor.transform);
+            var anchor = anchorManager.AttachAnchor(hitPlane, hitPose);
+            Instantiate(anchorPrefab, anchor.transform);
 
             if (anchor == null)
             {
@@ -78,18 +88,10 @@ public class AnchorCreator : MonoBehaviour
             else
             {
                 // Stores the anchor so that it may be removed later.
-                m_AnchorPoints.Add(anchor);
+                anchorPoints.Add(anchor);
             }
         }
     }
 
-    static List<ARRaycastHit> s_Hits = new List<ARRaycastHit>();
 
-    List<ARAnchor> m_AnchorPoints;
-
-    ARRaycastManager m_RaycastManager;
-
-    ARAnchorManager m_AnchorManager;
-
-    ARPlaneManager m_PlaneManager;
 }
