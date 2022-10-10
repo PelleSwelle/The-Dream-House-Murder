@@ -9,6 +9,7 @@ public class DebugMenu : MonoBehaviour
     public GameObject debugMenu, characters, objects;
     public Button talkBtn, pickupBtn;
     public Button[] persons;
+    public ConversationManager conversationManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -37,8 +38,7 @@ public class DebugMenu : MonoBehaviour
 
     void talkTo(string characterName)
     {
-        // new conversation
-        Conversation conversation = ScriptableObject.CreateInstance<Conversation>();
+        // conversationManager.initConversation(GameObject.Find(characterName));
     }
 
 

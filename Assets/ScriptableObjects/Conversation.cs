@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -14,4 +12,10 @@ public class Conversation : ScriptableObject
     Character character;
     public string[] questions;
     public string[] answers;
+    public UiHandler conversationHandler;
+
+    public void onCreate()
+    {
+
+    }
 }
