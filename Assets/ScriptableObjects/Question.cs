@@ -6,4 +6,5 @@ using UnityEngine;
 public class Question : ScriptableObject
 {
     public string question;
+    public Answer unlock;
 }

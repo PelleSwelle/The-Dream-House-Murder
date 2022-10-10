@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.UI;
+using UnityEditor;
 
 public class GameManager : MonoBehaviour
 {
@@ -27,6 +28,12 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         cursor.SetActive(true);
+        getCharacters();
+    }
+
+    void getCharacters()
+    {
+
     }
 
     void Update()
@@ -43,12 +50,10 @@ public class GameManager : MonoBehaviour
         {
             if (cursorIsVisible)
             {
-                print("cursor is visible");
                 GameObject.Instantiate(objectToPlace, transform.position, transform.rotation);
             }
             else
             {
-                print("something something raycast manager");
                 List<ARRaycastHit> hits = new List<ARRaycastHit>();
                 raycastManager.Raycast(Input.GetTouch(0).position, hits, UnityEngine.XR.ARSubsystems.TrackableType.Planes);
                 if (hits.Count > 0)

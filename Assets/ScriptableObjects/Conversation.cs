@@ -9,13 +9,8 @@ using UnityEngine;
 public class Conversation : ScriptableObject
 {
     public string characterOpeningLine;
-    Character character;
+    public Character character;
     public string[] questions;
     public string[] answers;
     public UiHandler conversationHandler;
-
-    public void onCreate()
-    {
-
-    }
 }
