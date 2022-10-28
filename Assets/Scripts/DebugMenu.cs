@@ -9,7 +9,7 @@ public class DebugMenu : MonoBehaviour
     public GameObject charactersParent;
     public Button debugToggle;
     public GameObject debugMenu, characterSelect, objects;
-    public Button talkBtn, pickupBtn;
+    public Button talkBtn, pickupBtn, generateBtn;
     public Button[] personButtons;
     public ConversationManager conversationManager;
     public Character[] characters;
@@ -53,6 +53,10 @@ public class DebugMenu : MonoBehaviour
         personButtons[3].onClick.AddListener(() => talkTo(characters[3]));
         personButtons[4].onClick.AddListener(() => talkTo(characters[4]));
         personButtons[5].onClick.AddListener(() => talkTo(characters[5]));
+    }
+
+    void generatePlot()
+    {
     }
 
     void talkTo(Character character)

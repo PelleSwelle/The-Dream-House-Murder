@@ -13,7 +13,6 @@ public class CharacterHandler : MonoBehaviour
     /// </summary>
     public void onFirstConversation()
     {
-        print($"met character: {this.name} for the first time");
     }
 
     public void onTalkedTo()
@@ -41,6 +40,5 @@ public class CharacterHandler : MonoBehaviour
     void addToCharactersPanel(Character character)
     {
         // charactersPanel.populateButton(this);
-        print($"added {character} to characters panel");
     }
 }

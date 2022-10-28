@@ -16,33 +16,33 @@ public class Notebook : MonoBehaviour
     public Button conversationsButton, cluesButton, CharactersButton;
 
     // canvas groups for controlling the alpha and interactability
-    public GameObject notebook, cluesPage, conversationsPage, charactersPage, bioPage;
+    public GameObject notebook, cluesPage, conversationsPage, charactersPage, bioPage, conversationPage, deductionPage;
+    public Transform conversationsParent;
 
     public GameObject[] pages;
-    public GameObject[] bios;
+    public AudioSource audioSource;
+    public GameObject conversationTilePrefab;
+    public ConversationUI conversationUiHandler;
     void OnValidate()
     {
         // canvas groups
         notebook = this.gameObject;
 
-        pages = new GameObject[4] { cluesPage, conversationsPage, charactersPage, bioPage };
+        pages = new GameObject[] { cluesPage, conversationsPage, charactersPage, bioPage, conversationPage, deductionPage };
+
     }
 
     void Start()
     {
-        // TODO isn't this declaring the same thing twice?
+
+        // EVENT LISTENERS ON TABS
         Button openCharactersTab = CharactersButton.GetComponent<Button>();
         Button openCluesTab = cluesButton.GetComponent<Button>();
         Button openConversationsTab = conversationsButton.GetComponent<Button>();
 
-
-
-        // EVENT LISTENERS ON BUTTONS
         openCharactersTab.onClick.AddListener(() => goToPage(charactersPage));
         openCluesTab.onClick.AddListener(() => goToPage(cluesPage));
         openConversationsTab.onClick.AddListener(() => goToPage(conversationsPage));
-
-
     }
 
 
@@ -63,30 +63,63 @@ public class Notebook : MonoBehaviour
             else if (_page == page)
             {
                 _page.SetActive(true);
-                StartCoroutine(openPage(.5f, page));
+                // StartCoroutine(openPage(.5f, page));
                 // setGroupActive(_page);
                 print("opened: " + page.ToString());
             }
         }
+        audioSource.Play();
     }
 
-    // TODO: this should be in uiHandler
-    /// <summary>
-    /// The animation for the notebook page turning
-    /// </summary>
-    /// <param name="duration"></param>
-    /// <param name="page"></param>
-    /// <returns></returns>
-    private IEnumerator openPage(float duration, GameObject page)
+    public void addCharacterToConversations(Character character)
     {
-        Vector3 targetPos = new Vector3(700, 1400, 0);
-        Vector3 startPos = new Vector3(0, 0, 0);
-        float t = 0f;
-        while (t < duration)
+        if (conversationsPage.transform.GetChild(1).gameObject.activeInHierarchy)
         {
-            page.transform.position = Vector3.Lerp(startPos, targetPos, t / duration);
-            t += Time.deltaTime;
-            yield return null;
+            // TODO: make this a function in notebook
+            conversationsPage.transform.GetChild(1).gameObject.SetActive(false);
         }
+        // Show notification that the character is added to conversations
+        StartCoroutine(conversationUiHandler.showNotification($"{character.nickName} added to conversations log", .5f));
+        GameObject tile = GameObject.Instantiate(conversationTilePrefab, new Vector3(0, 0, 0), Quaternion.identity, conversationsParent);
+        tile.name = character.nickName + "Tile";
+        tile.transform.GetChild(0).GetComponent<Image>().sprite = character.photo;
+        tile.transform.GetChild(1).GetComponent<Text>().text = character.nickName;
+        tile.transform.GetChild(2).GetComponent<Text>().text = "THIS IS WHERE THE LAST SENTENCE GOES";
+    }
+
+    /// <summary>
+    /// Sets the conversation tile to reflect the latest sentence said.
+    /// </summary>
+    /// <param name="tile"></param>
+    public void updateConversationTile(GameObject tile, Answer answer)
+    {
+        tile.transform.GetChild(2).GetComponent<Text>().text = answer.line;
+    }
+
+    /// <summary>
+    /// Adds the lines of the conversation to the conversations log
+    /// </summary>
+    /// <param name="conversation"></param>
+    /// <param name="question"></param>
+    /// <param name="answer"></param>
+    public void addConversationLine(Conversation conversation, bool isPlayer, string line)
+    {
+        throw new System.NotImplementedException();
+        // check wether the character exists in the conversations log
+        // if it does add the lines to the character conversations
+        // if the character does not exist
+        // instantiate the characterConversation
+        // add the conversation to the character conversations
+        // if end of conversation, add a endOfConversation marker.
+    }
+
+    /// <summary>
+    /// Adds a testimony to the 'clues?' poge
+    /// </summary>
+    /// <param name="character"></param>
+    /// <param name="answer"></param>
+    public void addTestimony(Character character, Answer answer)
+    {
+
     }
 }

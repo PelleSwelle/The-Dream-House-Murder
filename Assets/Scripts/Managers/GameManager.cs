@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.UI;
-using UnityEditor;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,24 +15,27 @@ public class GameManager : MonoBehaviour
     // TODO: delete this on release
     public Button debugButton;
     public GameObject debugMenu;
+
+
     public Conversation[] conversations; // conversations that has happened 
     public GameObject objectToPlace;
     public ARRaycastManager raycastManager;
+    public Plot plot;
+
+    public string[] hasHeard;
+
+    // to be filled up during gameplay, as the player learns more and more about each person
+    public string knownFacts;
 
     public void OnValidate()
     {
         cursor = this.transform.GetChild(0).gameObject;
     }
 
+
     void Start()
     {
         cursor.SetActive(true);
-        getCharacters();
-    }
-
-    void getCharacters()
-    {
-
     }
 
     void Update()
@@ -46,6 +48,7 @@ public class GameManager : MonoBehaviour
         {
             updateCursor();
         }
+        // TODO: check for whether we are inside the bounds of the UI
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
             if (cursorIsVisible)
