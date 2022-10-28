@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9979803480095c34394e10ab95ea2678, type: 3}
+  m_Name: HonestAhmed
+  m_EditorClassIdentifier: 
+  notebook: {fileID: 0}
+  charactersPage: {fileID: 0}
+  index: 0
+  model: {fileID: 0}
+  bioPage: {fileID: 0}
+  fields: []
+  photo: {fileID: 21300000, guid: e6d6ee5caeb4b2f4a9683e0a2af83341, type: 3}
+  dateOfBirth: 403920
+  iq: 50
+  inARelationship: 0
+  partner: {fileID: 0}
+  nickName: Honest Ahmed
+  firstName: Ahmed
+  middleName: Abdul
+  lastName: Jensen
+  compassionate: nah
+  loyal: nah
+  stable: nah
+  extrovert: nah
+  longDescription: He is a person
+  description: 'He is Ahmed. '
+  careerPath: all of them
+  politicalLeaning: all of them
+  educationField: all of them
+  educationLevel: the highest you can get
+  diet: puppies
+  sexuality: all of them
+  religion: atheist
+  ethnicity: Middle eastern
+  nationality: Danish
+  hobbies:
+  - eating puppies
+  - being a furry
+  favoriteFoods:
+  - puppy
+  badHabits:
+  - being a furry
+  negativeCharacteristics:
+  - eats a lot of puppies
+  positiveCharacteristics:
+  - has large ears
+  - hears very well
+  whereWasFound: 
+  hasBeenTalkedTo: 0
+  hasBeenTalkedToAbout: 
+  knowsAbout: 
+  liesAbout: 
+  isWitness: 0
+  isMurderer: 0

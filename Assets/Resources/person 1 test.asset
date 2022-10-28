@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1537f5ba1be5abb47b017375ba76d234, type: 3}
+  m_Name: person 1 test
+  m_EditorClassIdentifier: 
+  nodeLinks:
+  - baseNodeGuid: edaa954b-12e5-4967-bd87-9194699d1b48
+    portName: Next
+    targetNodeGuid: ea5b999f-a300-4efc-a499-54b5533e84e9
+  - baseNodeGuid: ea5b999f-a300-4efc-a499-54b5533e84e9
+    portName: Where were you at the time of the murder?
+    targetNodeGuid: 625d05e7-7b35-4303-8b22-f89b131ba557
+  - baseNodeGuid: ea5b999f-a300-4efc-a499-54b5533e84e9
+    portName: Are you profficient with an axe?
+    targetNodeGuid: 42d0ae99-98a7-47b7-9808-1bddf48ea3ec
+  - baseNodeGuid: ea5b999f-a300-4efc-a499-54b5533e84e9
+    portName: What is your relationship to the victim?
+    targetNodeGuid: b73ef804-a96a-4ba9-84fa-d9c17123c2cd
+  - baseNodeGuid: 625d05e7-7b35-4303-8b22-f89b131ba557
+    portName: in the timeframe of...
+    targetNodeGuid: 54ea8963-be39-4406-a5cb-5812d60bc4df
+  - baseNodeGuid: 625d05e7-7b35-4303-8b22-f89b131ba557
+    portName: you're not usually at the gym at that time...
+    targetNodeGuid: 16e22c06-e10f-4a78-8e46-3e71a91127fc
+  DialogueNodeData:
+  - nodeGuid: ea5b999f-a300-4efc-a499-54b5533e84e9
+    dialogueText: first encounter
+    position: {x: 123, y: 486.5}
+  - nodeGuid: 42d0ae99-98a7-47b7-9808-1bddf48ea3ec
+    dialogueText: Sure, I guess. I chop wood at my summerhouse...
+    position: {x: 525, y: 531.5}
+  - nodeGuid: b73ef804-a96a-4ba9-84fa-d9c17123c2cd
+    dialogueText: We didn't really know each other that well. Went to school together,
+      but never really hung out.
+    position: {x: 525, y: 628.5}
+  - nodeGuid: 54ea8963-be39-4406-a5cb-5812d60bc4df
+    dialogueText: Dialogue Node
+    position: {x: 1018, y: 308}
+  - nodeGuid: 625d05e7-7b35-4303-8b22-f89b131ba557
+    dialogueText: I was at the gym
+    position: {x: 525, y: 405}
+  - nodeGuid: 16e22c06-e10f-4a78-8e46-3e71a91127fc
+    dialogueText: Dialogue Node
+    position: {x: 1018, y: 429}
+  exposedProperties:
+  - propertyName: Character
+    propertyValue: Average Joe
+  - propertyName: Line of dialogue
+    propertyValue: What is my purpose
