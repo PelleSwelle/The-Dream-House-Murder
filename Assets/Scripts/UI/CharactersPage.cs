@@ -7,22 +7,29 @@ public class CharactersPage : MonoBehaviour
 {
     public Button[] tiles;
     public Sprite placeholderSprite;
-    Notebook notebook;
+    public Notebook notebook;
     public GameObject bioPage;
     public Character[] characters;
     public Button bioExitButton;
 
+    public GameObject charactersParent;
     void OnValidate()
     {
     }
     void Start()
     {
-        tiles[0].onClick.AddListener(() => populateButton(tiles[0], characters[0]));
-        tiles[1].onClick.AddListener(() => populateButton(tiles[1], characters[1]));
-        tiles[2].onClick.AddListener(() => populateButton(tiles[2], characters[2]));
-        tiles[3].onClick.AddListener(() => populateButton(tiles[3], characters[3]));
-        tiles[4].onClick.AddListener(() => populateButton(tiles[4], characters[4]));
-        tiles[5].onClick.AddListener(() => populateButton(tiles[5], characters[5]));
+        tiles[0].onClick.AddListener(() => goToBio(getCharacterFromButton(tiles[0])));
+        tiles[1].onClick.AddListener(() => goToBio(getCharacterFromButton(tiles[1])));
+        tiles[2].onClick.AddListener(() => goToBio(getCharacterFromButton(tiles[2])));
+        tiles[3].onClick.AddListener(() => goToBio(getCharacterFromButton(tiles[3])));
+        tiles[4].onClick.AddListener(() => goToBio(getCharacterFromButton(tiles[4])));
+        tiles[5].onClick.AddListener(() => goToBio(getCharacterFromButton(tiles[5])));
+
+        // TODO: do this somewhere else
+        foreach (Character character in characters)
+        {
+            character.hasBeenTalkedTo = false;
+        }
     }
 
     /// <summary>
@@ -31,8 +38,30 @@ public class CharactersPage : MonoBehaviour
     /// <param name="index"></param>
     public void goToBio(Character _character)
     {
-        print($"clicked button: {_character}");
+        bioPage.SetActive(true);
+        bioPage.GetComponent<BioPage>().populateBio(_character);
+        notebook.goToPage(bioPage);
         // TODO: check wether the character is met. If not, pop up says: you have not met this person yet.
+    }
+
+    // FIXME: returns wrong character
+    Character getCharacterFromButton(Button button)
+    {
+        Character character = null;
+
+        // get the text from the button
+        string name = button.transform.GetChild(1).GetComponent<Text>().text;
+        print($"text on the button: {name}");
+
+        foreach (Transform characterTransform in charactersParent.transform)
+        {
+            if (name == characterTransform.gameObject.GetComponent<CharacterHandler>().character.nickName)
+            {
+                character = characterTransform.gameObject.GetComponent<CharacterHandler>().character;
+            }
+        }
+        print($"button contained: {character.name}");
+        return character;
     }
 
     /// <summary>
@@ -43,7 +72,21 @@ public class CharactersPage : MonoBehaviour
     {
         button.transform.GetChild(0).GetComponent<Image>().sprite = character.photo;
         button.GetComponentInChildren<Text>().text = character.nickName;
-        print($"populated button: {button} with character {character}");
         button.GetComponent<CharacterTile>().onPopulate();
+    }
+
+    public Button getNextAvailableButton()
+    {
+        Button button = tiles[0];
+
+        foreach (Button tile in this.tiles)
+        {
+            string tileName = tile.transform.GetChild(1).GetComponent<Text>().text;
+            if (tileName == "NAME")
+            {
+                button = tile;
+            }
+        }
+        return button;
     }
 }

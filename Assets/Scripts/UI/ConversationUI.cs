@@ -1,78 +1,86 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class ConversationUI : MonoBehaviour
 {
     public UiHandler uiHandler;
     public Button[] questionButtons;
+
+    public Button exitButton;
     public Text answerField;
     public Image characterImage;
     public Character character;
     public Conversation conversation;
+    public ConversationManager conversationManager;
+    public GameObject notification;
 
     void Start()
     {
         setOnClickListeners();
+        notification.SetActive(false);
     }
 
+    /// <summary>
+    /// sets the on clicklisteners on the question buttons
+    /// </summary>
     void setOnClickListeners()
     {
-        questionButtons[0].onClick.AddListener(askQuestion1);
-        questionButtons[1].onClick.AddListener(askQuestion2);
-        questionButtons[2].onClick.AddListener(askQuestion3);
-        questionButtons[3].onClick.AddListener(askQuestion4);
+        questionButtons[0].onClick.AddListener(() => conversationManager.onChooseQuestion(conversationManager.currentlyAvailableQuestions[0]));
+        questionButtons[1].onClick.AddListener(() => conversationManager.onChooseQuestion(conversationManager.currentlyAvailableQuestions[1]));
+        questionButtons[2].onClick.AddListener(() => conversationManager.onChooseQuestion(conversationManager.currentlyAvailableQuestions[2]));
+        questionButtons[3].onClick.AddListener(() => conversationManager.onChooseQuestion(conversationManager.currentlyAvailableQuestions[3]));
+        exitButton.onClick.AddListener(() => conversationManager.endConversation());
     }
 
-
+    /// <summary>
+    /// sets the image for the character on the UI
+    /// </summary>
+    /// <param name="character"></param>
     public void setCharacterImage(Character character)
     {
         characterImage.sprite = character.photo;
     }
-    public void populateAnswer(string answer)
-    {
-        answerField.text = answer;
-    }
 
     /// <summary>
-    /// populates the ConversationUI with the contents of the conversation
+    /// populates the answer text for the answer
     /// </summary>
-    /// <param name="questions"></param>
-    /// <param name="answers"></param>
-    public void populateConversation(string[] questions, string answer)
+    /// <param name="answer"></param>
+    public void updateAnswerField(Answer answer)
     {
-        populateQuestions(questions);
-        // TODO: implement the answers
+        answerField.text = answer.line;
     }
+
     /// <summary>
     /// populates the players text fields with the given questions
     /// </summary>
     /// <param name="questions"></param>
-    public void populateQuestions(string[] questions)
+    public void updateQuestionButtons(Question[] questions)
     {
-        for (int i = 0; i < questionButtons.Length; i++)
-        {
-            questionButtons[i].GetComponentInChildren<Text>().text = questions[i];
-        }
-    }
-    public void askQuestion1()
-    {
-        print("wup 1");
-    }
-    public void askQuestion2()
-    {
-        print("wup 2");
+        if (questions.Length > 4)
+            throw new System.Exception("there were more than 4 questions");
 
-    }
-    public void askQuestion3()
-    {
-        print("wup 3");
+        else if (questions.Length < 4)
+            throw new System.Exception("There were less than 4 questions");
 
+        else
+            for (int i = 0; i < questionButtons.Length; i++)
+            {
+                questionButtons[i].GetComponentInChildren<Text>().text = questions[i].line;
+            }
     }
-    public void askQuestion4()
-    {
-        print("wup 4");
 
+    /// <summary>
+    /// Show a notification with the given message for a given delay
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="delay"></param>
+    /// <returns></returns>
+    public IEnumerator showNotification(string message, float delay)
+    {
+        notification.GetComponent<Text>().text = message;
+        notification.SetActive(true);
+        yield return new WaitForSeconds(delay);
+        notification.SetActive(false);
     }
 }

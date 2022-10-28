@@ -3,11 +3,14 @@ using UnityEngine.UI;
 
 public class NotebookButton : MonoBehaviour
 {
+    public Animator notebookAnimator;
     public GameObject notebook;
+    public AudioSource audioSource;
 
     void Start()
     {
         this.GetComponent<Button>().onClick.AddListener(() => toggleNotebook());
+        notebookAnimator.SetBool("isOpen", false);
     }
     /// <summary>
     /// sets the canvas group component attached to the notebook
@@ -15,15 +18,19 @@ public class NotebookButton : MonoBehaviour
     /// </summary>
     public void toggleNotebook()
     {
-        if (notebook.activeInHierarchy)
+        bool isOpen = notebookAnimator.GetBool("isOpen");
+        print("notebook state: " + isOpen.ToString());
+        audioSource.Play();
+
+        if (isOpen)
         {
-            notebook.SetActive(false);
+            notebookAnimator.SetBool("isOpen", false);
             print("closed notebook");
         }
-        else if (!notebook.activeInHierarchy)
+        else if (!isOpen)
         {
-            notebook.SetActive(true);
             print("opened notebook");
+            notebookAnimator.SetBool("isOpen", true);
         }
     }
 }
