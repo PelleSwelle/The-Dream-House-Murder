@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1537f5ba1be5abb47b017375ba76d234, type: 3}
+  m_Name: asdom
+  m_EditorClassIdentifier: 
+  nodeLinks:
+  - baseNodeGuid: c28d88f2-806f-46f1-b11c-72f2ad48a560
+    portName: Next
+    targetNodeGuid: e4a102d2-f6bc-411d-be41-eca16dc5cf7f
+  DialogueNodeData:
+  - nodeGuid: e4a102d2-f6bc-411d-be41-eca16dc5cf7f
+    dialogueText: Dialogue Node
+    position: {x: 364, y: 221.5}
