@@ -5,18 +5,15 @@ using UnityEngine.UI;
 
 public class BioPage : MonoBehaviour
 {
-    public GameObject image, nameText, nickNameText, dateOfBirthText, occupationText, favouriteFoodText, religionText, descriptionText;
+    public GameObject image, nameText, nickNameText, dateOfBirthText, descriptionText;
 
     public void populateBio(Character character)
     {
         image.GetComponent<Image>().sprite = character.photo;
         nameText.GetComponent<Text>().text = $"{character.firstName} {character.middleName} {character.lastName}";
-        nickNameText.GetComponent<Text>().text = character.nickName;
+        nickNameText.GetComponent<Text>().text = character.firstName;
         dateOfBirthText.GetComponent<Text>().text = formatDateOfBirth(character.dateOfBirth);
-        occupationText.GetComponent<Text>().text = character.careerPath;
-        favouriteFoodText.GetComponent<Text>().text = character.favoriteFoods[0];
-        religionText.GetComponent<Text>().text = character.religion;
-        descriptionText.GetComponent<Text>().text = character.longDescription;
+        descriptionText.GetComponent<Text>().text = character.description;
     }
     string formatDateOfBirth(int dateOfBirth)
     {

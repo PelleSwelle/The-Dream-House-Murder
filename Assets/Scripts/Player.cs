@@ -6,6 +6,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public List<Testimony> testimonies;
+    public List<Question> questions;
 
     void Start()
     {

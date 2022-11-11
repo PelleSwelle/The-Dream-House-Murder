@@ -23,26 +23,26 @@ public class Notebook : MonoBehaviour
     public AudioSource audioSource;
     public GameObject conversationTilePrefab;
     public ConversationUI conversationUiHandler;
+    public Animator animator;
+    public bool isOpen;
     void OnValidate()
     {
-        // canvas groups
         notebook = this.gameObject;
 
         pages = new GameObject[] { cluesPage, conversationsPage, charactersPage, bioPage, conversationPage, deductionPage };
-
     }
+
 
     void Start()
     {
-
         // EVENT LISTENERS ON TABS
         Button openCharactersTab = CharactersButton.GetComponent<Button>();
         Button openCluesTab = cluesButton.GetComponent<Button>();
         Button openConversationsTab = conversationsButton.GetComponent<Button>();
 
-        openCharactersTab.onClick.AddListener(() => goToPage(charactersPage));
-        openCluesTab.onClick.AddListener(() => goToPage(cluesPage));
-        openConversationsTab.onClick.AddListener(() => goToPage(conversationsPage));
+        openCharactersTab.onClick.AddListener(() => goToPage(charactersPage, true));
+        openCluesTab.onClick.AddListener(() => goToPage(cluesPage, true));
+        openConversationsTab.onClick.AddListener(() => goToPage(conversationsPage, true));
     }
 
 
@@ -51,26 +51,30 @@ public class Notebook : MonoBehaviour
     /// opens a page in the notebook, while simultaneously closing the others
     /// </summary>
     /// <param name="page">CanvasGroup</param>
-    public void goToPage(GameObject page)
+    public void goToPage(GameObject page, bool withSound)
     {
-        foreach (GameObject _page in pages)
+        print("opened page: " + page.name);
+        if (withSound)
+            audioSource.Play();
+
+        // set active or not active to make sure on page does not cover the other
+        foreach (GameObject _page in this.pages)
         {
-            if (_page != page)
-            {
-                _page.SetActive(false);
-                // setGroupInactive(_page);
-            }
-            else if (_page == page)
+            if (_page == page)
             {
                 _page.SetActive(true);
-                // StartCoroutine(openPage(.5f, page));
-                // setGroupActive(_page);
-                print("opened: " + page.ToString());
+            }
+            else
+            {
+                _page.SetActive(false);
             }
         }
-        audioSource.Play();
     }
 
+    /// <summary>
+    /// add the character to the list of conversations
+    /// </summary>
+    /// <param name="character"></param>
     public void addCharacterToConversations(Character character)
     {
         if (conversationsPage.transform.GetChild(1).gameObject.activeInHierarchy)
@@ -79,11 +83,11 @@ public class Notebook : MonoBehaviour
             conversationsPage.transform.GetChild(1).gameObject.SetActive(false);
         }
         // Show notification that the character is added to conversations
-        StartCoroutine(conversationUiHandler.showNotification($"{character.nickName} added to conversations log", .5f));
+        StartCoroutine(conversationUiHandler.showNotification($"{character.firstName} added to conversations log", .5f));
         GameObject tile = GameObject.Instantiate(conversationTilePrefab, new Vector3(0, 0, 0), Quaternion.identity, conversationsParent);
-        tile.name = character.nickName + "Tile";
+        tile.name = character.firstName + "Tile";
         tile.transform.GetChild(0).GetComponent<Image>().sprite = character.photo;
-        tile.transform.GetChild(1).GetComponent<Text>().text = character.nickName;
+        tile.transform.GetChild(1).GetComponent<Text>().text = character.firstName;
         tile.transform.GetChild(2).GetComponent<Text>().text = "THIS IS WHERE THE LAST SENTENCE GOES";
     }
 
@@ -93,7 +97,7 @@ public class Notebook : MonoBehaviour
     /// <param name="tile"></param>
     public void updateConversationTile(GameObject tile, Answer answer)
     {
-        tile.transform.GetChild(2).GetComponent<Text>().text = answer.line;
+        tile.transform.GetChild(2).GetComponent<Text>().text = answer.sentence;
     }
 
     /// <summary>

@@ -6,23 +6,28 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject cursor;
-    public Character[] charactersMet;
-    public UiHandler notebookHandler;
-    public GameObject notebook;
+    public GameObject charactersParent;
+    public List<Character> characters;
+    public GameObject cursor, notebookButton;
+    public Character mary, boyfriend, officer, rea;
+    public ConversationUI conversationUI;
+    public Notebook notebook;
+    public GameObject notebookObject;
     public bool cursorIsVisible = true;
 
     // TODO: delete this on release
     public Button debugButton;
     public GameObject debugMenu;
 
-
-    public Conversation[] conversations; // conversations that has happened 
+    public ConversationManager conversationManager;
     public GameObject objectToPlace;
     public ARRaycastManager raycastManager;
     public Plot plot;
 
     public string[] hasHeard;
+
+    public int numberOfCharactersPlaced;
+    public bool isInPlacementMode;
 
     // to be filled up during gameplay, as the player learns more and more about each person
     public string knownFacts;
@@ -36,35 +41,61 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         cursor.SetActive(true);
+        numberOfCharactersPlaced = 0;
+        mary = new Character("Mary", Resources.Load("maryPhoto") as Sprite);
+        boyfriend = new Character("Boyfriend", Resources.Load("boyfriendPhoto") as Sprite);
+        officer = new Character("Officer", Resources.Load("officerPhoto") as Sprite);
+        rea = new Character("Rea", Resources.Load("reaPhoto") as Sprite);
+        characters = new List<Character> { mary, boyfriend, officer, rea };
+
+        print($"number of characters instantiated: {characters.Count}");
     }
 
     void Update()
     {
-        handleTouch();
+        // bool allCharactersPlaced = numberOfCharactersPlaced == characters.Count;
+
+        // // ************* PLACEMENT MODE *************
+        // if (!allCharactersPlaced)
+        // {
+        //     isInPlacementMode = true;
+
+        //     if (cursorIsVisible)
+        //     {
+        //         updateCursor();
+        //     }
+        //     // check wether any UI is open
+        //     if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        //     {
+        //         placeCharacter(characters[numberOfCharactersPlaced + 1]);
+        //     }
+        //     isInPlacementMode = false;
+        // }
+
+        // // ************* GAME MODE *************
+        // else
+        // {
+        //     // game mode
+        // }
     }
-    void handleTouch()
+
+
+    void placeCharacter(Character character)
     {
         if (cursorIsVisible)
         {
-            updateCursor();
+            GameObject.Instantiate(character.model, transform.position, transform.rotation);
         }
-        // TODO: check for whether we are inside the bounds of the UI
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        else
         {
-            if (cursorIsVisible)
+            List<ARRaycastHit> hits = new List<ARRaycastHit>();
+            raycastManager.Raycast(Input.GetTouch(0).position, hits, UnityEngine.XR.ARSubsystems.TrackableType.Planes);
+            if (hits.Count > 0)
             {
-                GameObject.Instantiate(objectToPlace, transform.position, transform.rotation);
-            }
-            else
-            {
-                List<ARRaycastHit> hits = new List<ARRaycastHit>();
-                raycastManager.Raycast(Input.GetTouch(0).position, hits, UnityEngine.XR.ARSubsystems.TrackableType.Planes);
-                if (hits.Count > 0)
-                {
-                    GameObject.Instantiate(objectToPlace, hits[0].pose.position, hits[0].pose.rotation);
-                }
+                GameObject.Instantiate(character.model, hits[0].pose.position, hits[0].pose.rotation);
             }
         }
+        numberOfCharactersPlaced++;
     }
 
     void updateCursor()
@@ -77,62 +108,6 @@ public class GameManager : MonoBehaviour
         {
             transform.position = hits[0].pose.position;
             transform.rotation = hits[0].pose.rotation;
-        }
-    }
-
-    public void spawnCharacter()
-    {
-        throw new System.NotImplementedException("Not implemented");
-    }
-
-    void testInput()
-    {
-        // if (Input.GetMouseButtonDown(0))
-        // {
-        //     // spawnCharacter()
-        // }
-        // CONVERSATION WITH AVERAGE BOB
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            // TODO find another way to get the character
-            // initiateConversation(GameObject.Find("averageBob"));
-        }
-        // CHARACTERS
-        else if (Input.GetKeyDown(KeyCode.U))
-        {
-            // this.uiHandler.goToPage(this.notebook.pages[0]);
-        }
-        // CLUES
-        else if (Input.GetKeyDown(KeyCode.I))
-        {
-            // this.uiHandler.goToPage(this.notebook.pages[1]);
-        }
-        // CONVERSATIONS
-        else if (Input.GetKeyDown(KeyCode.O))
-        {
-            // this.uiHandler.goToPage(this.notebook.pages[2]);
-        }
-        // BIO
-        else if (Input.GetKeyDown(KeyCode.P))
-        {
-            // this.uiHandler.goToPage(this.notebook.pages[3]);
-        }
-
-        else if (Input.GetKeyDown(KeyCode.Q))
-        {
-            // this.toggleNotebook();
-        }
-        else if (Input.GetKeyDown(KeyCode.J))
-        {
-            // charactersPanel.populateButton(GameObject.Find("averageBob").GetComponent<Character>());
-        }
-        else if (Input.GetKeyDown(KeyCode.K))
-        {
-            // charactersPanel.populateButton(GameObject.Find("shortKathy").GetComponent<Character>());
-        }
-        else if (Input.GetKeyDown(KeyCode.H))
-        {
-            // charactersPanel.populateButton(GameObject.Find("oldReginald").GetComponent<Character>());
         }
     }
 }

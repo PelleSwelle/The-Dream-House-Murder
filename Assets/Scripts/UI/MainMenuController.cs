@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
-    public UiHandler uiHandler;
+    public UiHandler mainMenuHandler;
     // getting all of the child pages
     public GameObject titlePage, settingsPage, aboutPage, creditsPage, helpPage;
     public Button playButton, settingsButton, aboutButton, creditsButton, helpButton;
@@ -26,29 +26,29 @@ public class MainMenuController : MonoBehaviour
         // onclick listeners
         play.onClick.AddListener(() => enterGame());
 
-        settings.onClick.AddListener(() => uiHandler.goToPage(settingsPage));
+        settings.onClick.AddListener(() => mainMenuHandler.goToPage(settingsPage));
         settings.onClick.AddListener(() => backButton.SetActive(true));
 
-        about.onClick.AddListener(() => uiHandler.goToPage(aboutPage));
+        about.onClick.AddListener(() => mainMenuHandler.goToPage(aboutPage));
         about.onClick.AddListener(() => backButton.SetActive(true));
 
-        credits.onClick.AddListener(() => uiHandler.goToPage(creditsPage));
+        credits.onClick.AddListener(() => mainMenuHandler.goToPage(creditsPage));
         credits.onClick.AddListener(() => backButton.SetActive(true));
 
-        help.onClick.AddListener(() => uiHandler.goToPage(helpPage));
+        help.onClick.AddListener(() => mainMenuHandler.goToPage(helpPage));
         help.onClick.AddListener(() => backButton.SetActive(true));
 
         // back button
-        back.onClick.AddListener(() => uiHandler.goToPage(titlePage));
+        back.onClick.AddListener(() => mainMenuHandler.goToPage(titlePage));
         back.onClick.AddListener(() => backButton.SetActive(false));
 
         // start on title page
-        uiHandler.goToPage(titlePage);
+        mainMenuHandler.goToPage(titlePage);
     }
 
     void OnValidate()
     {
-        uiHandler.goToPage(titlePage);
+        mainMenuHandler.goToPage(titlePage);
         // titlePage.SetActive(true);
         // settingsPage.SetActive(false);
         // aboutPage.SetActive(false);

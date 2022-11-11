@@ -1,25 +1,20 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 /// <summary>
-/// represention of a conversation between the player and the given character
+/// represention of a CONTINUOUS conversation between the player and a character.
 /// managed by the ConversationManager
+/// No need to include a character, because the conversationis implemented in the character class.
 /// </summary>
 public class Conversation
 {
-    public string characterOpeningLine;
-    public Character character;
-    public Question[] questions;
-    public Answer[] answers; // TODO: these sshould come from the character
-    public UiHandler conversationHandler;
-    public int numberOfQuestionsAsked;
-    public int numberOfAnswers;
+    public List<Question> questions;
+    public List<Answer> answers;
+    public UiHandler conversationUiHandler; // generic ui methods
 
-
-    public Question currentQuestion;
-    public Answer currentAnswer;
-
-    public Conversation(Character _character)
+    public Conversation(List<Question> qList, List<Answer> aList)
     {
-        this.character = _character;
+        this.questions = qList;
+        this.answers = aList;
     }
 }
