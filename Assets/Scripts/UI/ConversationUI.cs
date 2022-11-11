@@ -1,11 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ConversationUI : MonoBehaviour
 {
-    public UiHandler uiHandler;
-    public Button[] questionButtons;
+    public GameObject conversationObject;
 
     public Button exitButton;
     public Text answerField;
@@ -14,6 +14,9 @@ public class ConversationUI : MonoBehaviour
     public Conversation conversation;
     public ConversationManager conversationManager;
     public GameObject notification;
+    public bool isOpen;
+    public GameObject questionPrefab;
+    public Transform questionsParent;
 
     void Start()
     {
@@ -26,11 +29,30 @@ public class ConversationUI : MonoBehaviour
     /// </summary>
     void setOnClickListeners()
     {
-        questionButtons[0].onClick.AddListener(() => conversationManager.onChooseQuestion(conversationManager.currentlyAvailableQuestions[0]));
-        questionButtons[1].onClick.AddListener(() => conversationManager.onChooseQuestion(conversationManager.currentlyAvailableQuestions[1]));
-        questionButtons[2].onClick.AddListener(() => conversationManager.onChooseQuestion(conversationManager.currentlyAvailableQuestions[2]));
-        questionButtons[3].onClick.AddListener(() => conversationManager.onChooseQuestion(conversationManager.currentlyAvailableQuestions[3]));
-        exitButton.onClick.AddListener(() => conversationManager.endConversation());
+        // questionButtons[0].onClick.AddListener(() => conversationManager.onChooseQuestion(conversationManager.currentlyAvailableQuestions[0]));
+        // questionButtons[1].onClick.AddListener(() => conversationManager.onChooseQuestion(conversationManager.currentlyAvailableQuestions[1]));
+        // questionButtons[2].onClick.AddListener(() => conversationManager.onChooseQuestion(conversationManager.currentlyAvailableQuestions[2]));
+        // questionButtons[3].onClick.AddListener(() => conversationManager.onChooseQuestion(conversationManager.currentlyAvailableQuestions[3]));
+        exitButton.onClick.AddListener(() => conversationManager.leaveConversation());
+    }
+
+    /// <summary>
+    /// toggles the active state of the conversation UI
+    /// </summary>
+    void toggleUI()
+    {
+        if (conversationObject.activeSelf)
+        {
+            conversationObject.SetActive(false);
+            this.isOpen = true;
+            conversationManager.isInConversation = false;
+        }
+        else if (conversationObject.activeSelf)
+        {
+            conversationObject.SetActive(true);
+            this.isOpen = false;
+            conversationManager.isInConversation = true;
+        }
     }
 
     /// <summary>
@@ -48,26 +70,45 @@ public class ConversationUI : MonoBehaviour
     /// <param name="answer"></param>
     public void updateAnswerField(Answer answer)
     {
-        answerField.text = answer.line;
+        answerField.text = answer.sentence;
+        answer.hasBeenSaid = true;
     }
 
+
     /// <summary>
-    /// populates the players text fields with the given questions
+    /// populates the players text fields with the currently available questions
     /// </summary>
     /// <param name="questions"></param>
-    public void updateQuestionButtons(Question[] questions)
+    public void updateQuestionButtons()
     {
-        if (questions.Length > 4)
-            throw new System.Exception("there were more than 4 questions");
+        clearQuestions();
+        foreach (Question question in getAvailableQuestions())
+        {
+            print("update ui with: " + question.sentence);
+            // instantiate button and set parent
+            GameObject questionButton = GameObject.Instantiate(questionPrefab, Vector3.zero, Quaternion.identity, questionsParent);
+            // set text on button
+            questionButton.GetComponentInChildren<Text>().text = question.sentence;
+            // add onclick listener
+            questionButton.GetComponent<Button>().onClick.AddListener(() => conversationManager.askQuestion(question, conversationManager.conversationPartner));
+        }
+    }
 
-        else if (questions.Length < 4)
-            throw new System.Exception("There were less than 4 questions");
 
-        else
-            for (int i = 0; i < questionButtons.Length; i++)
-            {
-                questionButtons[i].GetComponentInChildren<Text>().text = questions[i].line;
-            }
+    void clearQuestions()
+    {
+        int numberOfQuestions = questionsParent.childCount;
+        print("questionsParent.count: " + questionsParent.childCount);
+
+        foreach (Transform child in questionsParent.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+    }
+
+    List<Question> getAvailableQuestions()
+    {
+        return conversationManager.currentlyAvailableQuestions;
     }
 
     /// <summary>

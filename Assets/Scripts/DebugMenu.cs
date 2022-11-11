@@ -6,13 +6,14 @@ using UnityEditor;
 
 public class DebugMenu : MonoBehaviour
 {
+    public GameManager gameManager;
     public GameObject charactersParent;
     public Button debugToggle;
     public GameObject debugMenu, characterSelect, objects;
-    public Button talkBtn, pickupBtn, generateBtn;
+    public Button talkBtn, pickupBtn;
     public Button[] personButtons;
     public ConversationManager conversationManager;
-    public Character[] characters;
+    public CharactersPage charactersPage;
 
 
     void OnValidate()
@@ -20,11 +21,9 @@ public class DebugMenu : MonoBehaviour
         for (int i = 0; i < 0; i++)
         {
             // setting the text on the buttons
-            personButtons[i].GetComponentInChildren<Text>().text = charactersParent.transform.GetChild(i).name;
+            personButtons[i].GetComponentInChildren<Text>().text = gameManager.characters[i].firstName;
         }
     }
-
-
 
 
     void Start()
@@ -47,25 +46,11 @@ public class DebugMenu : MonoBehaviour
         Button pickupButton = pickupBtn.GetComponent<Button>();
         pickupButton.onClick.AddListener(() => pickup());
 
-        personButtons[0].onClick.AddListener(() => talkTo(characters[0]));
-        personButtons[1].onClick.AddListener(() => talkTo(characters[1]));
-        personButtons[2].onClick.AddListener(() => talkTo(characters[2]));
-        personButtons[3].onClick.AddListener(() => talkTo(characters[3]));
-        personButtons[4].onClick.AddListener(() => talkTo(characters[4]));
-        personButtons[5].onClick.AddListener(() => talkTo(characters[5]));
+        personButtons[0].onClick.AddListener(() => conversationManager.initConversation(gameManager.mary));
+        personButtons[1].onClick.AddListener(() => conversationManager.initConversation(gameManager.boyfriend));
+        personButtons[2].onClick.AddListener(() => conversationManager.initConversation(gameManager.officer));
+        personButtons[3].onClick.AddListener(() => conversationManager.initConversation(gameManager.rea));
     }
-
-    void generatePlot()
-    {
-    }
-
-    void talkTo(Character character)
-    {
-        // get the character in assets folder
-        // string[] results = AssetDatabase.FindAssets(character.ToString());
-        conversationManager.initConversation(character);
-    }
-
 
     void talk()
     {

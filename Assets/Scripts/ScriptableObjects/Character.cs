@@ -1,57 +1,37 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
-[CreateAssetMenu(menuName = "Character")]
-public class Character : ScriptableObject
+public class Character
 {
     // *************** GAME REFERENCES ***************
     public GameObject notebook;
     public CharactersPage charactersPage;
-    public int index;
     public GameObject model;
-    public GameObject bioPage;
-    public GameObject[] fields; // coupling
+    public GameObject biopage;
+    public GameObject[] fields;
+    public bool hasBeenTalkedTo = false;
+    public Conversation conversation;
 
     // *************** CHARACTER PROPERTIES ***************
-    public Sprite photo;
-    public int dateOfBirth, iq;
-    public bool inARelationship;
-    public GameObject partner;
-    public string nickName, firstName, middleName, lastName,
-                  compassionate, loyal, stable, extrovert,
-                  longDescription, description,
-                  careerPath, politicalLeaning, educationField, educationLevel,
-                  diet, sexuality, religion, ethnicity, nationality;
-    public string[] hobbies, favoriteFoods, badHabits, negativeCharacteristics, positiveCharacteristics;
+    public Sprite photo; // TODO: this
+    public string firstName, middleName, lastName, description;
+    public int dateOfBirth;
 
-    public string whereWasFound;
+    // TODO: update this when character is placed
+    public bool isPlaced;
 
-    public bool hasBeenTalkedTo = false;
-    public List<Subject> hasBeenTalkedToAbout;
+    public Character(string name, Sprite photo)
+    {
+        this.firstName = name;
+        this.photo = photo;
+    }
 
-    // ************ WHAT THE PERSON KNOWS (set in the inspector) ************
-    // public bool knowsWeapon, knowsLocation,
-    //             knowsTimeOfDay, wasAtTheScene,
-    //             knowsVictim, knowsMurderer,
-    //             knowsWhoIsMurderer, knowsMotive,
-    //             knowsWhoWitnessed, sawItHappen;
-    public Subject[] knowsAbout;
-
-
-    // TODO: this should probably not be strings
-    public Subject[] liesAbout;
-    public Answer[] lines;
-    public bool isWitness; // check this to see wether the character should have a story to tell about what happened
-
-    public bool isMurderer;
-    /// <summary>
-    /// Console log different values contained in the player. primarily used in conversation
-    /// </summary>
-    public void printState()
+    public void printCharacter()
     {
         Debug.Log(
-            $"**************{this.nickName}**************\n Talked to before: {this.hasBeenTalkedTo} \n Has been talked to about: {this.hasBeenTalkedToAbout} \n"
+            $"**************{this.firstName}**************\n Talked to before: {this.hasBeenTalkedTo}"
         );
     }
 }
