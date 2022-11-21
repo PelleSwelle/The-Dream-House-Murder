@@ -20,20 +20,8 @@ public class ConversationUI : MonoBehaviour
 
     void Start()
     {
-        setOnClickListeners();
-        notification.SetActive(false);
-    }
-
-    /// <summary>
-    /// sets the on clicklisteners on the question buttons
-    /// </summary>
-    void setOnClickListeners()
-    {
-        // questionButtons[0].onClick.AddListener(() => conversationManager.onChooseQuestion(conversationManager.currentlyAvailableQuestions[0]));
-        // questionButtons[1].onClick.AddListener(() => conversationManager.onChooseQuestion(conversationManager.currentlyAvailableQuestions[1]));
-        // questionButtons[2].onClick.AddListener(() => conversationManager.onChooseQuestion(conversationManager.currentlyAvailableQuestions[2]));
-        // questionButtons[3].onClick.AddListener(() => conversationManager.onChooseQuestion(conversationManager.currentlyAvailableQuestions[3]));
         exitButton.onClick.AddListener(() => conversationManager.leaveConversation());
+        notification.SetActive(false);
     }
 
     /// <summary>
@@ -55,6 +43,7 @@ public class ConversationUI : MonoBehaviour
         }
     }
 
+
     /// <summary>
     /// sets the image for the character on the UI
     /// </summary>
@@ -63,6 +52,7 @@ public class ConversationUI : MonoBehaviour
     {
         characterImage.sprite = character.photo;
     }
+
 
     /// <summary>
     /// populates the answer text for the answer
@@ -95,6 +85,9 @@ public class ConversationUI : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// clears the question boxes.
+    /// </summary>
     void clearQuestions()
     {
         int numberOfQuestions = questionsParent.childCount;
@@ -106,10 +99,16 @@ public class ConversationUI : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// gets the list of currentlyAvailableQuestions from conversationManager
+    /// </summary>
+    /// <returns></returns>
     List<Question> getAvailableQuestions()
     {
         return conversationManager.currentlyAvailableQuestions;
     }
+
 
     /// <summary>
     /// Show a notification with the given message for a given delay
@@ -119,6 +118,7 @@ public class ConversationUI : MonoBehaviour
     /// <returns></returns>
     public IEnumerator showNotification(string message, float delay)
     {
+        print($"notification showing: {message}");
         notification.GetComponent<Text>().text = message;
         notification.SetActive(true);
         yield return new WaitForSeconds(delay);

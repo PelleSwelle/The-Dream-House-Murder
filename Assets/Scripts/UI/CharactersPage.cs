@@ -18,9 +18,7 @@ public class CharactersPage : MonoBehaviour
     public Button bioExitButton; // the exit button on the biopage
 
     public GameObject charactersParent; // parent object for all of the characters.
-    void OnValidate()
-    {
-    }
+
     void Start()
     {
         // four buttons = four characters, each with an onclick leading to their biopage
@@ -49,7 +47,6 @@ public class CharactersPage : MonoBehaviour
 
         // get the text from the button
         string name = button.transform.GetChild(1).GetComponent<Text>().text;
-        print($"text on the button: {name}");
 
         foreach (Transform characterTransform in charactersParent.transform)
         {
@@ -58,7 +55,6 @@ public class CharactersPage : MonoBehaviour
                 character = characterTransform.gameObject.GetComponent<CharacterHandler>().character;
             }
         }
-        print($"button contained: {character.firstName}");
         return character;
     }
 
