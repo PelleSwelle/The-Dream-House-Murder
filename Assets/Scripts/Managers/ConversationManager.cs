@@ -34,7 +34,8 @@ public class ConversationManager : MonoBehaviour
         conversationUi.SetActive(false);
         gameManager.mary.printCharacter();
         currentlyAvailableQuestions = new List<Question>();
-        gameManager.mary.conversation = new Conversation(
+        
+         gameManager.mary.conversation = new Conversation(
             new List<Question>()
             {
                 new Question(1, 1, "Who are you to Olivia"),
@@ -44,7 +45,7 @@ public class ConversationManager : MonoBehaviour
                 new Question(4, 1, "Why did you leave the house?"),
                 new Question(4, 2, "Why wasn't Olivia with you?"),
                 new Question(5, 1, "Why did you leave the house?"),
-                new Question(5, 2, "Why didn't you bring Olivia with you?"),
+                //new Question(5, 2, "Why didn't you bring Olivia with you?"),
                 new Question(6, 1, "Who was on the phone?"),
                 new Question(6, 2, "When did you return to the house?"),
                 new Question(7, 1, "Did the two of you fight?"),
@@ -62,8 +63,8 @@ public class ConversationManager : MonoBehaviour
                 new Answer(3, 1, "I was drinking a local bar to calm down..."),
                 new Answer(4, 1, "We had an argument, that made me upset."),
                 new Answer(4, 2, "We had an argument, that made me upset."),
-                new Answer(5, 1, "I heard her speaking to another guys on the phone. Which made me angry because, she has a boyfriend"),
-                new Answer(5, 2, "I heard her speaking to another guys on the phone. Which made me angry because, she has a boyfriend, so I ran away"),
+                new Answer(5, 1, "I heard her speaking to another guys on the phone. Which made me angry because, she has a boyfriend, so I ran away"),
+                //new Answer(5, 2, "I heard her speaking to another guys on the phone. Which made me angry because, she has a boyfriend, so I ran away"),
                 new Answer(6, 1, "Her secret lover, I belive he's an Real-Estate Agent"),
                 new Answer(6, 2, "I returned to the house an hour later, and saw someone running out of the house."),
                 new Answer(7, 1, "No we would never! I left as soon as I felt it was necessary to escape the argument"),
