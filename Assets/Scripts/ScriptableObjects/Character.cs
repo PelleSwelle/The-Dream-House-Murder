@@ -11,27 +11,30 @@ public class Character
     public GameObject model;
     public GameObject biopage;
     public GameObject[] fields;
-    public bool hasBeenTalkedTo = false;
     public Conversation conversation;
 
     // *************** CHARACTER PROPERTIES ***************
+    public bool hasBeenTalkedTo = false;
     public Sprite photo; // TODO: this
     public string firstName, middleName, lastName, description;
     public int dateOfBirth;
 
     // TODO: update this when character is placed
-    public bool isPlaced;
+    public bool isPlaced = false, isScaled = false;
 
-    public Character(string name, Sprite photo)
+    public Character(string name, Sprite photo, GameObject model)
     {
         this.firstName = name;
         this.photo = photo;
+        this.model = model;
+
+        this.isPlaced = false;
+        this.isScaled = false;
     }
 
-    public void printCharacter()
+    public void scaleModel(Vector3 newScale)
     {
-        Debug.Log(
-            $"**************{this.firstName}**************\n Talked to before: {this.hasBeenTalkedTo}"
-        );
+        this.model.transform.localScale = newScale;
+        Debug.Log("scaling character" + this.model.transform.localScale);
     }
 }

@@ -6,54 +6,32 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
-    public UiHandler mainMenuHandler;
+    // public UiHandler mainMenuHandler;
     // getting all of the child pages
     public GameObject titlePage, settingsPage, aboutPage, creditsPage, helpPage;
     public Button playButton, settingsButton, aboutButton, creditsButton, helpButton;
-    public GameObject backButton;
+    public GameObject backObject;
+    public List<GameObject> pages;
 
-    void Awake()
+    void Start()
     {
-        // Instantiate(playButton, this.transform.position, this.transform.rotation, this.transform);
-        // this is dumb but neccessary
-        Button play = playButton.GetComponent<Button>();
-        Button settings = settingsButton.GetComponent<Button>();
-        Button about = aboutButton.GetComponent<Button>();
-        Button credits = creditsButton.GetComponent<Button>();
-        Button help = helpButton.GetComponent<Button>();
-        Button back = backButton.GetComponent<Button>();
+        pages = new List<GameObject> { titlePage, settingsPage, aboutPage, creditsPage, helpPage };
 
         // onclick listeners
-        play.onClick.AddListener(() => enterGame());
-
-        settings.onClick.AddListener(() => mainMenuHandler.goToPage(settingsPage));
-        settings.onClick.AddListener(() => backButton.SetActive(true));
-
-        about.onClick.AddListener(() => mainMenuHandler.goToPage(aboutPage));
-        about.onClick.AddListener(() => backButton.SetActive(true));
-
-        credits.onClick.AddListener(() => mainMenuHandler.goToPage(creditsPage));
-        credits.onClick.AddListener(() => backButton.SetActive(true));
-
-        help.onClick.AddListener(() => mainMenuHandler.goToPage(helpPage));
-        help.onClick.AddListener(() => backButton.SetActive(true));
-
+        playButton.onClick.AddListener(() => enterGame());
+        settingsButton.onClick.AddListener(() => goToPage(settingsPage));
+        aboutButton.onClick.AddListener(() => goToPage(aboutPage));
+        creditsButton.onClick.AddListener(() => goToPage(creditsPage));
+        helpButton.onClick.AddListener(() => goToPage(helpPage));
         // back button
-        back.onClick.AddListener(() => mainMenuHandler.goToPage(titlePage));
-        back.onClick.AddListener(() => backButton.SetActive(false));
+        backObject.GetComponent<Button>().onClick.AddListener(() => goToPage(titlePage));
 
-        // start on title page
-        mainMenuHandler.goToPage(titlePage);
+        openMenu();
     }
 
     void OnValidate()
     {
-        mainMenuHandler.goToPage(titlePage);
-        // titlePage.SetActive(true);
-        // settingsPage.SetActive(false);
-        // aboutPage.SetActive(false);
-        // creditsPage.SetActive(false);
-        // helpPage.SetActive(false);
+        goToPage(titlePage);
     }
 
     /// <summary>
@@ -63,5 +41,29 @@ public class MainMenuController : MonoBehaviour
     {
         SceneManager.LoadScene("MainScene", LoadSceneMode.Single);
         print("start game");
+    }
+
+    void openMenu()
+    {
+        goToPage(titlePage);
+    }
+
+    public void goToPage(GameObject page)
+    {
+        if (page == titlePage) { backObject.SetActive(false); }
+        else { backObject.SetActive(true); }
+
+        // set active or not active to make sure on page does not cover the other
+        foreach (GameObject _page in this.pages)
+        {
+            if (_page == page)
+            {
+                _page.SetActive(true);
+            }
+            else
+            {
+                _page.SetActive(false);
+            }
+        }
     }
 }

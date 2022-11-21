@@ -12,13 +12,9 @@ using System;
 /// </summary>
 public class ConversationManager : MonoBehaviour
 {
-    public List<Question> maryQuestions, boyfriendQuestions, reaQuestions;
-    public List<Answer> maryAnswers, boyfriendAnswers, reaAnswers;
     public ConversationUI conversationUiHandler; // the script attached to the UI object
     public GameObject conversationUi; // the gameobject containing the ui
 
-    public Character character;
-    public Player player;
 
     public List<Question> currentlyAvailableQuestions; // dynamic list of available questions at any given time
     public GameManager gameManager; // the game manager
@@ -32,7 +28,6 @@ public class ConversationManager : MonoBehaviour
     {
         // ID structure: round.question
         conversationUi.SetActive(false);
-        gameManager.mary.printCharacter();
         currentlyAvailableQuestions = new List<Question>();
         gameManager.mary.conversation = new Conversation(
             new List<Question>()
@@ -172,6 +167,7 @@ public class ConversationManager : MonoBehaviour
         return list.Find(x => x.ID == id);
     }
 
+
     /// <summary>
     /// gets the opening line from the character.
     /// the opening line is the Answer with id: 0.1f
@@ -206,6 +202,7 @@ public class ConversationManager : MonoBehaviour
         conversationUiHandler.updateQuestionButtons();
     }
 
+
     /// <summary>
     /// gets the id of the next available round of questions. 
     /// </summary>
@@ -217,6 +214,7 @@ public class ConversationManager : MonoBehaviour
         // TODO: if no more questions
         return lastAnswer.ID_round + 1;
     }
+
 
     /// <summary>
     /// 
@@ -230,6 +228,7 @@ public class ConversationManager : MonoBehaviour
         questions.Add(character.conversation.questions.Find(x => x.ID_round == idRound));
         return questions;
     }
+
 
     /// <summary>
     /// dispatches a question, updates the UI and updates the available questions
@@ -254,6 +253,7 @@ public class ConversationManager : MonoBehaviour
         StartCoroutine(conversationUiHandler.showNotification("asked a question", .5f));
     }
 
+
     /// <summary>
     /// computes an answer to the given question
     /// depending on the whether the character knows something and is truthful
@@ -269,6 +269,7 @@ public class ConversationManager : MonoBehaviour
     {
         return character.conversation.answers.Find(x => x.ID_round == _idRound);
     }
+
 
     /// <summary>
     /// Initiate a conversation with the given character
@@ -299,6 +300,7 @@ public class ConversationManager : MonoBehaviour
         conversationUiHandler.updateAnswerField(getOpeningLine(character));
         conversationUiHandler.setCharacterImage(character);
     }
+
 
     /// <summary>
     /// Sets currentConversation to null and closes the UI
