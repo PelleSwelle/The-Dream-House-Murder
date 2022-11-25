@@ -3308,8 +3308,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 6306658050632196185, guid: 3d63f46ca7185ee4ba3e5b1ce5322632,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: 296bd2dd2ad6940409c0619d9c03737d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4034,7 +4033,7 @@ MonoBehaviour:
   conversationManager: {fileID: 2126531266}
   gameManager: {fileID: 1051953107}
   objectToSpawn: {fileID: 0}
-  placementIndicator: {fileID: 8893717130918351528, guid: e1eb79b9acbffb94abd0837fa10c7ec3,
+  placementIndicator: {fileID: 8193525736852792860, guid: 2ecf51bffdeb7204691ebaeddccb0549,
     type: 3}
   tipManager: {fileID: 1051953110}
   charactersDone: 0
@@ -7577,7 +7576,6 @@ MonoBehaviour:
   conversationUiHandler: {fileID: 2126531268}
   conversationUi: {fileID: 711087383}
   gameManager: {fileID: 1051953107}
-  notebook: {fileID: 42741009}
   charactersPage: {fileID: 771407312}
   isInConversation: 0
   maryTile: {fileID: 1339073698}

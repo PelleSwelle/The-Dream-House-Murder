@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuestionConstants
+public static class QuestionConstants
 {
-    public List<Question> maryQuestions = new List<Question>()
+    public static List<Question> maryQuestions = new List<Question>()
     {
         new Question(1, 0, 0,
             "Who are you to Olivia", new Answer(
@@ -47,7 +47,7 @@ public class QuestionConstants
                 "It must have been that person running away! If only I knew who it was! How could he just do this"), isEndPoint: true)
     };
 
-    public List<Question> officerQuestions = new List<Question>()
+    public static List<Question> officerQuestions = new List<Question>()
     {
         new Question(1, 0, 0,
                 "Who was Involved?", new Answer(
@@ -66,7 +66,7 @@ public class QuestionConstants
                     "No, based on the information we have gathered from each of the suspects, the murderer could be any of them..."), isEndPoint: true)
     };
 
-    public List<Question> jamesQuestions = new List<Question>()
+    public static List<Question> jamesQuestions = new List<Question>()
     {
         new Question(1, 0, 0,
                 "Who are you to Olivia?", new Answer(
@@ -112,7 +112,7 @@ public class QuestionConstants
                     "It has to be Mary! She setup all of this and called the cops", _isTrue: false), isEndPoint: true)
     };
 
-    public List<Question> harryQuestions = new List<Question>()
+    public static List<Question> harryQuestions = new List<Question>()
     {
         new Question(1, 0, 0,
                 "Who are you to Olivia?", new Answer(
@@ -158,5 +158,5 @@ public class QuestionConstants
                     "I have no idea! I did not expect this to ever even happen. I should'nt even be here!"), isEndPoint: true)
     };
 
-
 }
+
