@@ -14,28 +14,35 @@ public class ArManager : MonoBehaviour
     public Character currentCharacter;
     public GameObject placementIndicator;
     private GameObject spawnedObject;
+    Vector3 initialScale;
+
     private Pose pose;
     private ARRaycastManager aRRaycastManager;
     private bool poseIsValid = false;
     private float initialDistance;
-    private Vector3 initialScale;
     public TipManager tipManager;
     public int charactersDone = 0;
     public Button acceptScaleButton;
-    string getDotsText = "Wave your phone around focusing on the ground. White dots should start to appear.";
-    string placeText = "tap the screen to placce a character";
-    string scaleText = "pinch with two fingers to properly scale your character.";
+    string getDotsText = "Wave your phone around focusing on the ground. White dots should start to appear. Tap this message, when they are visible";
+    string placeText = "Aim the icon at the spot, where you want to place your first character";
+    string scaleText = "If the character is not the right size, pinch with two fingers. If It looks good, press ACCEPT SCALE";
+
+    // TODO: the marker is not showing for some reason.
 
     void Start()
     {
         aRRaycastManager = FindObjectOfType<ARRaycastManager>();
-        updateModelAndCharacter();
+        updateModelAndCharacterToPlace();
         gameManager.gameMode = GameMode.placementMode;
         print(gameManager.gameMode);
     }
 
     void Update()
     {
+        bool placementMode = gameManager.gameMode == GameMode.placementMode;
+        bool scalingMode = gameManager.gameMode == GameMode.scalingMode;
+        bool playmode = gameManager.gameMode == GameMode.playMode;
+
         // ***** game mode *****
         if (!currentCharacter.isPlaced)
             gameManager.gameMode = GameMode.placementMode;
@@ -46,24 +53,25 @@ public class ArManager : MonoBehaviour
         else if (currentCharacter.isPlaced && currentCharacter.isScaled)
         {
             if (charactersDone != gameManager.characters.Count)
-                updateModelAndCharacter();
+                updateModelAndCharacterToPlace();
             else
                 gameManager.gameMode = GameMode.playMode;
         }
 
         // ********* INPUT HANDLING *********
 
-        // ********* placement *********
-        if (gameManager.gameMode == GameMode.placementMode)
+        if (placementMode)
         {
+            tipManager.setTipText(placeText);
             deactivateScaleAcceptButton();
 
-            tipManager.setTipText(placeText);
-            if (poseIsValid && Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+            bool isReadyToPlace = poseIsValid && Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began;
+
+            if (isReadyToPlace)
                 placeObject(objectToSpawn, currentCharacter);
         }
-        // ********* scaling *********
-        else if (gameManager.gameMode == GameMode.scalingMode)
+
+        else if (scalingMode)
         {
             tipManager.setTipText(scaleText);
             if (Input.touchCount == 2)
@@ -71,6 +79,7 @@ public class ArManager : MonoBehaviour
                 activateAcceptScaleButton();
                 Touch touchZero = Input.GetTouch(0);
                 Touch touchOne = Input.GetTouch(1);
+
 
                 if (touchZero.phase == TouchPhase.Ended || touchZero.phase == TouchPhase.Canceled ||
                     touchOne.phase == TouchPhase.Ended || touchOne.phase == TouchPhase.Canceled)
@@ -94,11 +103,10 @@ public class ArManager : MonoBehaviour
             }
         }
 
-        // ********* play *********
-        else if (gameManager.gameMode == GameMode.playMode)
+        else if (playmode)
         {
             deactivateScaleAcceptButton();
-            tipManager.setTipText("play");
+
             if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
@@ -106,19 +114,24 @@ public class ArManager : MonoBehaviour
                 Physics.Raycast(ray, out hitData);
 
                 // look for the character pressed in the list of characters
-                foreach (Character character in gameManager.characters)
-                {
-                    if (hitData.collider.name == character.model.name)
-                    {
-                        print($"hit character: {character.firstName}");
-                        conversationManager.initConversation(character);
-                    }
-                }
+                talkToCharacterHitByRaycast(hitData);
             }
         }
 
         UpdatePlacementPose();
         UpdatePlacementIndicator();
+    }
+
+    void talkToCharacterHitByRaycast(RaycastHit hit)
+    {
+        foreach (Character character in gameManager.characters)
+        {
+            if (hit.collider.name == character.model.name)
+            {
+                print($"hit character: {character.firstName}");
+                conversationManager.initConversation(character);
+            }
+        }
     }
 
     void activateAcceptScaleButton()
@@ -168,13 +181,14 @@ public class ArManager : MonoBehaviour
     /// <param name="character"></param>
     void placeObject(GameObject model, Character character)
     {
-        spawnedObject = Instantiate(model, pose.position, pose.rotation);
+        Pose newPose = new Pose(pose.position, new Quaternion(0, 200, 0, 0));
+        spawnedObject = Instantiate(model, newPose.position, newPose.rotation);
         character.model = spawnedObject;
         character.isPlaced = true;
     }
 
     /// <summary> update currentCharacter and the object to spawn</summary>
-    void updateModelAndCharacter()
+    void updateModelAndCharacterToPlace()
     {
         charactersDone += 1;
         currentCharacter = gameManager.characters.Find(x => x.isPlaced == false);

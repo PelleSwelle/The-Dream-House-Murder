@@ -12,7 +12,6 @@ using System;
 /// </summary>
 public class ConversationManager : MonoBehaviour
 {
-    QuestionConstants constants;
     public ConversationUI conversationUiHandler; // the script attached to the UI object
     public GameObject conversationUi; // the gameobject containing the ui
     public List<Question> currentlyAvailableQuestions; // dynamic list of available questions at any given time
@@ -25,7 +24,6 @@ public class ConversationManager : MonoBehaviour
 
     void Start()
     {
-        constants = new QuestionConstants();
         conversationUi.SetActive(false);
         currentlyAvailableQuestions = new List<Question>();
         setCharacterConversations();
@@ -194,10 +192,10 @@ public class ConversationManager : MonoBehaviour
 
     void setCharacterConversations()
     {
-        gameManager.mary.questions = constants.maryQuestions;
-        gameManager.officer.questions = constants.officerQuestions;
-        gameManager.rea.questions = constants.harryQuestions;
-        gameManager.boyfriend.questions = constants.jamesQuestions;
+        gameManager.mary.questions = QuestionConstants.maryQuestions;
+        gameManager.officer.questions = QuestionConstants.officerQuestions;
+        gameManager.rea.questions = QuestionConstants.harryQuestions;
+        gameManager.boyfriend.questions = QuestionConstants.jamesQuestions;
     }
 
 
