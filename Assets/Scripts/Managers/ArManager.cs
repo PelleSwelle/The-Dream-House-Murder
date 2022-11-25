@@ -19,77 +19,101 @@ public class ArManager : MonoBehaviour
     private bool poseIsValid = false;
     private float initialDistance;
     private Vector3 initialScale;
-    // public TipManager tipManager;
+    public TipManager tipManager;
     public int charactersDone = 0;
     public Button acceptScaleButton;
+    string getDotsText = "Wave your phone around focusing on the ground. White dots should start to appear.";
+    string placeText = "tap the screen to placce a character";
+    string scaleText = "pinch with two fingers to properly scale your character.";
 
     void Start()
     {
         aRRaycastManager = FindObjectOfType<ARRaycastManager>();
         updateModelAndCharacter();
+        gameManager.gameMode = GameMode.placementMode;
+        print(gameManager.gameMode);
     }
 
     void Update()
     {
+        // ***** game mode *****
+        if (!currentCharacter.isPlaced)
+            gameManager.gameMode = GameMode.placementMode;
 
-        // *** game mode ***
-        if (currentCharacter.isPlaced && currentCharacter.isScaled)
+        else if (currentCharacter.isPlaced && !currentCharacter.isScaled)
+            gameManager.gameMode = GameMode.scalingMode;
+
+        else if (currentCharacter.isPlaced && currentCharacter.isScaled)
         {
-            deactivateAcceptButton();
-            if (charactersDone == gameManager.characters.Count)
-            {
-                if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
-                {
-                    Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-                    RaycastHit hitData;
-                    Physics.Raycast(ray, out hitData);
-
-                    // print(hitData.collider.name);
-                    foreach (Character character in gameManager.characters)
-                    {
-                        if (hitData.collider.name == character.model.name)
-                        {
-                            print($"hit character: {character.firstName}");
-                            conversationManager.initConversation(character);
-                        }
-                    }
-                }
-            }
-            else
+            if (charactersDone != gameManager.characters.Count)
                 updateModelAndCharacter();
+            else
+                gameManager.gameMode = GameMode.playMode;
         }
 
-        // *** placement
-        if (!currentCharacter.isPlaced && poseIsValid && Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
-            placeObject(objectToSpawn, currentCharacter);
+        // ********* INPUT HANDLING *********
 
-        // *** scaling ***
-        if (currentCharacter.isPlaced && !currentCharacter.isScaled && Input.touchCount == 2)
+        // ********* placement *********
+        if (gameManager.gameMode == GameMode.placementMode)
         {
-            activateAcceptButton();
-            Touch touchZero = Input.GetTouch(0);
-            Touch touchOne = Input.GetTouch(1);
+            deactivateScaleAcceptButton();
 
-            if (touchZero.phase == TouchPhase.Ended || touchZero.phase == TouchPhase.Canceled ||
-                touchOne.phase == TouchPhase.Ended || touchOne.phase == TouchPhase.Canceled)
-                return;
-
-            if (touchZero.phase == TouchPhase.Began || touchOne.phase == TouchPhase.Began)
+            tipManager.setTipText(placeText);
+            if (poseIsValid && Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+                placeObject(objectToSpawn, currentCharacter);
+        }
+        // ********* scaling *********
+        else if (gameManager.gameMode == GameMode.scalingMode)
+        {
+            tipManager.setTipText(scaleText);
+            if (Input.touchCount == 2)
             {
-                initialDistance = Vector2.Distance(touchZero.position, touchOne.position);
-                initialScale = spawnedObject.transform.localScale;
-                Debug.Log("Initial Disatance: " + initialDistance + "GameObject Name: "
-                    + objectToSpawn.name); // Just to check in console
+                activateAcceptScaleButton();
+                Touch touchZero = Input.GetTouch(0);
+                Touch touchOne = Input.GetTouch(1);
+
+                if (touchZero.phase == TouchPhase.Ended || touchZero.phase == TouchPhase.Canceled ||
+                    touchOne.phase == TouchPhase.Ended || touchOne.phase == TouchPhase.Canceled)
+                    return;
+
+                if (touchZero.phase == TouchPhase.Began || touchOne.phase == TouchPhase.Began)
+                {
+                    initialDistance = Vector2.Distance(touchZero.position, touchOne.position);
+                    initialScale = spawnedObject.transform.localScale;
+                }
+                else // if touch is moved
+                {
+                    float currentDistance = Vector2.Distance(touchZero.position, touchOne.position);
+
+                    if (Mathf.Approximately(initialDistance, 0))
+                        return;
+
+                    float factor = currentDistance / initialDistance;
+                    spawnedObject.transform.localScale = initialScale * factor; // scale multiplied by the factor we calculated
+                }
             }
-            else // if touch is moved
+        }
+
+        // ********* play *********
+        else if (gameManager.gameMode == GameMode.playMode)
+        {
+            deactivateScaleAcceptButton();
+            tipManager.setTipText("play");
+            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
             {
-                float currentDistance = Vector2.Distance(touchZero.position, touchOne.position);
+                Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+                RaycastHit hitData;
+                Physics.Raycast(ray, out hitData);
 
-                if (Mathf.Approximately(initialDistance, 0))
-                    return; // do nothing if it can be ignored where inital distance is very close to zero
-
-                float factor = currentDistance / initialDistance;
-                spawnedObject.transform.localScale = initialScale * factor; // scale multiplied by the factor we calculated
+                // look for the character pressed in the list of characters
+                foreach (Character character in gameManager.characters)
+                {
+                    if (hitData.collider.name == character.model.name)
+                    {
+                        print($"hit character: {character.firstName}");
+                        conversationManager.initConversation(character);
+                    }
+                }
             }
         }
 
@@ -97,14 +121,13 @@ public class ArManager : MonoBehaviour
         UpdatePlacementIndicator();
     }
 
-
-    void activateAcceptButton()
+    void activateAcceptScaleButton()
     {
         acceptScaleButton.gameObject.SetActive(true);
         acceptScaleButton.onClick.AddListener(() => acceptScale());
     }
 
-    void deactivateAcceptButton()
+    void deactivateScaleAcceptButton()
     {
         acceptScaleButton.gameObject.SetActive(false);
     }

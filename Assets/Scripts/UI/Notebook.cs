@@ -71,25 +71,25 @@ public class Notebook : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// add the character to the list of conversations
-    /// </summary>
-    /// <param name="character"></param>
-    public void addCharacterToConversations(Character character)
-    {
-        if (conversationsPage.transform.GetChild(1).gameObject.activeInHierarchy)
-        {
-            // TODO: make this a function in notebook
-            conversationsPage.transform.GetChild(1).gameObject.SetActive(false);
-        }
-        // Show notification that the character is added to conversations
-        StartCoroutine(conversationUiHandler.showNotification($"{character.firstName} added to conversations log", .5f));
-        GameObject tile = GameObject.Instantiate(conversationTilePrefab, new Vector3(0, 0, 0), Quaternion.identity, conversationsParent);
-        tile.name = character.firstName + "Tile";
-        tile.transform.GetChild(0).GetComponent<Image>().sprite = character.photo;
-        tile.transform.GetChild(1).GetComponent<Text>().text = character.firstName;
-        tile.transform.GetChild(2).GetComponent<Text>().text = "THIS IS WHERE THE LAST SENTENCE GOES";
-    }
+    // /// <summary>
+    // /// add the character to the list of conversations
+    // /// </summary>
+    // /// <param name="character"></param>
+    // public void addCharacterToConversations(Character character)
+    // {
+    //     if (conversationsPage.transform.GetChild(1).gameObject.activeInHierarchy)
+    //     {
+    //         // TODO: make this a function in notebook
+    //         conversationsPage.transform.GetChild(1).gameObject.SetActive(false);
+    //     }
+    //     // Show notification that the character is added to conversations
+    //     StartCoroutine(conversationUiHandler.showNotification($"{character.firstName} added to conversations log", .5f));
+    //     GameObject tile = GameObject.Instantiate(conversationTilePrefab, new Vector3(0, 0, 0), Quaternion.identity, conversationsParent);
+    //     tile.name = character.firstName + "Tile";
+    //     tile.transform.GetChild(0).GetComponent<Image>().sprite = character.photo;
+    //     tile.transform.GetChild(1).GetComponent<Text>().text = character.firstName;
+    //     // updateConversationTile(tile, )
+    // }
 
     /// <summary>
     /// Sets the conversation tile to reflect the latest sentence said.
