@@ -64,6 +64,11 @@ public class ConversationUI : MonoBehaviour
         answer.hasBeenSaid = true;
     }
 
+    public void displayOpeningLine(Character character)
+    {
+        answerField.text = character.openingLine;
+    }
+
 
     /// <summary>
     /// populates the players text fields with the currently available questions
@@ -72,15 +77,18 @@ public class ConversationUI : MonoBehaviour
     public void updateQuestionButtons()
     {
         clearQuestions();
-        foreach (Question question in getAvailableQuestions())
+
+        foreach (Question q in getAvailableQuestions())
         {
-            print("update ui with: " + question.sentence);
             // instantiate button and set parent
             GameObject questionButton = GameObject.Instantiate(questionPrefab, Vector3.zero, Quaternion.identity, questionsParent);
+
             // set text on button
-            questionButton.GetComponentInChildren<Text>().text = question.sentence;
+            questionButton.GetComponentInChildren<Text>().text = q.sentence;
+
             // add onclick listener
-            questionButton.GetComponent<Button>().onClick.AddListener(() => conversationManager.askQuestion(question, conversationManager.conversationPartner));
+            questionButton.GetComponent<Button>().onClick.AddListener(()
+                => conversationManager.askQuestion(q, conversationManager.conversationPartner));
         }
     }
 
@@ -91,7 +99,6 @@ public class ConversationUI : MonoBehaviour
     void clearQuestions()
     {
         int numberOfQuestions = questionsParent.childCount;
-        print("questionsParent.count: " + questionsParent.childCount);
 
         foreach (Transform child in questionsParent.transform)
         {
@@ -100,12 +107,9 @@ public class ConversationUI : MonoBehaviour
     }
 
 
-    /// <summary>
-    /// gets the list of currentlyAvailableQuestions from conversationManager
-    /// </summary>
-    /// <returns></returns>
     List<Question> getAvailableQuestions()
     {
+        print($"UI received {conversationManager.currentlyAvailableQuestions.Count} questions");
         return conversationManager.currentlyAvailableQuestions;
     }
 

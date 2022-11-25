@@ -9,7 +9,7 @@ public class TipManager : MonoBehaviour
     public Button tipButton;
     public Button acceptButton;
 
-    private string page1text = "You are now in placement mode.\nThere are four characters in this game. Before the game can commence,\nyou will need to place them in your surroundings.\n click to progress";
+    private string page1text = "Wave your phone around, focusing on the ground, until you see white dots appear on the floor";
     private string page2text = "move your phone around, and white dots should start to appear on the ground around you...";
     private string page3text = "place your characters as you see fit. It is recommended to spread them out a bit to be able to use the space around you.";
     Text buttonText;

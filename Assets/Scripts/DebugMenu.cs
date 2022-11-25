@@ -66,21 +66,9 @@ public class DebugMenu : MonoBehaviour
 
     void toggleDebug()
     {
-        print("debug menu toggle");
         if (debugMenu.activeSelf)
-        {
             debugMenu.SetActive(false);
-        }
         else if (!debugMenu.activeSelf)
-        {
             debugMenu.SetActive(true);
-            // bottom.SetActive(false);
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

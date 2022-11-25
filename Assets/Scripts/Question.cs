@@ -2,42 +2,20 @@
 /// respresentation of a question in game.
 /// questions and answers come in pairs
 /// </summary>
-public class Question : ISayable
+public class Question
 {
-    private string line;
-    private int id_round;
-    private int id_variant;
-    private int[] id;
+    public Answer answer;
+    public string sentence;
+    public QuestionID ID;
     public bool hasBeenSaid = false;
-    public Question(int _idRound, int _idVariant, string _line)
+    // public QuestionID unlocksQuestion, unlocks2;
+    public bool hasBranches, isEndPoint;
+    public Question(int id1, int id2, int id3, string _sentence, Answer _answer, bool hasBranches = false, bool isEndPoint = false)
     {
-        this.id_round = _idRound;
-        this.id_variant = _idVariant;
-        this.line = _line;
-        // gather the two variables in the id to one variable
-        this.ID = new int[] { this.id_round, this.id_variant };
+        this.ID = new QuestionID(id1, id2, id3);
+        this.sentence = _sentence;
+        this.answer = _answer;
+        this.hasBranches = hasBranches;
+        this.isEndPoint = isEndPoint;
     }
-
-    public int[] ID
-    {
-        get { return id; }
-        set { id = value; }
-    }
-
-    public string sentence
-    {
-        get { return line; }
-        set { line = value; }
-    }
-    public int ID_round
-    {
-        get { return id_round; }
-        set { id_round = value; }
-    }
-    public int ID_variant
-    {
-        get { return id_variant; }
-        set { id_variant = value; }
-    }
-
 }

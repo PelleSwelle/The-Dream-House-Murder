@@ -11,10 +11,12 @@ public class Character
     public GameObject model;
     public GameObject biopage;
     public GameObject[] fields;
-    public Conversation conversation;
+    // public Conversation conversation;
+    public List<Question> questions;
 
     // *************** CHARACTER PROPERTIES ***************
     public bool hasBeenTalkedTo = false;
+    public string openingLine;
     public Sprite photo; // TODO: this
     public string firstName, middleName, lastName, description;
     public int dateOfBirth;
@@ -22,7 +24,7 @@ public class Character
     // TODO: update this when character is placed
     public bool isPlaced = false, isScaled = false;
 
-    public Character(string name, Sprite photo, GameObject model)
+    public Character(string name, Sprite photo, GameObject model, string _openingLine)
     {
         this.firstName = name;
         this.photo = photo;
@@ -30,6 +32,7 @@ public class Character
 
         this.isPlaced = false;
         this.isScaled = false;
+        this.openingLine = _openingLine;
     }
 
     public void scaleModel(Vector3 newScale)

@@ -8,6 +8,8 @@ public class CharacterHandler : MonoBehaviour
     public Character character;
     public CharactersPage charactersPage;
 
+    public GameObject conversationTile;
+
     void Update()
     {
         // if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
