@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.UI;
 using System.Text.RegularExpressions;
-using System;
+// using System;
 
 /// <summary>
 /// Manager for handling everything that has to do with conversation
@@ -12,6 +12,8 @@ using System;
 /// </summary>
 public class ConversationManager : MonoBehaviour
 {
+    public AudioClip[] voiceLinesMale, voiceLinesFemale;
+    public AudioSource audioSource;
     public ConversationUI conversationUiHandler; // the script attached to the UI object
     public GameObject conversationUi; // the gameobject containing the ui
     public List<Question> currentlyAvailableQuestions; // dynamic list of available questions at any given time
@@ -92,29 +94,29 @@ public class ConversationManager : MonoBehaviour
     {
         currentlyAvailableQuestions.Clear(); // remove current questions from list of available questions
 
-        bool nothingAskedYet = getLatestQuestion(conversationPartner) == null;
+        bool nothingAskedYet = conversationPartner.getLastAskedQuestion() == null;
 
         if (nothingAskedYet)
             currentlyAvailableQuestions.Add(conversationPartner.questions.Find(x => x.ID.val1 == 1));
         else
         {
-            if (getLatestQuestion(conversationPartner).isEndPoint)
+            if (conversationPartner.getLastAskedQuestion().isEndPoint)
             {
                 print("no mas questionosos");
                 return;
             }
             else
             {
-                bool latestQuestionBranchesOut = getLatestQuestion(conversationPartner).hasBranches;
+                bool latestQuestionBranchesOut = conversationPartner.getLastAskedQuestion().hasBranches;
 
                 if (latestQuestionBranchesOut)
                 {
-                    List<Question> unlockedQuestions = getUnlockedQuestions(conversationPartner, getLatestQuestion(conversationPartner));
+                    List<Question> unlockedQuestions = getUnlockedQuestions(conversationPartner, conversationPartner.getLastAskedQuestion());
                     currentlyAvailableQuestions.AddRange(unlockedQuestions);
                 }
                 else
                 {
-                    Question unlockedQuestion = getUnlockedQuestion(conversationPartner, getLatestQuestion(conversationPartner));
+                    Question unlockedQuestion = getUnlockedQuestion(conversationPartner, conversationPartner.getLastAskedQuestion());
                     print("the question continues linearly: " + unlockedQuestion.sentence);
                     currentlyAvailableQuestions.Add(unlockedQuestion);
                 }
@@ -124,41 +126,45 @@ public class ConversationManager : MonoBehaviour
         conversationUiHandler.updateQuestionButtons();
     }
 
-
-    Question getLatestQuestion(Character character)
-    {
-        return character.questions.FindLast(x => x.hasBeenSaid == true);
-    }
-
-
     public void askQuestion(Question question, Character character)
     {
-        // flag the question as has been said
+        if (character.gender == "female")
+            playRandomFemaleVoiceClip();
+        else
+            playRandomMaleVoiceClip();
+
         question.hasBeenSaid = true;
-
         conversationUiHandler.updateAnswerField(question.answer);
-
-        print($"has been said: {question.hasBeenSaid}");
-
         updateAvailableQuestions(character);
-
         conversationUiHandler.updateQuestionButtons();
-
-        // notification
-        StartCoroutine(conversationUiHandler.showNotification("asked a question", .5f));
     }
+    public void playRandomFemaleVoiceClip()
+    {
+        int index = Random.Range(0, voiceLinesFemale.Length);
+        audioSource.PlayOneShot(voiceLinesFemale[index]);
+    }
+
+    public void playRandomMaleVoiceClip()
+    {
+        int index = Random.Range(0, voiceLinesMale.Length);
+        audioSource.PlayOneShot(voiceLinesMale[index]);
+    }
+
 
     public void initConversation(Character character)
     {
+        if (character.gender == "female")
+            playRandomFemaleVoiceClip();
+        else
+            playRandomMaleVoiceClip();
+
         conversationPartner = character;
         print(conversationPartner.firstName);
-        // start with a check to see wether to add the character to the character screen
-        if (!character.hasBeenTalkedTo)
-            character.hasBeenTalkedTo = true;
+
+        character.hasBeenTalkedTo = true;
         // notebook.addCharacterToConversations(character);
         // charactersPage.populateButton(charactersPage.getNextAvailableButton(), character);
 
-        // set the first answer to has been said
         updateAvailableQuestions(character);
 
         conversationUi.SetActive(true);
@@ -169,20 +175,19 @@ public class ConversationManager : MonoBehaviour
 
     public void leaveConversation()
     {
-        if (!conversationPartner.hasBeenTalkedTo)
-            conversationPartner.hasBeenTalkedTo = true;
+        conversationPartner.hasBeenTalkedTo = true;
 
-        Answer lastAnswer = conversationPartner.questions.FindLast(x => x.hasBeenSaid = true).answer;
+        Answer lastGivenAnswer = conversationPartner.questions.FindLast(x => x.hasBeenSaid = true).answer;
 
         // sorry. Was going fast
         if (conversationPartner == gameManager.mary)
-            maryTile.updateAnswer(lastAnswer);
+            maryTile.updateAnswer(lastGivenAnswer);
         else if (conversationPartner == gameManager.officer)
-            officerTile.updateAnswer(lastAnswer);
+            officerTile.updateAnswer(lastGivenAnswer);
         else if (conversationPartner == gameManager.boyfriend)
-            boyfriendTile.updateAnswer(lastAnswer);
+            boyfriendTile.updateAnswer(lastGivenAnswer);
         else if (conversationPartner == gameManager.rea)
-            reaTile.updateAnswer(lastAnswer);
+            reaTile.updateAnswer(lastGivenAnswer);
 
         conversationPartner = null;
         print("left conversation");
@@ -196,14 +201,5 @@ public class ConversationManager : MonoBehaviour
         gameManager.officer.questions = QuestionConstants.officerQuestions;
         gameManager.rea.questions = QuestionConstants.harryQuestions;
         gameManager.boyfriend.questions = QuestionConstants.jamesQuestions;
-    }
-
-
-    void printAvailableQuestions()
-    {
-        foreach (Question q in currentlyAvailableQuestions)
-        {
-            print("Question: " + q.sentence);
-        }
     }
 }

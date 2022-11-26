@@ -42,10 +42,10 @@ public class GameManager : MonoBehaviour
         // numberOfCharactersPlaced = 0;
 
         // ********* LOAD THE CHARACTERS *********
-        mary = new Character("Mary", Resources.Load("maryPhoto") as Sprite, maryPrefab, "henmlo. Am Mary");
-        boyfriend = new Character("Boyfriend", Resources.Load("boyfriendPhoto") as Sprite, boyfriendPrefab, "hep bup boyfriend");
-        officer = new Character("Officer", Resources.Load("officerPhoto") as Sprite, officerPrefab, "hallo am oFfIcEr");
-        rea = new Character("Rea", Resources.Load("reaPhoto") as Sprite, reaPrefab, "em real etstae");
+        mary = new Character("Mary", Resources.Load("maryPhoto") as Sprite, maryPrefab, "henmlo. Am Mary", "female");
+        boyfriend = new Character("Boyfriend", Resources.Load("boyfriendPhoto") as Sprite, boyfriendPrefab, "hep bup boyfriend", "male");
+        officer = new Character("Officer", Resources.Load("officerPhoto") as Sprite, officerPrefab, "hallo am oFfIcEr", "male");
+        rea = new Character("Rea", Resources.Load("reaPhoto") as Sprite, reaPrefab, "em real etstae", "male");
 
         // assign the characters to their respective characterHandlers
         charactersParent.transform.GetChild(0).GetComponent<CharacterHandler>().character = officer;
@@ -55,8 +55,6 @@ public class GameManager : MonoBehaviour
 
         characters = new List<Character> { mary, boyfriend, officer, rea };
     }
-
-    /// <summary> fills the character conversations with newly instantiated questions and answers </summary>
 }
 
 public enum GameMode
