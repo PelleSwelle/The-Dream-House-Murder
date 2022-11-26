@@ -30,7 +30,7 @@ public class NotebookButton : MonoBehaviour
             animator.Play("openNotebook");
             notebook.isOpen = true;
             // by default the opening page is the characters page
-            notebook.goToPage(notebookObject.GetComponent<Notebook>().charactersPage, false);
+            notebook.goToPage(notebookObject.GetComponent<Notebook>().conversationPage, false);
         }
     }
 
