@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 /// </summary>
 public class ConversationManager : MonoBehaviour
 {
+    public ConversationsPage conversationPage;
     public AudioClip[] voiceLinesMale, voiceLinesFemale;
     public AudioSource audioSource;
     public ConversationUI conversationUiHandler; // the script attached to the UI object
@@ -19,10 +20,9 @@ public class ConversationManager : MonoBehaviour
     public List<Question> currentlyAvailableQuestions; // dynamic list of available questions at any given time
     public GameManager gameManager; // the game manager
     // public Notebook notebook; // the script attached to the notebook object
-    public CharactersPage charactersPage; // the script attached to the characters page object
     public bool isInConversation; // whether the player is in a conversation or not
     public Character conversationPartner;
-    public ConversationTile maryTile, boyfriendTile, officerTile, reaTile;
+    // public ConversationTile maryTile, boyfriendTile, officerTile, reaTile;
 
     void Start()
     {
@@ -138,11 +138,13 @@ public class ConversationManager : MonoBehaviour
         updateAvailableQuestions(character);
         conversationUiHandler.updateQuestionButtons();
     }
+
     public void playRandomFemaleVoiceClip()
     {
         int index = Random.Range(0, voiceLinesFemale.Length);
         audioSource.PlayOneShot(voiceLinesFemale[index]);
     }
+
 
     public void playRandomMaleVoiceClip()
     {
@@ -179,15 +181,17 @@ public class ConversationManager : MonoBehaviour
 
         Answer lastGivenAnswer = conversationPartner.questions.FindLast(x => x.hasBeenSaid = true).answer;
 
+
+
         // sorry. Was going fast
-        if (conversationPartner == gameManager.mary)
-            maryTile.updateAnswer(lastGivenAnswer);
-        else if (conversationPartner == gameManager.officer)
-            officerTile.updateAnswer(lastGivenAnswer);
-        else if (conversationPartner == gameManager.boyfriend)
-            boyfriendTile.updateAnswer(lastGivenAnswer);
-        else if (conversationPartner == gameManager.rea)
-            reaTile.updateAnswer(lastGivenAnswer);
+        // if (conversationPartner == gameManager.mary)
+        //     maryTile.updateAnswer(lastGivenAnswer);
+        // else if (conversationPartner == gameManager.officer)
+        //     officerTile.updateAnswer(lastGivenAnswer);
+        // else if (conversationPartner == gameManager.boyfriend)
+        //     boyfriendTile.updateAnswer(lastGivenAnswer);
+        // else if (conversationPartner == gameManager.rea)
+        //     reaTile.updateAnswer(lastGivenAnswer);
 
         conversationPartner = null;
         print("left conversation");

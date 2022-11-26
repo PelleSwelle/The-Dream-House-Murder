@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4618294992073604380}
   - component: {fileID: 4618294992073604383}
   m_Layer: 5
-  m_Name: cluesTab
+  m_Name: deductionTab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -186,7 +186,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Clues
+  m_text: Deduction
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d5392c91028e29f48b9c3e9a0136b904, type: 2}
   m_sharedMaterial: {fileID: -2117661549394393023, guid: d5392c91028e29f48b9c3e9a0136b904,

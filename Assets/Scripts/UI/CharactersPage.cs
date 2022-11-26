@@ -22,23 +22,23 @@ public class CharactersPage : MonoBehaviour
     void Start()
     {
         // four buttons = four characters, each with an onclick leading to their biopage
-        maryTile.onClick.AddListener(() => displayBio(gameManager.mary));
-        boyfriendTile.onClick.AddListener(() => displayBio(gameManager.boyfriend));
-        officerTile.onClick.AddListener(() => displayBio(gameManager.officer));
-        reaTile.onClick.AddListener(() => displayBio(gameManager.rea));
+        // maryTile.onClick.AddListener(() => displayBio(gameManager.mary));
+        // boyfriendTile.onClick.AddListener(() => displayBio(gameManager.boyfriend));
+        // officerTile.onClick.AddListener(() => displayBio(gameManager.officer));
+        // reaTile.onClick.AddListener(() => displayBio(gameManager.rea));
     }
 
-    /// <summary>
-    /// opens the bio page and populates it with the given character taken from the index given.
-    /// </summary>
-    /// <param name="index"></param>
-    public void displayBio(Character _character)
-    {
-        bioPage.SetActive(true);
-        bioPage.GetComponent<BioPage>().populateBio(_character);
-        notebook.goToPage(notebook.bioPage, true);
-        // TODO: check wether the character is met. If not, pop up says: you have not met this person yet.
-    }
+    // /// <summary>
+    // /// opens the bio page and populates it with the given character taken from the index given.
+    // /// </summary>
+    // /// <param name="index"></param>
+    // public void displayBio(Character _character)
+    // {
+    //     bioPage.SetActive(true);
+    //     bioPage.GetComponent<BioPage>().populateBio(_character);
+    //     notebook.goToPage(notebook.bioPage, true);
+    //     // TODO: check wether the character is met. If not, pop up says: you have not met this person yet.
+    // }
 
     // /// <summary>
     // /// populate a button in the characters page with the given character

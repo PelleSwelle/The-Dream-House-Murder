@@ -11,7 +11,6 @@ public class ConversationUI : MonoBehaviour
     public Text answerField;
     public Image characterImage;
     public Character character;
-    public Conversation conversation;
     public ConversationManager conversationManager;
     public GameObject notification;
     public bool isOpen;
