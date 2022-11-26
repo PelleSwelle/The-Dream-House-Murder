@@ -20,11 +20,12 @@ public class Character
     public Sprite photo; // TODO: this
     public string firstName, middleName, lastName, description;
     public int dateOfBirth;
+    public string gender;
 
     // TODO: update this when character is placed
     public bool isPlaced = false, isScaled = false;
 
-    public Character(string name, Sprite photo, GameObject model, string _openingLine)
+    public Character(string name, Sprite photo, GameObject model, string _openingLine, string gender)
     {
         this.firstName = name;
         this.photo = photo;
@@ -33,11 +34,17 @@ public class Character
         this.isPlaced = false;
         this.isScaled = false;
         this.openingLine = _openingLine;
+        this.gender = gender;
     }
 
     public void scaleModel(Vector3 newScale)
     {
         this.model.transform.localScale = newScale;
         Debug.Log("scaling character" + this.model.transform.localScale);
+    }
+
+    public Question getLastAskedQuestion()
+    {
+        return questions.FindLast(x => x.hasBeenSaid == true);
     }
 }

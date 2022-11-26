@@ -8,7 +8,6 @@ using UnityEngine.UI;
 public class ArManager : MonoBehaviour
 {
     public ConversationManager conversationManager;
-    // public GameObject policePerson, boyfriend, mary, rea;
     public GameManager gameManager;
     public GameObject objectToSpawn;
     public Character currentCharacter;
@@ -39,10 +38,6 @@ public class ArManager : MonoBehaviour
 
     void Update()
     {
-        bool placementMode = gameManager.gameMode == GameMode.placementMode;
-        bool scalingMode = gameManager.gameMode == GameMode.scalingMode;
-        bool playmode = gameManager.gameMode == GameMode.playMode;
-
         // ***** game mode *****
         if (!currentCharacter.isPlaced)
             gameManager.gameMode = GameMode.placementMode;
@@ -59,77 +54,90 @@ public class ArManager : MonoBehaviour
         }
 
         // ********* INPUT HANDLING *********
+        bool isInPlacementMode = gameManager.gameMode == GameMode.placementMode;
+        bool isInScalingMode = gameManager.gameMode == GameMode.scalingMode;
+        bool isInPlayMode = gameManager.gameMode == GameMode.playMode;
 
-        if (placementMode)
+        if (isInPlacementMode)
         {
             tipManager.setTipText(placeText);
             deactivateScaleAcceptButton();
 
-            bool isReadyToPlace = poseIsValid && Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began;
-
-            if (isReadyToPlace)
-                placeObject(objectToSpawn, currentCharacter);
+            placeOnTap();
         }
 
-        else if (scalingMode)
+        else if (isInScalingMode)
         {
             tipManager.setTipText(scaleText);
-            if (Input.touchCount == 2)
-            {
-                activateAcceptScaleButton();
-                Touch touchZero = Input.GetTouch(0);
-                Touch touchOne = Input.GetTouch(1);
+            activateAcceptScaleButton();
 
-
-                if (touchZero.phase == TouchPhase.Ended || touchZero.phase == TouchPhase.Canceled ||
-                    touchOne.phase == TouchPhase.Ended || touchOne.phase == TouchPhase.Canceled)
-                    return;
-
-                if (touchZero.phase == TouchPhase.Began || touchOne.phase == TouchPhase.Began)
-                {
-                    initialDistance = Vector2.Distance(touchZero.position, touchOne.position);
-                    initialScale = spawnedObject.transform.localScale;
-                }
-                else // if touch is moved
-                {
-                    float currentDistance = Vector2.Distance(touchZero.position, touchOne.position);
-
-                    if (Mathf.Approximately(initialDistance, 0))
-                        return;
-
-                    float factor = currentDistance / initialDistance;
-                    spawnedObject.transform.localScale = initialScale * factor; // scale multiplied by the factor we calculated
-                }
-            }
+            scaleOnPinch();
         }
 
-        else if (playmode)
+        else if (isInPlayMode)
         {
             deactivateScaleAcceptButton();
 
-            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
-            {
-                Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-                RaycastHit hitData;
-                Physics.Raycast(ray, out hitData);
+            initConversationOnTap();
 
-                // look for the character pressed in the list of characters
-                talkToCharacterHitByRaycast(hitData);
-            }
         }
 
         UpdatePlacementPose();
         UpdatePlacementIndicator();
     }
 
-    void talkToCharacterHitByRaycast(RaycastHit hit)
+    Character getCharacterFromRaycastHit(RaycastHit hit)
     {
-        foreach (Character character in gameManager.characters)
+        Character character = gameManager.characters.Find(x => x.model.name == hit.collider.name);
+        return character;
+    }
+
+    void placeOnTap()
+    {
+        bool isReadyToPlace = poseIsValid && Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began;
+        if (isReadyToPlace)
+            placeObject(objectToSpawn, currentCharacter);
+    }
+
+    void initConversationOnTap()
+    {
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
-            if (hit.collider.name == character.model.name)
+            Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+            RaycastHit hitData;
+            Physics.Raycast(ray, out hitData);
+
+            Character characterToTalkTo = getCharacterFromRaycastHit(hitData);
+            conversationManager.initConversation(characterToTalkTo);
+        }
+    }
+
+    void scaleOnPinch()
+    {
+        if (Input.touchCount == 2)
+        {
+            Touch touchZero = Input.GetTouch(0);
+            Touch touchOne = Input.GetTouch(1);
+
+
+            if (touchZero.phase == TouchPhase.Ended || touchZero.phase == TouchPhase.Canceled ||
+                touchOne.phase == TouchPhase.Ended || touchOne.phase == TouchPhase.Canceled)
+                return;
+
+            if (touchZero.phase == TouchPhase.Began || touchOne.phase == TouchPhase.Began)
             {
-                print($"hit character: {character.firstName}");
-                conversationManager.initConversation(character);
+                initialDistance = Vector2.Distance(touchZero.position, touchOne.position);
+                initialScale = spawnedObject.transform.localScale;
+            }
+            else // if touch is moved
+            {
+                float currentDistance = Vector2.Distance(touchZero.position, touchOne.position);
+
+                if (Mathf.Approximately(initialDistance, 0))
+                    return;
+
+                float factor = currentDistance / initialDistance;
+                spawnedObject.transform.localScale = initialScale * factor; // scale multiplied by the factor we calculated
             }
         }
     }
@@ -137,7 +145,7 @@ public class ArManager : MonoBehaviour
     void activateAcceptScaleButton()
     {
         acceptScaleButton.gameObject.SetActive(true);
-        acceptScaleButton.onClick.AddListener(() => acceptScale());
+        acceptScaleButton.onClick.AddListener(() => acceptScaleOfCharacter());
     }
 
     void deactivateScaleAcceptButton()
@@ -145,10 +153,8 @@ public class ArManager : MonoBehaviour
         acceptScaleButton.gameObject.SetActive(false);
     }
 
-    /// <summary> set the current character to isScaled </summary>
-    void acceptScale()
+    void acceptScaleOfCharacter()
     {
-        print("accept scale, moving on to next character");
         currentCharacter.isScaled = true;
     }
 
