@@ -32,13 +32,13 @@ public class ConversationUI : MonoBehaviour
         {
             conversationObject.SetActive(false);
             this.isOpen = true;
-            conversationManager.isInConversation = false;
+            // conversationManager.isInConversation = false;
         }
         else if (conversationObject.activeSelf)
         {
             conversationObject.SetActive(true);
             this.isOpen = false;
-            conversationManager.isInConversation = true;
+            // conversationManager.isInConversation = true;
         }
     }
 
@@ -87,7 +87,7 @@ public class ConversationUI : MonoBehaviour
 
             // add onclick listener
             questionButton.GetComponent<Button>().onClick.AddListener(()
-                => conversationManager.askQuestion(q, conversationManager.conversationPartner));
+                => conversationManager.askQuestion(q, conversationManager.talkPartner));
         }
     }
 

@@ -22,12 +22,11 @@ public class Character
     public int dateOfBirth;
     public string gender;
 
-    // TODO: update this when character is placed
     public bool isPlaced = false, isScaled = false;
 
-    public Character(string name, Sprite photo, GameObject model, string _openingLine, string gender)
+    public Character(string firstName, Sprite photo, GameObject model, string _openingLine, string gender)
     {
-        this.firstName = name;
+        this.firstName = firstName;
         this.photo = photo;
         this.model = model;
 
@@ -46,5 +45,15 @@ public class Character
     public Question getLastAskedQuestion()
     {
         return questions.FindLast(x => x.hasBeenSaid == true);
+    }
+
+    public Question getQuestionByID(int val1, int val2 = 0, int val3 = 0)
+    {
+        return questions.Find(x => x.ID.val1 == val1 && x.ID.val2 == val2 && x.ID.val3 == val3);
+    }
+
+    public Question getFirstQuestion()
+    {
+        return questions.Find(x => x.ID.val1 == 1);
     }
 }

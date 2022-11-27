@@ -5,6 +5,5 @@ using UnityEngine;
 public class CharacterHandler : MonoBehaviour
 {
     public Character character;
-    public CharactersPage charactersPage;
     public GameObject conversationTile;
 }

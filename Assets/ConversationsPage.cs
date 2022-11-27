@@ -1,15 +1,21 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class ConversationsPage : MonoBehaviour
 {
-    public GameObject maryTile, jamesTile, officerTile, harryTile;
     public ConversationManager conversationManager;
+    public ConversationTile maryTile, jamesTile, officerTile, harryTile;
+    private List<ConversationTile> tiles;
+
+    void Start()
+    {
+        tiles = new List<ConversationTile>() { maryTile, jamesTile, officerTile, harryTile };
+    }
 
     public void updateTileText(Character character)
     {
-        // GameObject tile = character
-        string tileText = character.getLastAskedQuestion().answer.sentence;
-        // tile.transform.GetChild(2).GetComponent<Text>().text = tileText;
+        var tile = tiles.Find(x => x.character == character);
+        tile.updateText(character.getLastAskedQuestion().answer);
     }
 }

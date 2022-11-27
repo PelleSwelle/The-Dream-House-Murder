@@ -959,6 +959,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 203831828}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &203831831 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8290644966861751893, guid: 020b6fcab04229d47b975552c53d3506,
+    type: 3}
+  m_PrefabInstance: {fileID: 203831828}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203831830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb7609d5ab0a9ea4aa6194e8eab5d546, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &223974226
 GameObject:
   m_ObjectHideFlags: 0
@@ -4111,10 +4123,12 @@ MonoBehaviour:
     type: 3}
   maryPrefab: {fileID: 9077816962094724098, guid: 4a52365d33d7eae4f8d3a2219898744c,
     type: 3}
-  boyfriendPrefab: {fileID: 8220149827311068818, guid: 4ffbb085be388624d9ad9c6d329a7676,
-    type: 3}
-  reaPrefab: {fileID: 5309242904282657856, guid: eec3b2c897a73ef4b88fcd6eed23ed1e,
-    type: 3}
+  jamesPrefab: {fileID: 0}
+  harryPrefab: {fileID: 0}
+  officerPhoto: {fileID: 21300000, guid: 78cccc1e7e6378048b6e028a7cf9a806, type: 3}
+  maryPhoto: {fileID: 21300000, guid: ae7ef9ac013fa86409196bf0e47b5c95, type: 3}
+  jamesPhoto: {fileID: 21300000, guid: 05a1618ba945f024db07a0b16cf695d7, type: 3}
+  harryPhoto: {fileID: 21300000, guid: cc0edcb738c6d8e42924e9586c2a7edc, type: 3}
   gameMode: 0
 --- !u!4 &1051953108
 Transform:
@@ -4717,6 +4731,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1339073695}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1339073698 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8290644966861751893, guid: 020b6fcab04229d47b975552c53d3506,
+    type: 3}
+  m_PrefabInstance: {fileID: 1339073695}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1339073697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb7609d5ab0a9ea4aa6194e8eab5d546, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1347568195
 GameObject:
   m_ObjectHideFlags: 0
@@ -5039,6 +5065,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9178593339451348349, guid: 020b6fcab04229d47b975552c53d3506,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9178593341147173505, guid: 020b6fcab04229d47b975552c53d3506,
         type: 3}
       propertyPath: m_Sprite
@@ -5059,6 +5090,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1467534407}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1467534410 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8290644966861751893, guid: 020b6fcab04229d47b975552c53d3506,
+    type: 3}
+  m_PrefabInstance: {fileID: 1467534407}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1467534409}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb7609d5ab0a9ea4aa6194e8eab5d546, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1479747841
 GameObject:
   m_ObjectHideFlags: 0
@@ -6080,6 +6123,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1932661180}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1932661183 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8290644966861751893, guid: 020b6fcab04229d47b975552c53d3506,
+    type: 3}
+  m_PrefabInstance: {fileID: 1932661180}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1932661182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb7609d5ab0a9ea4aa6194e8eab5d546, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1979780489
 GameObject:
   m_ObjectHideFlags: 0
@@ -6503,11 +6558,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a62ec7462445b3f4aadf6e4dcae2b410, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maryTile: {fileID: 1339073697}
-  jamesTile: {fileID: 1932661182}
-  officerTile: {fileID: 1467534409}
-  harryTile: {fileID: 203831830}
   conversationManager: {fileID: 2126531266}
+  maryTile: {fileID: 1339073698}
+  jamesTile: {fileID: 1932661183}
+  officerTile: {fileID: 1467534410}
+  harryTile: {fileID: 203831831}
 --- !u!1001 &2104528656
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7080,6 +7135,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45cc5f5fcf3286d47806c06cae8cfa09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  conversationUi: {fileID: 711087383}
+  conversationUiHandler: {fileID: 2126531268}
   conversationPage: {fileID: 2059793032}
   voiceLinesMale:
   - {fileID: 8300000, guid: a87ed3e3f1a743e45aafdac045b09128, type: 3}
@@ -7094,10 +7151,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 0c50c7fac89635f4c89cf00a2ddcce12, type: 3}
   - {fileID: 8300000, guid: 53f5ba898cfe00e4b876121359ae6f2f, type: 3}
   audioSource: {fileID: 42741013}
-  conversationUiHandler: {fileID: 2126531268}
-  conversationUi: {fileID: 711087383}
   gameManager: {fileID: 1051953107}
-  isInConversation: 0
 --- !u!4 &2126531267
 Transform:
   m_ObjectHideFlags: 0

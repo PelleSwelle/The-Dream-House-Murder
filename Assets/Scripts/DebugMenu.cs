@@ -47,9 +47,9 @@ public class DebugMenu : MonoBehaviour
         pickupButton.onClick.AddListener(() => pickup());
 
         personButtons[0].onClick.AddListener(() => conversationManager.initConversation(gameManager.mary));
-        personButtons[1].onClick.AddListener(() => conversationManager.initConversation(gameManager.boyfriend));
+        personButtons[1].onClick.AddListener(() => conversationManager.initConversation(gameManager.james));
         personButtons[2].onClick.AddListener(() => conversationManager.initConversation(gameManager.officer));
-        personButtons[3].onClick.AddListener(() => conversationManager.initConversation(gameManager.rea));
+        personButtons[3].onClick.AddListener(() => conversationManager.initConversation(gameManager.harry));
     }
 
     void talk()
