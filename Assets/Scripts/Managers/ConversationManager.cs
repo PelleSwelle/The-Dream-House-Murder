@@ -7,22 +7,22 @@ using System.Text.RegularExpressions;
 // using System;
 
 /// <summary>
-/// Manager for handling everything that has to do with conversation
-/// incl: UI, questions, answers and state
+/// Delegating all tasks that have to do with conversations
 /// </summary>
 public class ConversationManager : MonoBehaviour
 {
+    #region memberVariables
+    public GameObject conversationUi; // the gameobject containing the ui
+    public ConversationUI conversationUiHandler; // the script attached to the UI object
     public ConversationsPage conversationPage;
+
     public AudioClip[] voiceLinesMale, voiceLinesFemale;
     public AudioSource audioSource;
-    public ConversationUI conversationUiHandler; // the script attached to the UI object
-    public GameObject conversationUi; // the gameobject containing the ui
+
     public List<Question> currentlyAvailableQuestions; // dynamic list of available questions at any given time
     public GameManager gameManager; // the game manager
-    // public Notebook notebook; // the script attached to the notebook object
-    public bool isInConversation; // whether the player is in a conversation or not
-    public Character conversationPartner;
-    // public ConversationTile maryTile, boyfriendTile, officerTile, reaTile;
+    public Character talkPartner;
+    #endregion
 
     void Start()
     {
@@ -45,78 +45,53 @@ public class ConversationManager : MonoBehaviour
         List<Question> unlockedQuestions = new List<Question>();
         QuestionID lastQuestionID = question.ID;
 
-        // first value always goes forward
         int firstVal = lastQuestionID.val1 + 1;
-        // second and third can be beside each other
-        int secondVal, thirdVal;
 
         // seeing whether we come from one digit or two
-        bool comesFromSingleDigit = lastQuestionID.val2 == 0;
-        bool comesFromTwoDigit = lastQuestionID.val2 != 0 && lastQuestionID.val3 == 0;
+        bool lastQuestionWasSingleDigit = lastQuestionID.val2 == 0;
+        bool lastQuestionWasTwoDigit = lastQuestionID.val2 != 0 && lastQuestionID.val3 == 0;
 
-        if (comesFromSingleDigit)
+        if (lastQuestionWasSingleDigit)
         {
-            print("comes from single digit");
-            // first question
-            secondVal = 1;
-            unlockedQuestions.Add(getQuestionByID(character, firstVal, secondVal));
-
-            // second question
-            secondVal = 2;
-            unlockedQuestions.Add(getQuestionByID(character, firstVal, secondVal));
+            unlockedQuestions.Add(character.getQuestionByID(firstVal, 1));
+            unlockedQuestions.Add(character.getQuestionByID(firstVal, 2));
         }
-        else if (comesFromTwoDigit)
+        else if (lastQuestionWasTwoDigit)
         {
-            print("comes from double digit");
-            secondVal = lastQuestionID.val2;
-            // first question
-            thirdVal = 1;
-            unlockedQuestions.Add(getQuestionByID(character, firstVal, secondVal, thirdVal));
-            // second question
-            thirdVal = 2;
-            unlockedQuestions.Add(getQuestionByID(character, firstVal, secondVal, thirdVal));
+            unlockedQuestions.Add(character.getQuestionByID(firstVal, lastQuestionID.val2, 1));
+            unlockedQuestions.Add(character.getQuestionByID(firstVal, lastQuestionID.val2, 2));
         }
         else
-            print("uuuhhhh");
+            print("eeerrrhhhh");
 
         return unlockedQuestions;
     }
 
 
-    /// <summary> gets the question with the matching ID</summary>
-    Question getQuestionByID(Character character, int val1, int val2 = 0, int val3 = 0)
-    {
-        return character.questions.Find(x => x.ID.val1 == val1 && x.ID.val2 == val2 && x.ID.val3 == val3);
-    }
-
-
-    void updateAvailableQuestions(Character conversationPartner)
+    void updateAvailableQuestions(Character talkPartner)
     {
         currentlyAvailableQuestions.Clear(); // remove current questions from list of available questions
 
-        bool nothingAskedYet = conversationPartner.getLastAskedQuestion() == null;
+        bool nothingAskedYet = talkPartner.getLastAskedQuestion() == null;
 
         if (nothingAskedYet)
-            currentlyAvailableQuestions.Add(conversationPartner.questions.Find(x => x.ID.val1 == 1));
+            currentlyAvailableQuestions.Add(talkPartner.getFirstQuestion());
         else
         {
-            if (conversationPartner.getLastAskedQuestion().isEndPoint)
-            {
-                print("no mas questionosos");
+            if (talkPartner.getLastAskedQuestion().isEndPoint)
                 return;
-            }
             else
             {
-                bool latestQuestionBranchesOut = conversationPartner.getLastAskedQuestion().hasBranches;
+                bool latestQuestionBranchesOut = talkPartner.getLastAskedQuestion().hasBranches;
 
                 if (latestQuestionBranchesOut)
                 {
-                    List<Question> unlockedQuestions = getUnlockedQuestions(conversationPartner, conversationPartner.getLastAskedQuestion());
+                    List<Question> unlockedQuestions = getUnlockedQuestions(talkPartner, talkPartner.getLastAskedQuestion());
                     currentlyAvailableQuestions.AddRange(unlockedQuestions);
                 }
                 else
                 {
-                    Question unlockedQuestion = getUnlockedQuestion(conversationPartner, conversationPartner.getLastAskedQuestion());
+                    Question unlockedQuestion = getUnlockedQuestion(talkPartner, talkPartner.getLastAskedQuestion());
                     print("the question continues linearly: " + unlockedQuestion.sentence);
                     currentlyAvailableQuestions.Add(unlockedQuestion);
                 }
@@ -137,14 +112,15 @@ public class ConversationManager : MonoBehaviour
         conversationUiHandler.updateAnswerField(question.answer);
         updateAvailableQuestions(character);
         conversationUiHandler.updateQuestionButtons();
+        conversationPage.updateTileText(talkPartner);
     }
 
+    // REPONSIBILITY: playing sound
     public void playRandomFemaleVoiceClip()
     {
         int index = Random.Range(0, voiceLinesFemale.Length);
         audioSource.PlayOneShot(voiceLinesFemale[index]);
     }
-
 
     public void playRandomMaleVoiceClip()
     {
@@ -160,12 +136,9 @@ public class ConversationManager : MonoBehaviour
         else
             playRandomMaleVoiceClip();
 
-        conversationPartner = character;
-        print(conversationPartner.firstName);
+        talkPartner = character;
 
         character.hasBeenTalkedTo = true;
-        // notebook.addCharacterToConversations(character);
-        // charactersPage.populateButton(charactersPage.getNextAvailableButton(), character);
 
         updateAvailableQuestions(character);
 
@@ -177,33 +150,16 @@ public class ConversationManager : MonoBehaviour
 
     public void leaveConversation()
     {
-        conversationPartner.hasBeenTalkedTo = true;
-
-        Answer lastGivenAnswer = conversationPartner.questions.FindLast(x => x.hasBeenSaid = true).answer;
-
-
-
-        // sorry. Was going fast
-        // if (conversationPartner == gameManager.mary)
-        //     maryTile.updateAnswer(lastGivenAnswer);
-        // else if (conversationPartner == gameManager.officer)
-        //     officerTile.updateAnswer(lastGivenAnswer);
-        // else if (conversationPartner == gameManager.boyfriend)
-        //     boyfriendTile.updateAnswer(lastGivenAnswer);
-        // else if (conversationPartner == gameManager.rea)
-        //     reaTile.updateAnswer(lastGivenAnswer);
-
-        conversationPartner = null;
-        print("left conversation");
+        talkPartner = null;
         conversationUi.SetActive(false);
     }
 
-
+    // RESPONSIBILITY: setting constants
     void setCharacterConversations()
     {
         gameManager.mary.questions = QuestionConstants.maryQuestions;
         gameManager.officer.questions = QuestionConstants.officerQuestions;
-        gameManager.rea.questions = QuestionConstants.harryQuestions;
-        gameManager.boyfriend.questions = QuestionConstants.jamesQuestions;
+        gameManager.harry.questions = QuestionConstants.harryQuestions;
+        gameManager.james.questions = QuestionConstants.jamesQuestions;
     }
 }
