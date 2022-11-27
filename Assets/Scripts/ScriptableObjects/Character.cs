@@ -6,20 +6,17 @@ using UnityEngine.UI;
 public class Character
 {
     // *************** GAME REFERENCES ***************
-    public GameObject notebook;
-    public CharactersPage charactersPage;
     public GameObject model;
-    public GameObject biopage;
-    public GameObject[] fields;
-    // public Conversation conversation;
-    public List<Question> questions;
+    public List<Question> questionsInCurrentAct;
+    public Act[] acts;
+    public Act currentAct;
+    public List<Question> questionsAsked;
 
     // *************** CHARACTER PROPERTIES ***************
     public bool hasBeenTalkedTo = false;
     public string openingLine;
     public Sprite photo; // TODO: this
     public string firstName, middleName, lastName, description;
-    public int dateOfBirth;
     public string gender;
 
     public bool isPlaced = false, isScaled = false;
@@ -34,6 +31,38 @@ public class Character
         this.isScaled = false;
         this.openingLine = _openingLine;
         this.gender = gender;
+
+        acts = new Act[2];
+
+        questionsAsked = new List<Question>();
+
+        if (firstName == "Mary")
+        {
+            acts[0] = new Act(1, Constants.maryQuestions);
+            acts[1] = new Act(2, Constants.maryQuestions);
+
+        }
+        else if (firstName == "James")
+        {
+            acts[0] = new Act(1, Constants.jamesQuestions);
+            acts[1] = new Act(2, Constants.jamesAct2);
+        }
+        else if (firstName == "Officer")
+        {
+            acts[0] = new Act(1, Constants.officerQuestions);
+            acts[1] = new Act(2, Constants.officerAct2);
+        }
+        else if (firstName == "Harry")
+        {
+            acts[0] = new Act(1, Constants.harryQuestions);
+            acts[1] = new Act(2, Constants.harryAct2);
+        }
+        currentAct = acts[0];
+    }
+
+    public void setScale()
+    {
+        isScaled = true;
     }
 
     public void scaleModel(Vector3 newScale)
@@ -42,18 +71,24 @@ public class Character
         Debug.Log("scaling character" + this.model.transform.localScale);
     }
 
+    public void goToNextAct()
+    {
+        currentAct = acts[1];
+    }
+
     public Question getLastAskedQuestion()
     {
-        return questions.FindLast(x => x.hasBeenSaid == true);
+        return questionsAsked[questionsAsked.Count - 1];
     }
 
-    public Question getQuestionByID(int val1, int val2 = 0, int val3 = 0)
+    public Question getLastAskedQuestionFromCurrentAct()
     {
-        return questions.Find(x => x.ID.val1 == val1 && x.ID.val2 == val2 && x.ID.val3 == val3);
+        return questionsInCurrentAct.FindLast(x => x.hasBeenSaid == true);
     }
 
-    public Question getFirstQuestion()
+
+    public Question getFirstQuestionInCurrentAct()
     {
-        return questions.Find(x => x.ID.val1 == 1);
+        return questionsInCurrentAct.Find(x => x.ID.val1 == 1);
     }
 }

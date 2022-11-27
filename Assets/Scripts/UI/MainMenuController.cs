@@ -40,7 +40,6 @@ public class MainMenuController : MonoBehaviour
     void enterGame()
     {
         SceneManager.LoadScene("MainScene", LoadSceneMode.Single);
-        print("start game");
     }
 
     void openMenu()

@@ -9,22 +9,24 @@ public class ArManager : MonoBehaviour
 {
     public ConversationManager conversationManager;
     public GameManager gameManager;
-    public GameObject objectToSpawn;
-    public Character currentCharacter;
-    public GameObject placementIndicator;
+
+    private GameObject objectToSpawn;
     private GameObject spawnedObject;
+    private Character currentCharacter;
+
+    public GameObject placementIndicator;
     Vector3 initialScale;
 
     private Pose pose;
     private ARRaycastManager aRRaycastManager;
+
     private bool poseIsValid = false;
     private float initialDistance;
     public TipManager tipManager;
+
     public int charactersDone = 0;
+
     public Button acceptScaleButton;
-    string getDotsText = "Wave your phone around focusing on the ground. White dots should start to appear. Tap this message, when they are visible";
-    string placeText = "Aim the icon at the spot, where you want to place your first character";
-    string scaleText = "If the character is not the right size, pinch with two fingers. If It looks good, press ACCEPT SCALE";
 
     // TODO: the marker is not showing for some reason.
 
@@ -33,7 +35,6 @@ public class ArManager : MonoBehaviour
         aRRaycastManager = FindObjectOfType<ARRaycastManager>();
         updateModelAndCharacterToPlace();
         gameManager.gameMode = GameMode.placementMode;
-        print(gameManager.gameMode);
     }
 
     void Update()
@@ -60,7 +61,7 @@ public class ArManager : MonoBehaviour
 
         if (isInPlacementMode)
         {
-            tipManager.setTipText(placeText);
+            tipManager.setText(tipManager.planesInstructions);
             deactivateScaleAcceptButton();
 
             placeOnTap();
@@ -68,7 +69,7 @@ public class ArManager : MonoBehaviour
 
         else if (isInScalingMode)
         {
-            tipManager.setTipText(scaleText);
+            tipManager.setText(tipManager.scalingInstructions);
             activateAcceptScaleButton();
 
             scaleOnPinch();
@@ -145,7 +146,7 @@ public class ArManager : MonoBehaviour
     void activateAcceptScaleButton()
     {
         acceptScaleButton.gameObject.SetActive(true);
-        acceptScaleButton.onClick.AddListener(() => acceptScaleOfCharacter());
+        acceptScaleButton.onClick.AddListener(() => currentCharacter.setScale());
     }
 
     void deactivateScaleAcceptButton()
@@ -153,17 +154,13 @@ public class ArManager : MonoBehaviour
         acceptScaleButton.gameObject.SetActive(false);
     }
 
-    void acceptScaleOfCharacter()
-    {
-        currentCharacter.isScaled = true;
-    }
-
     void UpdatePlacementIndicator()
     {
         if (spawnedObject == null && poseIsValid)
         {
             placementIndicator.SetActive(true);
-            placementIndicator.transform.SetPositionAndRotation(pose.position, pose.rotation);
+            Pose newPose = new Pose(pose.position, new Quaternion(0, 200, 0, 0));
+            placementIndicator.transform.SetPositionAndRotation(pose.position, newPose.rotation);
         }
         else
         {
@@ -199,7 +196,6 @@ public class ArManager : MonoBehaviour
         charactersDone += 1;
         currentCharacter = gameManager.characters.Find(x => x.isPlaced == false);
         objectToSpawn = gameManager.characters.Find(x => x.isPlaced == false).model;
-        print($"model to place: {objectToSpawn.name} belongs to: {currentCharacter.firstName}");
     }
 
 }

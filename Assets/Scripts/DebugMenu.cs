@@ -13,8 +13,6 @@ public class DebugMenu : MonoBehaviour
     public Button talkBtn, pickupBtn;
     public Button[] personButtons;
     public ConversationManager conversationManager;
-    public CharactersPage charactersPage;
-
 
     void OnValidate()
     {
