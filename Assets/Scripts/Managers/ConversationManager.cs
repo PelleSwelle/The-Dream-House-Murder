@@ -21,23 +21,22 @@ public class ConversationManager : MonoBehaviour
 
     public List<Question> currentlyAvailableQuestions; // dynamic list of available questions at any given time
     public GameManager gameManager; // the game manager
-    public Character talkPartner;
+    public Character currentConversationCharacter;
     #endregion
 
     void Start()
     {
         conversationUi.SetActive(false);
         currentlyAvailableQuestions = new List<Question>();
-        setCharacterConversations();
+        setInitialConversations();
     }
 
     /// <summary> gets the unlocked question in the case there is only one </summary>
-    Question getUnlockedQuestion(Character character, Question question)
+    Question getUnlockedQuestion(Character character, Question previousQuestion)
     {
-        Question unlockedQuestion = character.questions.Find(x => x.ID.val1 == question.ID.val1 + 1);
+        Question unlockedQuestion = character.questionsInCurrentAct.Find(x => x.ID.val1 == previousQuestion.ID.val1 + 1);
         return unlockedQuestion;
     }
-
 
     /// <summary> gets a list of the unlocked questions in the case there are two </summary>
     List<Question> getUnlockedQuestions(Character character, Question question)
@@ -48,18 +47,18 @@ public class ConversationManager : MonoBehaviour
         int firstVal = lastQuestionID.val1 + 1;
 
         // seeing whether we come from one digit or two
-        bool lastQuestionWasSingleDigit = lastQuestionID.val2 == 0;
-        bool lastQuestionWasTwoDigit = lastQuestionID.val2 != 0 && lastQuestionID.val3 == 0;
+        bool incomingQuestionWasSingleDigit = lastQuestionID.val2 == 0;
+        bool incomingQuestionWasTwoDigit = lastQuestionID.val2 != 0 && lastQuestionID.val3 == 0;
 
-        if (lastQuestionWasSingleDigit)
+        if (incomingQuestionWasSingleDigit)
         {
-            unlockedQuestions.Add(character.getQuestionByID(firstVal, 1));
-            unlockedQuestions.Add(character.getQuestionByID(firstVal, 2));
+            unlockedQuestions.Add(character.currentAct.getQuestionByID(firstVal, 1));
+            unlockedQuestions.Add(character.currentAct.getQuestionByID(firstVal, 2));
         }
-        else if (lastQuestionWasTwoDigit)
+        else if (incomingQuestionWasTwoDigit)
         {
-            unlockedQuestions.Add(character.getQuestionByID(firstVal, lastQuestionID.val2, 1));
-            unlockedQuestions.Add(character.getQuestionByID(firstVal, lastQuestionID.val2, 2));
+            unlockedQuestions.Add(character.currentAct.getQuestionByID(firstVal, lastQuestionID.val2, 1));
+            unlockedQuestions.Add(character.currentAct.getQuestionByID(firstVal, lastQuestionID.val2, 2));
         }
         else
             print("eeerrrhhhh");
@@ -72,27 +71,30 @@ public class ConversationManager : MonoBehaviour
     {
         currentlyAvailableQuestions.Clear(); // remove current questions from list of available questions
 
-        bool nothingAskedYet = talkPartner.getLastAskedQuestion() == null;
+        bool nothingAskedYet = talkPartner.getLastAskedQuestionFromCurrentAct() == null;
 
         if (nothingAskedYet)
-            currentlyAvailableQuestions.Add(talkPartner.getFirstQuestion());
+            currentlyAvailableQuestions.Add(talkPartner.getFirstQuestionInCurrentAct());
         else
         {
-            if (talkPartner.getLastAskedQuestion().isEndPoint)
+            if (talkPartner.getLastAskedQuestionFromCurrentAct().isEndPoint)
+            {
+                conversationUiHandler.showNotification($"act: {talkPartner.currentAct.actNumber}", 1000);
+                talkPartner.goToNextAct();
                 return;
+            }
             else
             {
-                bool latestQuestionBranchesOut = talkPartner.getLastAskedQuestion().hasBranches;
+                bool latestQuestionBranchesOut = talkPartner.getLastAskedQuestionFromCurrentAct().hasBranches;
 
                 if (latestQuestionBranchesOut)
                 {
-                    List<Question> unlockedQuestions = getUnlockedQuestions(talkPartner, talkPartner.getLastAskedQuestion());
+                    List<Question> unlockedQuestions = getUnlockedQuestions(talkPartner, talkPartner.getLastAskedQuestionFromCurrentAct());
                     currentlyAvailableQuestions.AddRange(unlockedQuestions);
                 }
                 else
                 {
-                    Question unlockedQuestion = getUnlockedQuestion(talkPartner, talkPartner.getLastAskedQuestion());
-                    print("the question continues linearly: " + unlockedQuestion.sentence);
+                    Question unlockedQuestion = getUnlockedQuestion(talkPartner, talkPartner.getLastAskedQuestionFromCurrentAct());
                     currentlyAvailableQuestions.Add(unlockedQuestion);
                 }
             }
@@ -108,13 +110,21 @@ public class ConversationManager : MonoBehaviour
         else
             playRandomMaleVoiceClip();
 
+        character.questionsAsked.Add(question);
         question.hasBeenSaid = true;
         conversationUiHandler.updateAnswerField(question.answer);
         updateAvailableQuestions(character);
         conversationUiHandler.updateQuestionButtons();
-        conversationPage.updateTileText(talkPartner);
+        conversationPage.updateTileText(currentConversationCharacter);
     }
 
+    private void playVoiceClip(Character character)
+    {
+        if (character.gender == "female")
+            playRandomFemaleVoiceClip();
+        else
+            playRandomMaleVoiceClip();
+    }
     // REPONSIBILITY: playing sound
     public void playRandomFemaleVoiceClip()
     {
@@ -131,12 +141,9 @@ public class ConversationManager : MonoBehaviour
 
     public void initConversation(Character character)
     {
-        if (character.gender == "female")
-            playRandomFemaleVoiceClip();
-        else
-            playRandomMaleVoiceClip();
+        playVoiceClip(character);
 
-        talkPartner = character;
+        currentConversationCharacter = character;
 
         character.hasBeenTalkedTo = true;
 
@@ -150,16 +157,16 @@ public class ConversationManager : MonoBehaviour
 
     public void leaveConversation()
     {
-        talkPartner = null;
+        currentConversationCharacter = null;
         conversationUi.SetActive(false);
     }
 
     // RESPONSIBILITY: setting constants
-    void setCharacterConversations()
+    void setInitialConversations()
     {
-        gameManager.mary.questions = QuestionConstants.maryQuestions;
-        gameManager.officer.questions = QuestionConstants.officerQuestions;
-        gameManager.harry.questions = QuestionConstants.harryQuestions;
-        gameManager.james.questions = QuestionConstants.jamesQuestions;
+        gameManager.mary.questionsInCurrentAct = Constants.maryQuestions;
+        gameManager.officer.questionsInCurrentAct = Constants.officerQuestions;
+        gameManager.harry.questionsInCurrentAct = Constants.harryQuestions;
+        gameManager.james.questionsInCurrentAct = Constants.jamesQuestions;
     }
 }

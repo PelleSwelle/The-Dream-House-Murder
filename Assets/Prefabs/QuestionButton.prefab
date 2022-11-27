@@ -91,6 +91,7 @@ GameObject:
   - component: {fileID: 8185257434280562776}
   - component: {fileID: 8185257434280562777}
   - component: {fileID: 8185257434280562778}
+  - component: {fileID: 604112955479913792}
   m_Layer: 5
   m_Name: QuestionButton
   m_TagString: Untagged
@@ -200,3 +201,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &604112955479913792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8185257434280562788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 793e1d09b358ad94ea928513a9925bd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterPhoto: {fileID: 0}
+  characterName: 
+  messengerTilePrefab: {fileID: 0}
+  messagesContainer: {fileID: 0}

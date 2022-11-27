@@ -7,35 +7,30 @@ public class TipManager : MonoBehaviour
 {
     public GameObject tutorialOverlay;
     public Button tipButton;
-    public Button acceptButton;
 
-    private string page1text = "Wave your phone around, focusing on the ground, until you see white dots appear on the floor";
-    private string page2text = "move your phone around, and white dots should start to appear on the ground around you...";
-    private string page3text = "place your characters as you see fit. It is recommended to spread them out a bit to be able to use the space around you.";
+    public string planesInstructions = "move your phone around, and white dots should start to appear on the ground around you...";
+    public string placementInstructions = "Aim the icon at the spot, where you want to place your first character, and tap the screen";
+    public string scalingInstructions = "If the character is not the right size, pinch with two fingers. If It looks good, press ACCEPT SCALE";
     Text buttonText;
 
     void Start()
     {
         buttonText = tipButton.GetComponentInChildren<Text>();
-        setTipText(page1text);
+        setText(planesInstructions);
 
-        tipButton.onClick.AddListener(() => progressTutorial());
+        tipButton.onClick.AddListener(() => click());
     }
 
 
-    public void setTipText(string text)
+    public void setText(string text)
     {
         buttonText.text = text;
     }
 
-    /// <summary>
-    /// moves from one part of the tutorial text to the next, if at last one, closes the window
-    /// </summary>
-    void progressTutorial()
+    void click()
     {
-        // Sorry. was going fast
-        if (buttonText.text == page1text) { setTipText(page2text); }
-        else if (buttonText.text == page2text) { setTipText(page3text); }
-        else if (buttonText.text == page3text) { tipButton.gameObject.SetActive(false); }
+        if (buttonText.text == planesInstructions)
+            setText(placementInstructions);
+
     }
 }

@@ -69,32 +69,25 @@ public class ConversationUI : MonoBehaviour
     }
 
 
-    /// <summary>
-    /// populates the players text fields with the currently available questions
-    /// </summary>
-    /// <param name="questions"></param>
     public void updateQuestionButtons()
     {
         clearQuestions();
 
         foreach (Question q in getAvailableQuestions())
         {
-            // instantiate button and set parent
             GameObject questionButton = GameObject.Instantiate(questionPrefab, Vector3.zero, Quaternion.identity, questionsParent);
-
-            // set text on button
-            questionButton.GetComponentInChildren<Text>().text = q.sentence;
-
-            // add onclick listener
-            questionButton.GetComponent<Button>().onClick.AddListener(()
-                => conversationManager.askQuestion(q, conversationManager.talkPartner));
+            setQuestionButtonTextAndHandler(questionButton, q);
         }
     }
 
+    void setQuestionButtonTextAndHandler(GameObject button, Question question)
+    {
+        button.GetComponentInChildren<Text>().text = question.sentence;
 
-    /// <summary>
-    /// clears the question boxes.
-    /// </summary>
+        button.GetComponent<Button>().onClick.AddListener(()
+            => conversationManager.askQuestion(question, conversationManager.currentConversationCharacter));
+    }
+
     void clearQuestions()
     {
         int numberOfQuestions = questionsParent.childCount;
@@ -108,7 +101,6 @@ public class ConversationUI : MonoBehaviour
 
     List<Question> getAvailableQuestions()
     {
-        print($"UI received {conversationManager.currentlyAvailableQuestions.Count} questions");
         return conversationManager.currentlyAvailableQuestions;
     }
 
@@ -121,7 +113,6 @@ public class ConversationUI : MonoBehaviour
     /// <returns></returns>
     public IEnumerator showNotification(string message, float delay)
     {
-        print($"notification showing: {message}");
         notification.GetComponent<Text>().text = message;
         notification.SetActive(true);
         yield return new WaitForSeconds(delay);
