@@ -33,6 +33,15 @@ public class Notebook : MonoBehaviour
     {
         conversationsButton.onClick.AddListener(() => goToPage(conversationsPage, true));
         deductionButton.onClick.AddListener(() => goToPage(deductionPage, true));
+        closeAllPages();
+    }
+
+    void closeAllPages()
+    {
+        foreach (GameObject _page in pages)
+        {
+            _page.SetActive(false);
+        }
     }
 
     public void goToPage(GameObject page, bool withSound)
