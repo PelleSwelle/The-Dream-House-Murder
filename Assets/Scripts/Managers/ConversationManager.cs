@@ -46,7 +46,6 @@ public class ConversationManager : MonoBehaviour
 
         int firstVal = lastQuestionID.val1 + 1;
 
-        // seeing whether we come from one digit or two
         bool incomingQuestionWasSingleDigit = lastQuestionID.val2 == 0;
         bool incomingQuestionWasTwoDigit = lastQuestionID.val2 != 0 && lastQuestionID.val3 == 0;
 
@@ -118,8 +117,9 @@ public class ConversationManager : MonoBehaviour
         conversationPage.updateTileText(currentConversationCharacter);
     }
 
-    private void playVoiceClip(Character character)
+    private void playRandomVoiceClip(Character character)
     {
+        audioSource.Stop();
         if (character.gender == "female")
             playRandomFemaleVoiceClip();
         else
@@ -128,20 +128,20 @@ public class ConversationManager : MonoBehaviour
     // REPONSIBILITY: playing sound
     public void playRandomFemaleVoiceClip()
     {
-        int index = Random.Range(0, voiceLinesFemale.Length);
-        audioSource.PlayOneShot(voiceLinesFemale[index]);
+        int i = Random.Range(0, voiceLinesFemale.Length);
+        audioSource.PlayOneShot(voiceLinesFemale[i]);
     }
 
     public void playRandomMaleVoiceClip()
     {
-        int index = Random.Range(0, voiceLinesMale.Length);
-        audioSource.PlayOneShot(voiceLinesMale[index]);
+        int i = Random.Range(0, voiceLinesMale.Length);
+        audioSource.PlayOneShot(voiceLinesMale[i]);
     }
 
 
     public void initConversation(Character character)
     {
-        playVoiceClip(character);
+        playRandomVoiceClip(character);
 
         currentConversationCharacter = character;
 
