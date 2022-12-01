@@ -1,18 +1,24 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public class Act
 {
     public int actNumber;
-    public List<Question> questions;
-    public bool isUnlocked = false;
-    public Act(int _actNumber, List<Question> _questions)
+    public IConversation conversation;
+    // public List<Question> questions;
+    public Act(int _actNumber, IConversation _conversation)
     {
         actNumber = _actNumber;
-        questions = _questions;
+        conversation = _conversation;
     }
 
-    public Question getQuestionByID(int val1, int val2 = 0, int val3 = 0)
+    public bool isFinished()
     {
-        return questions.Find(x => x.ID.val1 == val1 && x.ID.val2 == val2 && x.ID.val3 == val3);
+        List<Question> endPoints = conversation.getEndPoints();
+        Question hasBeenSaid = endPoints.Find(x => x.hasBeenSaid == true);
+        if (hasBeenSaid == null)
+            return false;
+        else
+            return true;
     }
 }

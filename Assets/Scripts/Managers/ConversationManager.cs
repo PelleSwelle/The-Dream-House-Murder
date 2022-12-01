@@ -1,41 +1,44 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
-using UnityEngine.UI;
-using System.Text.RegularExpressions;
-// using System;
 
-/// <summary>
-/// Delegating all tasks that have to do with conversations
-/// </summary>
 public class ConversationManager : MonoBehaviour
 {
-    #region memberVariables
-    public GameObject conversationUi; // the gameobject containing the ui
-    public ConversationUI conversationUiHandler; // the script attached to the UI object
+    public GameObject uiObject;
+    public ConversationUI conversationUI;
     public ConversationsPage conversationPage;
 
     public AudioClip[] voiceLinesMale, voiceLinesFemale;
-    public AudioSource audioSource;
+    public AudioSource voiceSource;
 
-    public List<Question> currentlyAvailableQuestions; // dynamic list of available questions at any given time
-    public GameManager gameManager; // the game manager
     public Character currentConversationCharacter;
-    #endregion
+    public List<Question> currentlyAvailableQuestions;
+
+    public GameManager gameManager;
 
     void Start()
     {
-        conversationUi.SetActive(false);
+        uiObject.SetActive(false);
         currentlyAvailableQuestions = new List<Question>();
-        setInitialConversations();
+        // setInitialConversations();
     }
 
     /// <summary> gets the unlocked question in the case there is only one </summary>
     Question getUnlockedQuestion(Character character, Question previousQuestion)
     {
-        Question unlockedQuestion = character.questionsInCurrentAct.Find(x => x.ID.val1 == previousQuestion.ID.val1 + 1);
-        return unlockedQuestion;
+        if (character.currentAct != character.acts[1])
+        {
+            Question unlockedQuestion = character.currentAct.conversation.Questions.Find(x => x.ID.val1 == previousQuestion.ID.val1 + 1);
+            return unlockedQuestion;
+        }
+        else
+        {
+            Question unlockedQuestion = character.currentAct.conversation.Questions.Find(
+                x => x.ID.val1 == previousQuestion.ID.val1 + 1
+                && x.ID.val2 == previousQuestion.ID.val2);
+            return unlockedQuestion;
+        }
+
     }
 
     /// <summary> gets a list of the unlocked questions in the case there are two </summary>
@@ -51,13 +54,17 @@ public class ConversationManager : MonoBehaviour
 
         if (incomingQuestionWasSingleDigit)
         {
-            unlockedQuestions.Add(character.currentAct.getQuestionByID(firstVal, 1));
-            unlockedQuestions.Add(character.currentAct.getQuestionByID(firstVal, 2));
+            unlockedQuestions.Add(character.currentAct.conversation.getQuestionByID(firstVal, 1));
+            unlockedQuestions.Add(character.currentAct.conversation.getQuestionByID(firstVal, 2));
+            if (character.currentAct.conversation.getQuestionByID(firstVal, 3) != null)
+                unlockedQuestions.Add(character.currentAct.conversation.getQuestionByID(firstVal, 3));
         }
         else if (incomingQuestionWasTwoDigit)
         {
-            unlockedQuestions.Add(character.currentAct.getQuestionByID(firstVal, lastQuestionID.val2, 1));
-            unlockedQuestions.Add(character.currentAct.getQuestionByID(firstVal, lastQuestionID.val2, 2));
+            unlockedQuestions.Add(character.currentAct.conversation.getQuestionByID(firstVal, lastQuestionID.val2, 1));
+            unlockedQuestions.Add(character.currentAct.conversation.getQuestionByID(firstVal, lastQuestionID.val2, 2));
+            if (character.currentAct.conversation.getQuestionByID(firstVal, lastQuestionID.val2, 3) != null)
+                unlockedQuestions.Add(character.currentAct.conversation.getQuestionByID(firstVal, lastQuestionID.val2, 3));
         }
         else
             print("eeerrrhhhh");
@@ -65,61 +72,92 @@ public class ConversationManager : MonoBehaviour
         return unlockedQuestions;
     }
 
+    Character getCharacterTalkedAbout()
+    {
+        string characterName = "";
+        List<Question> questions = currentConversationCharacter.acts[1].conversation.Questions.FindAll(x => x.ID.val1 == 2);
+        Question question = questions.Find(x => x.hasBeenSaid);
+
+        if (question.sentence.Contains("Harry"))
+            characterName = "Harry";
+        else if (question.sentence.Contains("Mary"))
+            characterName = "Mary";
+        else if (question.sentence.Contains("James"))
+            characterName = "James";
+
+        Character characterToReturn = gameManager.characters.Find(x => x.firstName == characterName);
+        print($"Character unlocked: {characterToReturn.firstName}");
+        return characterToReturn;
+    }
 
     void updateAvailableQuestions(Character talkPartner)
     {
-        currentlyAvailableQuestions.Clear(); // remove current questions from list of available questions
+        currentlyAvailableQuestions.Clear();
+        print($"get current act for {talkPartner}: {talkPartner.currentAct.actNumber}");
+        Question firstQuestionInCurrentRound = talkPartner.currentAct.conversation.getFirstQuestion();
+        // print("first question in current round: " + firstQuestionInCurrentRound.sentence);
+        bool nothingAskedInCurrentRound = firstQuestionInCurrentRound.hasBeenSaid == false;
 
-        bool nothingAskedYet = talkPartner.getLastAskedQuestionFromCurrentAct() == null;
-
-        if (nothingAskedYet)
-            currentlyAvailableQuestions.Add(talkPartner.getFirstQuestionInCurrentAct());
+        if (nothingAskedInCurrentRound)
+        {
+            currentlyAvailableQuestions.Add(talkPartner.currentAct.conversation.getFirstQuestion());
+        }
         else
         {
-            if (talkPartner.getLastAskedQuestionFromCurrentAct().isEndPoint)
+            print($"Current act: {talkPartner.currentAct.actNumber}");
+            if (talkPartner.currentAct.isFinished() == true)
             {
-                conversationUiHandler.showNotification($"act: {talkPartner.currentAct.actNumber}", 1000);
-                talkPartner.goToNextAct();
-                return;
+                if (talkPartner == gameManager.officer && talkPartner.currentAct == talkPartner.acts[1])
+                {
+                    Character characterToUnlock = getCharacterTalkedAbout();
+                    talkPartner.currentAct.conversation.onFinish(characterToUnlock);
+                }
+                else return;
             }
             else
             {
-                bool latestQuestionBranchesOut = talkPartner.getLastAskedQuestionFromCurrentAct().hasBranches;
+                bool latestQuestionBranchesOut = talkPartner.currentAct.conversation.getLastAskedQuestion().hasBranches;
 
                 if (latestQuestionBranchesOut)
                 {
-                    List<Question> unlockedQuestions = getUnlockedQuestions(talkPartner, talkPartner.getLastAskedQuestionFromCurrentAct());
+                    List<Question> unlockedQuestions = getUnlockedQuestions(talkPartner, talkPartner.currentAct.conversation.getLastAskedQuestion());
                     currentlyAvailableQuestions.AddRange(unlockedQuestions);
                 }
                 else
                 {
-                    Question unlockedQuestion = getUnlockedQuestion(talkPartner, talkPartner.getLastAskedQuestionFromCurrentAct());
+                    Question unlockedQuestion = getUnlockedQuestion(talkPartner, talkPartner.currentAct.conversation.getLastAskedQuestion());
                     currentlyAvailableQuestions.Add(unlockedQuestion);
                 }
             }
 
         }
-        conversationUiHandler.updateQuestionButtons();
+        conversationUI.updateQuestionButtons();
     }
 
     public void askQuestion(Question question, Character character)
     {
-        if (character.gender == "female")
-            playRandomFemaleVoiceClip();
-        else
-            playRandomMaleVoiceClip();
+        playRandomVoiceClip(character);
 
         character.questionsAsked.Add(question);
         question.hasBeenSaid = true;
-        conversationUiHandler.updateAnswerField(question.answer);
+
+        if (character.currentAct == character.acts[0] && gameManager.actIsOverForAll())
+        {
+            gameManager.officer.enterSecondAct();
+        }
+
+        conversationUI.updateAnswerField(question.answer);
         updateAvailableQuestions(character);
-        conversationUiHandler.updateQuestionButtons();
+        conversationUI.updateQuestionButtons();
         conversationPage.updateTileText(currentConversationCharacter);
     }
 
+
+
     private void playRandomVoiceClip(Character character)
     {
-        audioSource.Stop();
+        voiceSource.Stop();
+        print($"Character: {character.firstName}");
         if (character.gender == "female")
             playRandomFemaleVoiceClip();
         else
@@ -129,13 +167,13 @@ public class ConversationManager : MonoBehaviour
     public void playRandomFemaleVoiceClip()
     {
         int i = Random.Range(0, voiceLinesFemale.Length);
-        audioSource.PlayOneShot(voiceLinesFemale[i]);
+        voiceSource.PlayOneShot(voiceLinesFemale[i]);
     }
 
     public void playRandomMaleVoiceClip()
     {
         int i = Random.Range(0, voiceLinesMale.Length);
-        audioSource.PlayOneShot(voiceLinesMale[i]);
+        voiceSource.PlayOneShot(voiceLinesMale[i]);
     }
 
 
@@ -149,24 +187,23 @@ public class ConversationManager : MonoBehaviour
 
         updateAvailableQuestions(character);
 
-        conversationUi.SetActive(true);
-        conversationUiHandler.displayOpeningLine(character);
-        conversationUiHandler.setCharacterImage(character);
+        uiObject.SetActive(true);
+        conversationUI.displayOpeningLine(character);
+        conversationUI.setCharacterImage(character);
     }
 
 
     public void leaveConversation()
     {
         currentConversationCharacter = null;
-        conversationUi.SetActive(false);
+        uiObject.SetActive(false);
     }
 
-    // RESPONSIBILITY: setting constants
-    void setInitialConversations()
-    {
-        gameManager.mary.questionsInCurrentAct = Constants.maryQuestions;
-        gameManager.officer.questionsInCurrentAct = Constants.officerQuestions;
-        gameManager.harry.questionsInCurrentAct = Constants.harryQuestions;
-        gameManager.james.questionsInCurrentAct = Constants.jamesQuestions;
-    }
+    // void setInitialConversations()
+    // {
+    //     gameManager.mary.currentAct.questions = Constants.maryQuestions;
+    //     gameManager.officer.currentAct.questions = Constants.officerQuestions;
+    //     gameManager.harry.currentAct.questions = Constants.harryQuestions;
+    //     gameManager.james.currentAct.questions = Constants.jamesQuestions;
+    // }
 }

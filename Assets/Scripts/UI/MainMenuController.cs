@@ -6,12 +6,12 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
-    // public UiHandler mainMenuHandler;
-    // getting all of the child pages
     public GameObject titlePage, settingsPage, aboutPage, creditsPage, helpPage;
     public Button playButton, settingsButton, aboutButton, creditsButton, helpButton;
     public GameObject backObject;
     public List<GameObject> pages;
+    public AudioSource audioSource;
+    public AudioClip mainMenuMusic, openCloseSound, leafTurn;
 
     void Start()
     {
@@ -23,10 +23,13 @@ public class MainMenuController : MonoBehaviour
         aboutButton.onClick.AddListener(() => goToPage(aboutPage));
         creditsButton.onClick.AddListener(() => goToPage(creditsPage));
         helpButton.onClick.AddListener(() => goToPage(helpPage));
+
         // back button
         backObject.GetComponent<Button>().onClick.AddListener(() => goToPage(titlePage));
 
         openMenu();
+        audioSource.clip = mainMenuMusic;
+        audioSource.Play();
     }
 
     void OnValidate()
@@ -49,6 +52,7 @@ public class MainMenuController : MonoBehaviour
 
     public void goToPage(GameObject page)
     {
+        audioSource.PlayOneShot(openCloseSound);
         if (page == titlePage) { backObject.SetActive(false); }
         else { backObject.SetActive(true); }
 
