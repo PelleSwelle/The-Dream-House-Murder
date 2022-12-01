@@ -116,8 +116,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: -43.0219}
-  m_SizeDelta: {x: 990.9561, y: 171.5342}
+  m_AnchoredPosition: {x: 0, y: -64.395}
+  m_SizeDelta: {x: 990.9561, y: 128.79}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8185257434280562776
 CanvasRenderer:
@@ -215,5 +215,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterPhoto: {fileID: 0}
   characterName: 
-  messengerTilePrefab: {fileID: 0}
+  characterTilePrefab: {fileID: 0}
+  playerTilePrefab: {fileID: 0}
   messagesContainer: {fileID: 0}

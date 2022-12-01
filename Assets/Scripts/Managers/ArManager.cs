@@ -7,12 +7,13 @@ using UnityEngine.UI;
 
 public class ArManager : MonoBehaviour
 {
+    public Button notebookButton;
     public ConversationManager conversationManager;
     public GameManager gameManager;
 
-    private GameObject objectToSpawn;
+    private GameObject currentObject;
     private GameObject spawnedObject;
-    private Character currentCharacter;
+    public Character currentCharacter;
 
     public GameObject placementIndicator;
     Vector3 initialScale;
@@ -21,12 +22,11 @@ public class ArManager : MonoBehaviour
     private ARRaycastManager aRRaycastManager;
 
     private bool poseIsValid = false;
-    private float initialDistance;
+    private float initialScaleDistance;
+    private float initialRotateDistance;
+    private Quaternion initialRotation;
+    private Vector2 initialRotatePoint;
     public TipManager tipManager;
-
-    public int charactersDone = 0;
-
-    public Button acceptScaleButton;
 
     // TODO: the marker is not showing for some reason.
 
@@ -34,55 +34,11 @@ public class ArManager : MonoBehaviour
     {
         aRRaycastManager = FindObjectOfType<ARRaycastManager>();
         updateModelAndCharacterToPlace();
-        gameManager.gameMode = GameMode.placementMode;
+
     }
 
     void Update()
     {
-        // ***** game mode *****
-        if (!currentCharacter.isPlaced)
-            gameManager.gameMode = GameMode.placementMode;
-
-        else if (currentCharacter.isPlaced && !currentCharacter.isScaled)
-            gameManager.gameMode = GameMode.scalingMode;
-
-        else if (currentCharacter.isPlaced && currentCharacter.isScaled)
-        {
-            if (charactersDone != gameManager.characters.Count)
-                updateModelAndCharacterToPlace();
-            else
-                gameManager.gameMode = GameMode.playMode;
-        }
-
-        // ********* INPUT HANDLING *********
-        bool isInPlacementMode = gameManager.gameMode == GameMode.placementMode;
-        bool isInScalingMode = gameManager.gameMode == GameMode.scalingMode;
-        bool isInPlayMode = gameManager.gameMode == GameMode.playMode;
-
-        if (isInPlacementMode)
-        {
-            tipManager.setText(tipManager.planesInstructions);
-            deactivateScaleAcceptButton();
-
-            placeOnTap();
-        }
-
-        else if (isInScalingMode)
-        {
-            tipManager.setText(tipManager.scalingInstructions);
-            activateAcceptScaleButton();
-
-            scaleOnPinch();
-        }
-
-        else if (isInPlayMode)
-        {
-            deactivateScaleAcceptButton();
-
-            initConversationOnTap();
-
-        }
-
         UpdatePlacementPose();
         UpdatePlacementIndicator();
     }
@@ -93,14 +49,17 @@ public class ArManager : MonoBehaviour
         return character;
     }
 
-    void placeOnTap()
+    public void placeOnTap()
     {
         bool isReadyToPlace = poseIsValid && Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began;
         if (isReadyToPlace)
-            placeObject(objectToSpawn, currentCharacter);
+        {
+            tipManager.setButtonText(tipManager.instructionLines[3]);
+            placeObject(currentObject, currentCharacter);
+        }
     }
 
-    void initConversationOnTap()
+    public void initConversationOnTap()
     {
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
@@ -113,7 +72,7 @@ public class ArManager : MonoBehaviour
         }
     }
 
-    void scaleOnPinch()
+    public void scaleOnPinch()
     {
         if (Input.touchCount == 2)
         {
@@ -127,31 +86,47 @@ public class ArManager : MonoBehaviour
 
             if (touchZero.phase == TouchPhase.Began || touchOne.phase == TouchPhase.Began)
             {
-                initialDistance = Vector2.Distance(touchZero.position, touchOne.position);
+                initialScaleDistance = Vector2.Distance(touchZero.position, touchOne.position);
                 initialScale = spawnedObject.transform.localScale;
             }
             else // if touch is moved
             {
                 float currentDistance = Vector2.Distance(touchZero.position, touchOne.position);
 
-                if (Mathf.Approximately(initialDistance, 0))
+                if (Mathf.Approximately(initialScaleDistance, 0))
                     return;
 
-                float factor = currentDistance / initialDistance;
+                float factor = currentDistance / initialScaleDistance;
                 spawnedObject.transform.localScale = initialScale * factor; // scale multiplied by the factor we calculated
             }
         }
     }
 
-    void activateAcceptScaleButton()
+    public void rotateOnDrag()
     {
-        acceptScaleButton.gameObject.SetActive(true);
-        acceptScaleButton.onClick.AddListener(() => currentCharacter.setScale());
-    }
+        if (Input.touchCount == 1)
+        {
+            Touch touch = Input.GetTouch(0);
 
-    void deactivateScaleAcceptButton()
-    {
-        acceptScaleButton.gameObject.SetActive(false);
+            if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Ended)
+                return;
+
+            if (touch.phase == TouchPhase.Began)
+            {
+                initialRotatePoint = touch.position;
+                initialRotation = spawnedObject.transform.rotation;
+            }
+            else // if touch is moved
+            {
+                float currentDistance = Vector2.Distance(touch.position, initialRotatePoint);
+
+                if (Mathf.Approximately(initialScaleDistance, 0))
+                    return;
+
+                float factor = currentDistance / initialRotateDistance;
+                spawnedObject.transform.Rotate(0f, -touch.deltaPosition.x, 0f);
+            }
+        }
     }
 
     void UpdatePlacementIndicator()
@@ -184,18 +159,19 @@ public class ArManager : MonoBehaviour
     /// <param name="character"></param>
     void placeObject(GameObject model, Character character)
     {
+        // TODO: get the character to turn towards the player.
         Pose newPose = new Pose(pose.position, new Quaternion(0, 200, 0, 0));
         spawnedObject = Instantiate(model, newPose.position, newPose.rotation);
         character.model = spawnedObject;
         character.isPlaced = true;
+
+        gameManager.setMode(GameMode.scalingMode);
     }
 
     /// <summary> update currentCharacter and the object to spawn</summary>
-    void updateModelAndCharacterToPlace()
+    public void updateModelAndCharacterToPlace()
     {
-        charactersDone += 1;
         currentCharacter = gameManager.characters.Find(x => x.isPlaced == false);
-        objectToSpawn = gameManager.characters.Find(x => x.isPlaced == false).model;
+        currentObject = gameManager.characters.Find(x => x.isPlaced == false).model;
     }
-
 }

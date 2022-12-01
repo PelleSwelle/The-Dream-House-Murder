@@ -7,30 +7,40 @@ public class TipManager : MonoBehaviour
 {
     public GameObject tutorialOverlay;
     public Button tipButton;
+    private int instructionIndex;
+    public GameManager gameManager;
 
-    public string planesInstructions = "move your phone around, and white dots should start to appear on the ground around you...";
-    public string placementInstructions = "Aim the icon at the spot, where you want to place your first character, and tap the screen";
-    public string scalingInstructions = "If the character is not the right size, pinch with two fingers. If It looks good, press ACCEPT SCALE";
-    Text buttonText;
+    public List<string> instructionLines = new List<string>()
+    {
+        "move your phone around, and white dots should start to appear on the ground around you... Tap this panel when you see them",
+        "It is encouraged to walk around the room and place the characters spaced apart. The game will keep track of their position. Tap this panel to continue",
+        "Aim the icon at the spot, where you want to place your first character, and tap the screen",
+        "If the character is not the right size, pinch with two fingers. If It looks good, press ACCEPT SCALE"
+    };
+    private Text buttonText;
 
     void Start()
     {
+        instructionIndex = 0;
         buttonText = tipButton.GetComponentInChildren<Text>();
-        setText(planesInstructions);
+        setButtonText(instructionLines[instructionIndex]);
 
-        tipButton.onClick.AddListener(() => click());
+        tipButton.onClick.AddListener(() => incrementTutorial());
     }
 
 
-    public void setText(string text)
+    public void setButtonText(string text)
     {
         buttonText.text = text;
     }
 
-    void click()
+    void incrementTutorial()
     {
-        if (buttonText.text == planesInstructions)
-            setText(placementInstructions);
-
+        instructionIndex += 1;
+        setButtonText(instructionLines[instructionIndex]);
+        if (buttonText.text == instructionLines[2])
+        {
+            gameManager.setMode(GameMode.placementMode);
+        }
     }
 }
