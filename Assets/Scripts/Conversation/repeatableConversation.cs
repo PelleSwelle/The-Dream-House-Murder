@@ -36,12 +36,12 @@ public class repeatableConversation : IConversation, IResetable
     public void onFinish(Character character)
     {
         reset();
-        unlock(character);
+        unlockCharacterAct(character, 2);
     }
 
-    void unlock(Character character)
+    void unlockCharacterAct(Character character, int actNumber)
     {
-        character.enterSecondAct();
+        character.goToAct(actNumber);
     }
 
     public void reset()

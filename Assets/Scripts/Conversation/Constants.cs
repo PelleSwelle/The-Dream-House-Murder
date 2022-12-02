@@ -444,19 +444,19 @@ public static class Constants
             _hasBranches: true
         ),
         new Question(
-            2, 0, 0, "The Murderer is Mary. The boyfriend accused Mary of forcing him to leave the house to buy pizza so she could blame him of the murder. Mary has always been jealous of their relationship and called the police on her boyfriend.", new Answer(
+            2, 1, 0, "The Murderer is Mary. The boyfriend accused Mary of forcing him to leave the house to buy pizza so she could blame him of the murder. Mary has always been jealous of their relationship and called the police on her boyfriend.", new Answer(
                 "We do not have enough evidence to prove that. We do not have a case."
             ),
             _isEndPoint: true
         ),
         new Question(
-            2, 1, 0, "The murderer is James. The boyfriend is lying. The pizza they ordered were found in the kitchen when the murder happened. This explains the murder weapon being a kitchen knife which was found in the backyard. That means he could only have killed her after arriving home, and hearing Olivia flirting with Harry after Mary ran out, made him angry, which resulted in the murder. The real estate agent was seen running out of the front door by Mary and was never in the backyard.", new Answer(
+            2, 2, 0, "The murderer is James. The boyfriend is lying. The pizza they ordered were found in the kitchen when the murder happened. This explains the murder weapon being a kitchen knife which was found in the backyard. That means he could only have killed her after arriving home, and hearing Olivia flirting with Harry after Mary ran out, made him angry, which resulted in the murder. The real estate agent was seen running out of the front door by Mary and was never in the backyard.", new Answer(
                 "You're right! We have the evidence is conclusive. We will bring him in to the station, and he won't be coming out for a long time."
             ),
             _isEndPoint: true
         ),
         new Question(
-            2, 2, 0, "The Murderer is Harry. He is lying. He was last seen running outside the house during the time Mary was not home. If he saw Olivia dead he would have called the cops instead of run. Unless he wanted this to happen so he could own the house that Olivia refused to sell.", new Answer(
+            2, 3, 0, "The Murderer is Harry. He is lying. He was last seen running outside the house during the time Mary was not home. If he saw Olivia dead he would have called the cops instead of run. Unless he wanted this to happen so he could own the house that Olivia refused to sell.", new Answer(
                 "I'm sorry, detective. You're seeing ghosts. The evidence is not conclusive at all."
             ),
             _isEndPoint: true

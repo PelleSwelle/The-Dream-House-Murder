@@ -19,6 +19,10 @@ public class Act
         if (hasBeenSaid == null)
             return false;
         else
+        {
+            Debug.Log($"finished act: {actNumber}");
             return true;
+        }
+
     }
 }

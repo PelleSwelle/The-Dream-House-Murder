@@ -28,7 +28,6 @@ public class ConversationUI : MonoBehaviour
 
     public void toggleUI()
     {
-        print("toggled conversation");
         if (!isOpen)
         {
             animator.Play("openConversation");
