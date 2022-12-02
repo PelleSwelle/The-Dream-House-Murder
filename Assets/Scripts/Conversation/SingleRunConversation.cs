@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SingleRunConversation : Conversation, IConversation
+public class SingleRunConversation : IConversation
 {
     List<Question> IConversation.Questions
     {

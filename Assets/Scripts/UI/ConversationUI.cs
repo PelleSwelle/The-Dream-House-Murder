@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class ConversationUI : MonoBehaviour
 {
+    public Animator animator;
     public GameObject conversationObject;
 
     public Button exitButton;
@@ -21,42 +22,33 @@ public class ConversationUI : MonoBehaviour
     {
         exitButton.onClick.AddListener(() => conversationManager.leaveConversation());
         notification.SetActive(false);
+        isOpen = false;
     }
 
-    /// <summary>
-    /// toggles the active state of the conversation UI
-    /// </summary>
-    void toggleUI()
+
+    public void toggleUI()
     {
-        if (conversationObject.activeSelf)
+        print("toggled conversation");
+        if (!isOpen)
         {
-            conversationObject.SetActive(false);
+            animator.Play("openConversation");
             this.isOpen = true;
-            // conversationManager.isInConversation = false;
         }
-        else if (conversationObject.activeSelf)
+        else if (isOpen)
         {
-            conversationObject.SetActive(true);
+            animator.Play("closeConversation");
             this.isOpen = false;
             // conversationManager.isInConversation = true;
         }
     }
 
 
-    /// <summary>
-    /// sets the image for the character on the UI
-    /// </summary>
-    /// <param name="character"></param>
     public void setCharacterImage(Character character)
     {
         characterImage.sprite = character.photo;
     }
 
 
-    /// <summary>
-    /// populates the answer text for the answer
-    /// </summary>
-    /// <param name="answer"></param>
     public void updateAnswerField(Answer answer)
     {
         answerField.text = answer.sentence;
@@ -68,6 +60,10 @@ public class ConversationUI : MonoBehaviour
         answerField.text = character.openingLine;
     }
 
+    public void displayNothingToSay(Character character)
+    {
+        answerField.text = character.nothingToSayLine;
+    }
 
     public void updateQuestionButtons()
     {
@@ -104,13 +100,6 @@ public class ConversationUI : MonoBehaviour
         return conversationManager.currentlyAvailableQuestions;
     }
 
-
-    /// <summary>
-    /// Show a notification with the given message for a given delay
-    /// </summary>
-    /// <param name="message"></param>
-    /// <param name="delay"></param>
-    /// <returns></returns>
     public IEnumerator showNotification(string message, float delay)
     {
         notification.GetComponent<Text>().text = message;

@@ -17,20 +17,20 @@ public class Character
     public Sprite photo; // TODO: this
     public string firstName, middleName, lastName, description;
     public string gender;
-    // int index = 0;
-
+    public string nothingToSayLine;
     public bool isPlaced = false, isScaled = false;
 
-    public Character(string firstName, Sprite photo, GameObject model, string _openingLine, string gender)
+    public Character(string _firstName, Sprite _photo, GameObject _model, string _openingLine, string _gender, string _nothingToSay)
     {
-        this.firstName = firstName;
-        this.photo = photo;
-        this.model = model;
+        firstName = _firstName;
+        photo = _photo;
+        model = _model;
 
-        this.isPlaced = false;
-        this.isScaled = false;
-        this.openingLine = _openingLine;
-        this.gender = gender;
+        isPlaced = false;
+        isScaled = false;
+        openingLine = _openingLine;
+        gender = _gender;
+        nothingToSayLine = _nothingToSay;
 
         acts = new List<Act>();
 

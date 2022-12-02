@@ -12,9 +12,7 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class Notebook : MonoBehaviour
 {
-    public Button conversationsButton, deductionButton;
-
-    public GameObject notebook, conversationsPage, conversationPage, deductionPage;
+    public GameObject notebook, conversationsPage, conversationPage;
     public Transform conversationsParent;
 
     public List<GameObject> pages;
@@ -25,14 +23,12 @@ public class Notebook : MonoBehaviour
     {
         notebook = this.gameObject;
 
-        pages = new List<GameObject> { conversationsPage, conversationPage, deductionPage };
+        pages = new List<GameObject> { conversationsPage, conversationPage };
     }
 
 
     void Start()
     {
-        conversationsButton.onClick.AddListener(() => goToPage(conversationsPage, true));
-        deductionButton.onClick.AddListener(() => goToPage(deductionPage, true));
         closeAllPages();
     }
 
