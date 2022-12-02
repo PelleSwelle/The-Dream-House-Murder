@@ -37,10 +37,11 @@ public class Character
         questionsAsked = new List<Question>();
     }
 
-    public void loadActs(Act act1, Act act2)
+    public void loadActs(Act act1, Act act2, Act act3 = null)
     {
         acts.Add(act1);
         acts.Add(act2);
+        acts.Add(act3);
         currentAct = acts[0];
     }
 
@@ -56,15 +57,11 @@ public class Character
         Debug.Log("scaling character" + this.model.transform.localScale);
     }
 
-    public void enterSecondAct()
+    public void goToAct(int actNumber)
     {
-        Act secondAct = acts[1];
-        currentAct = secondAct;
-    }
-
-    public void enterThirdAct()
-    {
-        currentAct = acts[2];
+        actNumber--;
+        currentAct = acts[actNumber];
+        Debug.Log($"{firstName} entered act {currentAct.actNumber}");
     }
 
     public Question getLastAskedQuestion()

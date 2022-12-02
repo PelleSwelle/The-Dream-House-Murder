@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class ConversationManager : MonoBehaviour
 {
-    public GameObject uiObject;
     public ConversationUI conversationUI;
     public ConversationsPage conversationPage;
 
@@ -14,6 +13,8 @@ public class ConversationManager : MonoBehaviour
     public List<Question> currentlyAvailableQuestions;
 
     public GameManager gameManager;
+
+    bool foundMurderer;
 
     void Start()
     {
@@ -83,7 +84,6 @@ public class ConversationManager : MonoBehaviour
             characterName = "James";
 
         Character characterToReturn = gameManager.characters.Find(x => x.firstName == characterName);
-        print($"Character unlocked: {characterToReturn.firstName}");
         return characterToReturn;
     }
 
@@ -135,9 +135,20 @@ public class ConversationManager : MonoBehaviour
         character.questionsAsked.Add(question);
         question.hasBeenSaid = true;
 
+        // act 1 is over for all
         if (character.currentAct == character.acts[0] && gameManager.actIsOverForAll())
         {
-            gameManager.officer.enterSecondAct();
+            gameManager.officer.goToAct(2);
+        }
+        // act 2 is over for Harry, Mary & James
+        if (gameManager.actIsOverForThree() && character != gameManager.officer && character.currentAct == character.acts[1])
+        {
+            gameManager.officer.goToAct(3);
+        }
+
+        if (accusedSomeone())
+        {
+            gameManager.endGame(getAccused());
         }
 
         conversationUI.updateAnswerField(question.answer);
@@ -146,10 +157,26 @@ public class ConversationManager : MonoBehaviour
         conversationPage.updateTileText(character);
     }
 
+    bool accusedSomeone()
+    {
+        return gameManager.officer.acts[2].conversation.getQuestionByID(2, 1, 0).hasBeenSaid
+            || gameManager.officer.acts[2].conversation.getQuestionByID(2, 2, 0).hasBeenSaid
+            || gameManager.officer.acts[2].conversation.getQuestionByID(2, 3, 0).hasBeenSaid;
+    }
+    Character getAccused()
+    {
+        Question choice = gameManager.officer.acts[2].conversation.Questions.Find(x => x.ID.val1 == 2 && x.hasBeenSaid == true);
+        if (choice.ID.val2 == 1)
+            return gameManager.mary;
+        else if (choice.ID.val2 == 2)
+            return gameManager.james;
+        else
+            return gameManager.harry;
+    }
+
     private void playRandomVoiceClip(Character character)
     {
         voiceSource.Stop();
-        print($"Character: {character.firstName}");
         if (character.gender == "female")
             playRandomFemaleVoiceClip();
         else

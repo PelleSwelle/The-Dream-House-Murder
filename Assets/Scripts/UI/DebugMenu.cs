@@ -13,6 +13,7 @@ public class DebugMenu : MonoBehaviour
     public Button talkBtn, pickupBtn;
     public Button[] personButtons;
     public ConversationManager conversationManager;
+    public Text maryAct, jamesAct, officerAct, harryAct;
 
     void OnValidate()
     {
@@ -30,6 +31,14 @@ public class DebugMenu : MonoBehaviour
         characterSelect.SetActive(false);
 
         setOnClickListeners();
+    }
+
+    void Update()
+    {
+        maryAct.text = $"Mary act: {gameManager.mary.currentAct.actNumber}";
+        harryAct.text = $"Harry act: {gameManager.harry.currentAct.actNumber}";
+        jamesAct.text = $"James act: {gameManager.james.currentAct.actNumber}";
+        officerAct.text = $"Officer act: {gameManager.officer.currentAct.actNumber}";
     }
 
     void setOnClickListeners()

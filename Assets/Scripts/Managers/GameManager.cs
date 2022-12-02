@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public GameObject endScreen;
+    public Text endText;
     public GameObject charactersParent;
     public List<Character> characters;
     public GameObject cursor;
@@ -15,7 +18,7 @@ public class GameManager : MonoBehaviour
     public AudioSource musicSource;
     public AudioClip gameMusic;
     public GameMode currentMode;
-    public Button acceptScaleButton, notebookButton;
+    public Button acceptScaleButton, notebookButton, backToTitleButton;
     public ArManager arManager;
     public int charactersDone = 0;
 
@@ -61,20 +64,22 @@ public class GameManager : MonoBehaviour
         loadActs();
 
         characters = new List<Character> { mary, james, officer, harry };
-        print("loaded characters: " + characters.Count);
 
         assignCharacterHandlers();
-        foreach (Character c in characters)
-            print(c.firstName);
         cursor.SetActive(true);
         acceptScaleButton.onClick.AddListener(() => handleAccept());
-        // numberOfCharactersPlaced = 0;
+        backToTitleButton.onClick.AddListener(() => goToTitleScreen());
 
 
         musicSource.clip = gameMusic;
         musicSource.Play();
 
         setMode(GameMode.tutorialMode);
+    }
+
+    void goToTitleScreen()
+    {
+        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
     void loadActs()
@@ -89,7 +94,8 @@ public class GameManager : MonoBehaviour
         );
         officer.loadActs(
             new Act(1, new SingleRunConversation(Constants.officerQuestions)),
-            new Act(2, new repeatableConversation(Constants.officerAct2))
+            new Act(2, new repeatableConversation(Constants.officerAct2)),
+            new Act(3, new SingleRunConversation(Constants.officerAct3))
         );
         harry.loadActs(
             new Act(1, new SingleRunConversation(Constants.harryQuestions)),
@@ -126,10 +132,17 @@ public class GameManager : MonoBehaviour
         && james.currentAct.isFinished();
     }
 
+    public bool actIsOverForThree()
+    {
+        print("act is over for three characters");
+        return mary.currentAct.isFinished()
+        && harry.currentAct.isFinished()
+        && james.currentAct.isFinished();
+    }
+
     public void setMode(GameMode _gameMode)
     {
         currentMode = _gameMode;
-        print($"Entered: {currentMode}");
         acceptScaleButton.gameObject.SetActive(currentMode == GameMode.scalingMode);
         notebookButton.gameObject.SetActive(currentMode == GameMode.playMode);
     }
@@ -155,6 +168,24 @@ public class GameManager : MonoBehaviour
         else
             setMode(GameMode.playMode);
     }
+
+    public void endGame(Character character)
+    {
+        if (character == harry)
+        {
+            endText.text = "Really? You thought the murderer was Harry? Lol";
+        }
+        else if (character == mary)
+        {
+            endText.text = "Loool! It was not Mary.";
+        }
+        else if (character == james)
+        {
+            endText.text = "Yes. Good job. It was James. fuckin... hooray.";
+        }
+        endScreen.SetActive(true);
+    }
+
 }
 
 public enum GameMode
