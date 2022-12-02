@@ -36,7 +36,7 @@ public class ConversationsPage : MonoBehaviour
 
     public void updateTileText(Character character)
     {
-        var tile = tiles.Find(x => x.character == character);
+        ConversationTile tile = tiles.Find(x => x.character == character);
         Debug.Log("Tile" + tile.character.firstName);
         Answer answer = character.getLastAskedQuestion().answer;
         tile.updateText(answer);

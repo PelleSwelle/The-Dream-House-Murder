@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
@@ -154,9 +153,6 @@ public class ArManager : MonoBehaviour
             pose = hits[0].pose;
     }
 
-    /// <summary> set SpawnedObject to the current Model and set character is placed </summary>
-    /// <param name="model"></param>
-    /// <param name="character"></param>
     void placeObject(GameObject model, Character character)
     {
         // TODO: get the character to turn towards the player.
@@ -168,7 +164,6 @@ public class ArManager : MonoBehaviour
         gameManager.setMode(GameMode.scalingMode);
     }
 
-    /// <summary> update currentCharacter and the object to spawn</summary>
     public void updateModelAndCharacterToPlace()
     {
         currentCharacter = gameManager.characters.Find(x => x.isPlaced == false);

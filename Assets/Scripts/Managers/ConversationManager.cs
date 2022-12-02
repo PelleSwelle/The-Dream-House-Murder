@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,9 +17,7 @@ public class ConversationManager : MonoBehaviour
 
     void Start()
     {
-        uiObject.SetActive(false);
         currentlyAvailableQuestions = new List<Question>();
-        // setInitialConversations();
     }
 
     /// <summary> gets the unlocked question in the case there is only one </summary>
@@ -93,9 +90,7 @@ public class ConversationManager : MonoBehaviour
     void updateAvailableQuestions(Character talkPartner)
     {
         currentlyAvailableQuestions.Clear();
-        print($"get current act for {talkPartner}: {talkPartner.currentAct.actNumber}");
         Question firstQuestionInCurrentRound = talkPartner.currentAct.conversation.getFirstQuestion();
-        // print("first question in current round: " + firstQuestionInCurrentRound.sentence);
         bool nothingAskedInCurrentRound = firstQuestionInCurrentRound.hasBeenSaid == false;
 
         if (nothingAskedInCurrentRound)
@@ -104,7 +99,6 @@ public class ConversationManager : MonoBehaviour
         }
         else
         {
-            print($"Current act: {talkPartner.currentAct.actNumber}");
             if (talkPartner.currentAct.isFinished() == true)
             {
                 if (talkPartner == gameManager.officer && talkPartner.currentAct == talkPartner.acts[1])
@@ -149,10 +143,8 @@ public class ConversationManager : MonoBehaviour
         conversationUI.updateAnswerField(question.answer);
         updateAvailableQuestions(character);
         conversationUI.updateQuestionButtons();
-        conversationPage.updateTileText(currentConversationCharacter);
+        conversationPage.updateTileText(character);
     }
-
-
 
     private void playRandomVoiceClip(Character character)
     {
@@ -163,7 +155,7 @@ public class ConversationManager : MonoBehaviour
         else
             playRandomMaleVoiceClip();
     }
-    // REPONSIBILITY: playing sound
+
     public void playRandomFemaleVoiceClip()
     {
         int i = Random.Range(0, voiceLinesFemale.Length);
@@ -176,34 +168,39 @@ public class ConversationManager : MonoBehaviour
         voiceSource.PlayOneShot(voiceLinesMale[i]);
     }
 
-
     public void initConversation(Character character)
     {
         playRandomVoiceClip(character);
 
         currentConversationCharacter = character;
-
         character.hasBeenTalkedTo = true;
 
-        updateAvailableQuestions(character);
-
-        uiObject.SetActive(true);
-        conversationUI.displayOpeningLine(character);
         conversationUI.setCharacterImage(character);
-    }
+        conversationUI.toggleUI();
 
+        // before the officer has been talked to.
+        if (currentConversationCharacter != gameManager.officer)
+        {
+            if (gameManager.officer.hasBeenTalkedTo)
+            {
+                updateAvailableQuestions(character);
+                conversationUI.displayOpeningLine(character);
+            }
+            else
+            {
+                conversationUI.displayNothingToSay(character);
+            }
+        }
+        else
+        {
+            updateAvailableQuestions(character);
+            conversationUI.displayOpeningLine(character);
+        }
+    }
 
     public void leaveConversation()
     {
         currentConversationCharacter = null;
-        uiObject.SetActive(false);
+        conversationUI.toggleUI();
     }
-
-    // void setInitialConversations()
-    // {
-    //     gameManager.mary.currentAct.questions = Constants.maryQuestions;
-    //     gameManager.officer.currentAct.questions = Constants.officerQuestions;
-    //     gameManager.harry.currentAct.questions = Constants.harryQuestions;
-    //     gameManager.james.currentAct.questions = Constants.jamesQuestions;
-    // }
 }

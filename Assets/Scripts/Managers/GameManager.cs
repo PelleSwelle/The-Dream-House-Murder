@@ -25,10 +25,38 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        mary = new Character("Mary", maryPhoto, maryPrefab, "*sob* What?", "female");
-        james = new Character("James", jamesPhoto, jamesPrefab, "Who are you? What do you want?", "male");
-        officer = new Character("Officer", officerPhoto, officerPrefab, "What can I help you with?", "male");
-        harry = new Character("Harry", harryPhoto, harryPrefab, "What is it?", "male");
+        mary = new Character(
+            _firstName: "Mary",
+            _photo: maryPhoto,
+            _model: maryPrefab,
+            _openingLine: "*sob* What?",
+            _gender: "female",
+            _nothingToSay: "I think, you should talk to your colleague first."
+        );
+        james = new Character(
+            _firstName: "James",
+            _photo: jamesPhoto,
+            _model: jamesPrefab,
+            _openingLine: "Who are you? What do you want?",
+            _gender: "male",
+            _nothingToSay: "Shouldn't you talk to the officer first?"
+        );
+        officer = new Character(
+            _firstName: "Officer",
+            _photo: officerPhoto,
+            _model: officerPrefab,
+            _openingLine: "I'm glad you could get here so fast. What do you need to know?",
+            _gender: "male",
+            _nothingToSay: "I don't really have anything more to tell you at the moment."
+        );
+        harry = new Character(
+            _firstName: "Harry",
+            _photo: harryPhoto,
+            _model: harryPrefab,
+            _openingLine: "What is it?",
+            _gender: "male",
+            _nothingToSay: "I am not going to give you the entire story. Go get the basics from the officer."
+        );
 
         loadActs();
 
