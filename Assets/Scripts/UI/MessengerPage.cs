@@ -5,16 +5,18 @@ using UnityEngine.UI;
 
 public class MessengerPage : MonoBehaviour
 {
-    public Sprite characterPhoto;
-    public string characterName;
+    Sprite characterPhoto;
     public GameObject characterTilePrefab, playerTilePrefab;
     public Transform messagesContainer;
+    public Image characterImage;
+    public Text characterName;
 
 
     public void populate(Character character)
     {
-        characterPhoto = character.photo;
-        characterName = character.firstName;
+        setCharacterName(character);
+        setPhoto(character);
+
         foreach (Question q in character.questionsAsked)
         {
             Question question = q;
@@ -28,5 +30,14 @@ public class MessengerPage : MonoBehaviour
 
             playerTile.transform.GetChild(0).GetComponent<Text>().text = q.sentence;
         }
+    }
+
+    void setCharacterName(Character character)
+    {
+        characterName.text = character.firstName;
+    }
+    void setPhoto(Character character)
+    {
+        this.characterImage.sprite = character.photo;
     }
 }

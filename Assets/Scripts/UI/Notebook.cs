@@ -16,7 +16,7 @@ public class Notebook : MonoBehaviour
     public Transform conversationsParent;
 
     public List<GameObject> pages;
-    public AudioSource audioSource;
+    public AudioSource musicSource, soundFxSource;
     // public Animator animator;
     public bool isOpen;
     void OnValidate()
@@ -29,7 +29,7 @@ public class Notebook : MonoBehaviour
 
     void Start()
     {
-        closeAllPages();
+        // closeAllPages();
     }
 
     void closeAllPages()
@@ -43,7 +43,7 @@ public class Notebook : MonoBehaviour
     public void goToPage(GameObject page, bool withSound)
     {
         if (withSound)
-            audioSource.Play();
+            soundFxSource.Play();
 
         foreach (GameObject _page in this.pages)
         {

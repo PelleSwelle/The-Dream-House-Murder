@@ -30,8 +30,8 @@ public class ConversationsPage : MonoBehaviour
 
     void openConversationLog(Character character)
     {
-        notebook.goToPage(notebook.conversationPage, withSound: true);
         messengerPage.populate(character);
+        notebook.goToPage(notebook.conversationPage, withSound: true);
     }
 
     public void updateTileText(Character character)
