@@ -11,11 +11,13 @@ public class ArManager : MonoBehaviour
     public GameManager gameManager;
 
     private GameObject currentObject;
-    private GameObject spawnedObject;
+    public GameObject spawnedObject;
     public Character currentCharacter;
 
     public GameObject placementIndicator;
     Vector3 initialScale;
+    public Notebook notebook;
+    public ConversationUI conversationUI;
 
     private Pose pose;
     private ARRaycastManager aRRaycastManager;
@@ -26,6 +28,7 @@ public class ArManager : MonoBehaviour
     private Quaternion initialRotation;
     private Vector2 initialRotatePoint;
     public TipManager tipManager;
+    int numberOfCharactersPlaced = 0;
 
     // TODO: the marker is not showing for some reason.
 
@@ -60,7 +63,8 @@ public class ArManager : MonoBehaviour
 
     public void initConversationOnTap()
     {
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        bool noUiOpen = !notebook.isOpen && !conversationUI.isOpen;
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && noUiOpen)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
             RaycastHit hitData;
@@ -133,8 +137,8 @@ public class ArManager : MonoBehaviour
         if (spawnedObject == null && poseIsValid)
         {
             placementIndicator.SetActive(true);
-            Pose newPose = new Pose(pose.position, new Quaternion(0, 200, 0, 0));
-            placementIndicator.transform.SetPositionAndRotation(pose.position, newPose.rotation);
+            // Pose newPose = new Pose(pose.position, new Quaternion(100, 200, 100, 0));
+            placementIndicator.transform.SetPositionAndRotation(pose.position, Quaternion.Euler(-90, 0, 0));
         }
         else
         {
@@ -156,17 +160,20 @@ public class ArManager : MonoBehaviour
     void placeObject(GameObject model, Character character)
     {
         // TODO: get the character to turn towards the player.
-        Pose newPose = new Pose(pose.position, new Quaternion(0, 200, 0, 0));
-        spawnedObject = Instantiate(model, newPose.position, newPose.rotation);
+        // Pose newPose = new Pose(pose.position, new Quaternion(0, 200, 0, 0));
+        spawnedObject = Instantiate(model, pose.position, pose.rotation);
         character.model = spawnedObject;
         character.isPlaced = true;
 
         gameManager.setMode(GameMode.scalingMode);
+        numberOfCharactersPlaced++;
     }
 
     public void updateModelAndCharacterToPlace()
     {
         currentCharacter = gameManager.characters.Find(x => x.isPlaced == false);
         currentObject = gameManager.characters.Find(x => x.isPlaced == false).model;
+
+        tipManager.numberOfCharactersText.text = $"Currently placing: {currentCharacter.firstName}, {numberOfCharactersPlaced + 1} of 4.";
     }
 }
