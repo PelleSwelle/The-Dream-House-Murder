@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     public Button acceptScaleButton, notebookButton, backToTitleButton;
     public ArManager arManager;
     public int charactersDone = 0;
+    public TipManager tipManager;
 
     public void OnValidate()
     {
@@ -72,6 +73,7 @@ public class GameManager : MonoBehaviour
 
 
         musicSource.clip = gameMusic;
+        musicSource.loop = true;
         musicSource.Play();
 
         setMode(GameMode.tutorialMode);
@@ -162,11 +164,14 @@ public class GameManager : MonoBehaviour
 
         if (charactersDone < characters.Count)
         {
+            arManager.spawnedObject = null;
             arManager.updateModelAndCharacterToPlace();
             setMode(GameMode.placementMode);
         }
         else
             setMode(GameMode.playMode);
+
+        tipManager.incrementTutorial();
     }
 
     public void endGame(Character character)
