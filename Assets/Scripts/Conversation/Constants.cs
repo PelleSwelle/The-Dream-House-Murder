@@ -140,7 +140,7 @@ public static class Constants
             new Question(4, 2, 0,
                 "Who ordered the pizzas?", new Answer(
                     "It was Mary who ordered them! "
-                ), _hasBranches: true
+                )
             ),
             new Question(5, 0, 0,
                 "How long did it take you to collect the pizzas?", new Answer(
@@ -450,7 +450,7 @@ public static class Constants
             _isEndPoint: true
         ),
         new Question(
-            2, 2, 0, "The murderer is James. The boyfriend is lying. The pizza they ordered were found in the kitchen when the murder happened. This explains the murder weapon being a kitchen knife which was found in the backyard. That means he could only have killed her after arriving home, and hearing Olivia flirting with Harry after Mary ran out, made him angry, which resulted in the murder. The real estate agent was seen running out of the front door by Mary and was never in the backyard.", new Answer(
+            2, 2, 0, "The murderer is James. He is lying. The pizza they ordered were found in the kitchen when the murder happened. This explains the murder weapon being a kitchen knife which was found in the backyard. That means he could only have killed her after arriving home, and hearing Olivia flirting with Harry after Mary ran out, made him angry, which resulted in the murder. The real estate agent was seen running out of the front door by Mary and was never in the backyard.", new Answer(
                 "You're right! We have the evidence is conclusive. We will bring him in to the station, and he won't be coming out for a long time."
             ),
             _isEndPoint: true
