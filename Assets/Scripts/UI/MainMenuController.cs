@@ -29,6 +29,7 @@ public class MainMenuController : MonoBehaviour
 
         openMenu();
         audioSource.clip = mainMenuMusic;
+        audioSource.loop = true;
         audioSource.Play();
     }
 
