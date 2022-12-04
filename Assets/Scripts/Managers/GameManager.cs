@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     public int charactersDone = 0;
     public TipManager tipManager;
     public CharacterHandler officerHandler, maryHandler, jamesHandler, harryHandler;
+    public GameObject accusePanel;
 
     public void OnValidate()
     {
@@ -30,6 +31,7 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
+        accusePanel.SetActive(false);
         mary = new Character(
             _firstName: "Mary",
             _photo: maryPhoto,
@@ -42,7 +44,7 @@ public class GameManager : MonoBehaviour
             _firstName: "James",
             _photo: jamesPhoto,
             _model: jamesPrefab,
-            _openingLine: "Who are you? What do you want?",
+            _openingLine: "What do you want?",
             _gender: "male",
             _nothingToSay: "Shouldn't you talk to the officer first?"
         );
@@ -50,7 +52,7 @@ public class GameManager : MonoBehaviour
             _firstName: "Officer",
             _photo: officerPhoto,
             _model: officerPrefab,
-            _openingLine: "I'm glad you could get here so fast. What do you need to know?",
+            _openingLine: "What do you need to know?",
             _gender: "male",
             _nothingToSay: "I don't really have anything more to tell you at the moment."
         );
@@ -135,12 +137,15 @@ public class GameManager : MonoBehaviour
         && james.currentAct.isFinished();
     }
 
-    public bool actIsOverForThree()
+    public bool act2IsOverForThree()
     {
-        print("act is over for three characters");
-        return mary.currentAct.isFinished()
-        && harry.currentAct.isFinished()
-        && james.currentAct.isFinished();
+        if (mary.acts[1].isFinished() && harry.acts[1].isFinished() && james.acts[1].isFinished())
+        {
+            print("three is finished");
+            return true;
+        }
+        else
+            return false;
     }
 
     public void setMode(GameMode _gameMode)
@@ -185,17 +190,19 @@ public class GameManager : MonoBehaviour
 
     public void endGame(Character character)
     {
+        accusePanel.SetActive(false);
+
         if (character == harry)
         {
-            endText.text = "Really? You thought the murderer was Harry? Lol";
+            endText.text = "You didn't catch the murderer. Play again to figure out who did it.";
         }
         else if (character == mary)
         {
-            endText.text = "Loool! It was not Mary.";
+            endText.text = "The murderer got away with the deed. Play again to find the murderer.";
         }
         else if (character == james)
         {
-            endText.text = "Yes. Good job. It was James. fuckin... hooray.";
+            endText.text = "You solved the murder, and won the game. Congratulations!";
         }
         endScreen.SetActive(true);
     }

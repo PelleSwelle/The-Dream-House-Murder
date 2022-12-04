@@ -13,6 +13,7 @@ public class ConversationManager : MonoBehaviour
     public List<Question> currentlyAvailableQuestions;
 
     public GameManager gameManager;
+    public GameObject notebookButton;
 
 
     void Start()
@@ -143,9 +144,14 @@ public class ConversationManager : MonoBehaviour
             gameManager.officer.goToAct(2);
         }
         // act 2 is over for Harry, Mary & James
-        if (gameManager.actIsOverForThree() && character != gameManager.officer && character.currentAct == character.acts[1])
+        if (gameManager.act2IsOverForThree() && character != gameManager.officer && character.currentAct == character.acts[1])
         {
             gameManager.officer.goToAct(3);
+        }
+
+        if (character == gameManager.officer && gameManager.officer.acts[2].conversation.Questions[0].hasBeenSaid)
+        {
+            gameManager.accusePanel.SetActive(true);
         }
 
         if (accusedSomeone())
@@ -190,6 +196,7 @@ public class ConversationManager : MonoBehaviour
 
     public void initConversation(Character character)
     {
+        notebookButton.SetActive(false);
         playRandomVoiceClip(character);
 
         currentConversationCharacter = character;
@@ -221,6 +228,7 @@ public class ConversationManager : MonoBehaviour
 
     public void leaveConversation()
     {
+        notebookButton.SetActive(true);
         currentConversationCharacter = null;
         conversationUI.toggleUI();
     }

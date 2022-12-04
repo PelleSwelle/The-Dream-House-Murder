@@ -848,7 +848,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1247903690
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1037,6 +1037,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2099541340}
     m_Modifications:
+    - target: {fileID: 7158697445992231564, guid: 0940b07ecd0fd8b449ab7322ca8682f0,
+        type: 3}
+      propertyPath: m_text
+      value: The Dream House Murder
+      objectReference: {fileID: 0}
+    - target: {fileID: 7158697445992231565, guid: 0940b07ecd0fd8b449ab7322ca8682f0,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 905.1089
+      objectReference: {fileID: 0}
+    - target: {fileID: 7158697445992231565, guid: 0940b07ecd0fd8b449ab7322ca8682f0,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.594
+      objectReference: {fileID: 0}
     - target: {fileID: 7158697446035209097, guid: 0940b07ecd0fd8b449ab7322ca8682f0,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1055,6 +1070,11 @@ PrefabInstance:
     - target: {fileID: 7158697446035209097, guid: 0940b07ecd0fd8b449ab7322ca8682f0,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7158697446035209098, guid: 0940b07ecd0fd8b449ab7322ca8682f0,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7158697446035209111, guid: 0940b07ecd0fd8b449ab7322ca8682f0,
@@ -1086,6 +1106,11 @@ PrefabInstance:
     - target: {fileID: 7158697446035209111, guid: 0940b07ecd0fd8b449ab7322ca8682f0,
         type: 3}
       propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7158697446151495490, guid: 0940b07ecd0fd8b449ab7322ca8682f0,
+        type: 3}
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7158697446186216669, guid: 0940b07ecd0fd8b449ab7322ca8682f0,
@@ -1244,6 +1269,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7158697446311173678, guid: 0940b07ecd0fd8b449ab7322ca8682f0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7158697446394372667, guid: 0940b07ecd0fd8b449ab7322ca8682f0,
         type: 3}
       propertyPath: m_Type
@@ -1391,6 +1421,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7158697447465687171, guid: 0940b07ecd0fd8b449ab7322ca8682f0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7158697447514214161, guid: 0940b07ecd0fd8b449ab7322ca8682f0,
         type: 3}
       propertyPath: m_Type
@@ -1430,6 +1465,11 @@ PrefabInstance:
     - target: {fileID: 7158697447514214163, guid: 0940b07ecd0fd8b449ab7322ca8682f0,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7158697447514214164, guid: 0940b07ecd0fd8b449ab7322ca8682f0,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
