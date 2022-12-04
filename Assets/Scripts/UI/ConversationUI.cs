@@ -11,12 +11,13 @@ public class ConversationUI : MonoBehaviour
     public Button exitButton;
     public Text answerField;
     public Image characterImage;
-    public Character character;
+    public Text characterNameText;
     public ConversationManager conversationManager;
     public GameObject notification;
     public bool isOpen;
     public GameObject questionPrefab;
     public Transform questionsParent;
+    public GameObject notebookButton;
 
     void Start()
     {
@@ -29,10 +30,14 @@ public class ConversationUI : MonoBehaviour
     public void toggleUI()
     {
         if (!isOpen)
+        {
             animator.Play("openConversation");
+        }
 
         else if (isOpen)
+        {
             animator.Play("closeConversation");
+        }
 
         isOpen = !isOpen;
     }
@@ -43,6 +48,10 @@ public class ConversationUI : MonoBehaviour
         characterImage.sprite = character.photo;
     }
 
+    public void setCharacterName(Character character)
+    {
+        characterNameText.text = character.firstName;
+    }
 
     public void updateAnswerField(Answer answer)
     {

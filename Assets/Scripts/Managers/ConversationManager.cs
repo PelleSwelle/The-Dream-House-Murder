@@ -196,6 +196,7 @@ public class ConversationManager : MonoBehaviour
         character.hasBeenTalkedTo = true;
 
         conversationUI.setCharacterImage(character);
+        conversationUI.setCharacterName(character);
         conversationUI.toggleUI();
 
         // before the officer has been talked to.
