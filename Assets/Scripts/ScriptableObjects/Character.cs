@@ -68,4 +68,10 @@ public class Character
     {
         return questionsAsked[questionsAsked.Count - 1];
     }
+
+    public Question getLastAskedQuestionFromCurrentAct()
+    {
+        return currentAct.conversation.getLastAskedQuestion();
+    }
+
 }

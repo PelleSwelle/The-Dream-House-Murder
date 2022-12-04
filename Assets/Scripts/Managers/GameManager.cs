@@ -158,6 +158,14 @@ public class GameManager : MonoBehaviour
         harryHandler.character = harry;
     }
 
+    public Character getAccusedCharacter()
+    {
+        Question choice = officer.acts[2].conversation.Questions.Find(x => x.ID.val1 == 2 && x.hasBeenSaid == true);
+        if (choice.ID.val2 == 1) return mary;
+        else if (choice.ID.val2 == 2) return james;
+        else return harry;
+    }
+
     void handleAccept()
     {
         arManager.currentCharacter.setScale();
