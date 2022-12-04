@@ -10,7 +10,8 @@ public class MessengerPage : MonoBehaviour
     public Transform messagesContainer;
     public Image characterImage;
     public Text characterName;
-
+    private MessengerTileCharacter messengerTileCharacter;
+    private MessengerTilePlayer messengerTilePlayer;
 
     public void populate(Character character)
     {
@@ -19,16 +20,18 @@ public class MessengerPage : MonoBehaviour
 
         foreach (Question q in character.questionsAsked)
         {
+            print("populated messenger page with" + q.sentence);
             Question question = q;
             Answer answer = q.answer;
 
             GameObject playerTile = Instantiate(playerTilePrefab, new Vector3(0, 0, 0), Quaternion.identity, messagesContainer.transform);
+            messengerTilePlayer = playerTile.GetComponent<MessengerTilePlayer>();
+            messengerTilePlayer.setText(q);
+
             GameObject characterTile = Instantiate(characterTilePrefab, new Vector3(0, 0, 0), Quaternion.identity, messagesContainer.transform);
-
-            characterTile.transform.GetChild(0).GetComponent<Image>().sprite = character.photo;
-            characterTile.transform.GetChild(1).GetComponent<Text>().text = answer.sentence;
-
-            playerTile.transform.GetChild(0).GetComponent<Text>().text = q.sentence;
+            messengerTileCharacter = characterTile.GetComponent<MessengerTileCharacter>();
+            messengerTileCharacter.setImage(character);
+            messengerTileCharacter.setText(answer);
         }
     }
 
