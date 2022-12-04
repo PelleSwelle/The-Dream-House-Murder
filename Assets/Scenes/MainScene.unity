@@ -1414,6 +1414,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 2104528656}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &320558094 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2456662481318025604, guid: 5a4e686124decce4a9177c7efeb7b59f,
+    type: 3}
+  m_PrefabInstance: {fileID: 2104528656}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 320558093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43c75558baa4c9d4ba11ce64c19fcb27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!82 &320558095
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1981,6 +1993,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 376227126}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &445153967 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2456662481318025604, guid: 5a4e686124decce4a9177c7efeb7b59f,
+    type: 3}
+  m_PrefabInstance: {fileID: 376227126}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445153966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43c75558baa4c9d4ba11ce64c19fcb27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!82 &445153968
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2741,14 +2765,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 9f085727f1c68ae478e3b8fd8d1d94d0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4531,6 +4555,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 599891011}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1036100727 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2456662481318025604, guid: 5a4e686124decce4a9177c7efeb7b59f,
+    type: 3}
+  m_PrefabInstance: {fileID: 599891011}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1036100726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43c75558baa4c9d4ba11ce64c19fcb27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!82 &1036100728
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4687,6 +4723,10 @@ MonoBehaviour:
   arManager: {fileID: 1051953111}
   charactersDone: 0
   tipManager: {fileID: 1051953110}
+  officerHandler: {fileID: 1350687194}
+  maryHandler: {fileID: 1036100727}
+  jamesHandler: {fileID: 445153967}
+  harryHandler: {fileID: 320558094}
 --- !u!4 &1051953108
 Transform:
   m_ObjectHideFlags: 0
@@ -5555,6 +5595,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 169517336}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1350687194 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2456662481318025604, guid: 5a4e686124decce4a9177c7efeb7b59f,
+    type: 3}
+  m_PrefabInstance: {fileID: 169517336}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1350687193}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43c75558baa4c9d4ba11ce64c19fcb27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!82 &1350687195
 AudioSource:
   m_ObjectHideFlags: 0

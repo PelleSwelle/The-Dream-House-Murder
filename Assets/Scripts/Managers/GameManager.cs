@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     public ArManager arManager;
     public int charactersDone = 0;
     public TipManager tipManager;
+    public CharacterHandler officerHandler, maryHandler, jamesHandler, harryHandler;
 
     public void OnValidate()
     {
@@ -151,10 +152,10 @@ public class GameManager : MonoBehaviour
 
     void assignCharacterHandlers()
     {
-        charactersParent.transform.GetChild(0).GetComponent<CharacterHandler>().character = officer;
-        charactersParent.transform.GetChild(1).GetComponent<CharacterHandler>().character = james;
-        charactersParent.transform.GetChild(2).GetComponent<CharacterHandler>().character = mary;
-        charactersParent.transform.GetChild(3).GetComponent<CharacterHandler>().character = harry;
+        officerHandler.character = officer;
+        jamesHandler.character = james;
+        maryHandler.character = mary;
+        harryHandler.character = harry;
     }
 
     void handleAccept()

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3799810468921005005}
   - component: {fileID: 7582446358134589175}
   - component: {fileID: 6942559285761346974}
-  - component: {fileID: 490174722784823274}
+  - component: {fileID: 7703054683468313327}
   m_Layer: 5
   m_Name: messengerTile_player
   m_TagString: Untagged
@@ -77,7 +77,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &490174722784823274
+--- !u!114 &7703054683468313327
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -86,9 +86,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4806115531798856216}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb7609d5ab0a9ea4aa6194e8eab5d546, type: 3}
+  m_Script: {fileID: 11500000, guid: 89800c4a271fe894ab81338ed16dd32d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  text: {fileID: 693621719044248104}
 --- !u!1 &8800197637116713912
 GameObject:
   m_ObjectHideFlags: 0
