@@ -13,14 +13,21 @@ public class MessengerPage : MonoBehaviour
     private MessengerTileCharacter messengerTileCharacter;
     private MessengerTilePlayer messengerTilePlayer;
 
+    void clearMessages()
+    {
+        foreach (Transform tile in messagesContainer.transform)
+            GameObject.Destroy(tile.gameObject);
+    }
+
     public void populate(Character character)
     {
+        clearMessages();
+
         setCharacterName(character);
         setPhoto(character);
 
         foreach (Question q in character.questionsAsked)
         {
-            print("populated messenger page with" + q.sentence);
             Question question = q;
             Answer answer = q.answer;
 

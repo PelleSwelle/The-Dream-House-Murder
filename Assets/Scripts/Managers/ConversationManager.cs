@@ -14,7 +14,6 @@ public class ConversationManager : MonoBehaviour
 
     public GameManager gameManager;
 
-    bool foundMurderer;
 
     void Start()
     {
@@ -22,14 +21,16 @@ public class ConversationManager : MonoBehaviour
     }
 
     /// <summary> gets the unlocked question in the case there is only one </summary>
-    Question getUnlockedQuestion(Character character, Question previousQuestion)
+    Question getUnlockedQuestion(Character character)
     {
-        if (character.currentAct != character.acts[1])
+        Question previousQuestion = character.getLastAskedQuestionFromCurrentAct();
+        if (character.currentAct != character.acts[1]) // if character is not in second act
         {
-            Question unlockedQuestion = character.currentAct.conversation.Questions.Find(x => x.ID.val1 == previousQuestion.ID.val1 + 1);
+            Question unlockedQuestion = character.currentAct.conversation.Questions.Find(
+                x => x.ID.val1 == previousQuestion.ID.val1 + 1);
             return unlockedQuestion;
         }
-        else
+        else // if in second act
         {
             Question unlockedQuestion = character.currentAct.conversation.Questions.Find(
                 x => x.ID.val1 == previousQuestion.ID.val1 + 1
@@ -40,9 +41,10 @@ public class ConversationManager : MonoBehaviour
     }
 
     /// <summary> gets a list of the unlocked questions in the case there are two </summary>
-    List<Question> getUnlockedQuestions(Character character, Question question)
+    List<Question> getUnlockedQuestions(Character character)
     {
         List<Question> unlockedQuestions = new List<Question>();
+        Question question = character.getLastAskedQuestionFromCurrentAct();
         QuestionID lastQuestionID = question.ID;
 
         int firstVal = lastQuestionID.val1 + 1;
@@ -114,12 +116,12 @@ public class ConversationManager : MonoBehaviour
 
                 if (latestQuestionBranchesOut)
                 {
-                    List<Question> unlockedQuestions = getUnlockedQuestions(talkPartner, talkPartner.currentAct.conversation.getLastAskedQuestion());
+                    List<Question> unlockedQuestions = getUnlockedQuestions(talkPartner);
                     currentlyAvailableQuestions.AddRange(unlockedQuestions);
                 }
                 else
                 {
-                    Question unlockedQuestion = getUnlockedQuestion(talkPartner, talkPartner.currentAct.conversation.getLastAskedQuestion());
+                    Question unlockedQuestion = getUnlockedQuestion(talkPartner);
                     currentlyAvailableQuestions.Add(unlockedQuestion);
                 }
             }
@@ -148,7 +150,7 @@ public class ConversationManager : MonoBehaviour
 
         if (accusedSomeone())
         {
-            gameManager.endGame(getAccused());
+            gameManager.endGame(gameManager.getAccusedCharacter());
         }
 
         conversationUI.updateAnswerField(question.answer);
@@ -157,22 +159,13 @@ public class ConversationManager : MonoBehaviour
         conversationPage.updateTileText(character);
     }
 
-    bool accusedSomeone()
+    bool accusedSomeone() // returns true if any of the "accuse" questions have been said
     {
         return gameManager.officer.acts[2].conversation.getQuestionByID(2, 1, 0).hasBeenSaid
             || gameManager.officer.acts[2].conversation.getQuestionByID(2, 2, 0).hasBeenSaid
             || gameManager.officer.acts[2].conversation.getQuestionByID(2, 3, 0).hasBeenSaid;
     }
-    Character getAccused()
-    {
-        Question choice = gameManager.officer.acts[2].conversation.Questions.Find(x => x.ID.val1 == 2 && x.hasBeenSaid == true);
-        if (choice.ID.val2 == 1)
-            return gameManager.mary;
-        else if (choice.ID.val2 == 2)
-            return gameManager.james;
-        else
-            return gameManager.harry;
-    }
+
 
     private void playRandomVoiceClip(Character character)
     {

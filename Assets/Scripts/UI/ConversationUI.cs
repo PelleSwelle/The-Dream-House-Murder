@@ -29,16 +29,12 @@ public class ConversationUI : MonoBehaviour
     public void toggleUI()
     {
         if (!isOpen)
-        {
             animator.Play("openConversation");
-            this.isOpen = true;
-        }
+
         else if (isOpen)
-        {
             animator.Play("closeConversation");
-            this.isOpen = false;
-            // conversationManager.isInConversation = true;
-        }
+
+        isOpen = !isOpen;
     }
 
 
