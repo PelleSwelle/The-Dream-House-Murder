@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public Button enterGameButton;
     public GameObject endScreen;
     public Text endText;
     public GameObject charactersParent;
@@ -24,6 +25,7 @@ public class GameManager : MonoBehaviour
     public TipManager tipManager;
     public CharacterHandler officerHandler, maryHandler, jamesHandler, harryHandler;
     public GameObject accusePanel;
+    public CutSceneManager cutSceneManager;
 
     public void OnValidate()
     {
@@ -74,6 +76,8 @@ public class GameManager : MonoBehaviour
         acceptScaleButton.onClick.AddListener(() => handleAccept());
         backToTitleButton.onClick.AddListener(() => goToTitleScreen());
 
+        enterGameButton.onClick.AddListener(() => setMode(GameMode.playMode));
+        enterGameButton.gameObject.SetActive(false);
 
         musicSource.clip = gameMusic;
         musicSource.loop = true;
@@ -151,8 +155,16 @@ public class GameManager : MonoBehaviour
     public void setMode(GameMode _gameMode)
     {
         currentMode = _gameMode;
+
         acceptScaleButton.gameObject.SetActive(currentMode == GameMode.scalingMode);
         notebookButton.gameObject.SetActive(currentMode == GameMode.playMode);
+
+        if (currentMode == GameMode.playMode)
+            cutSceneManager.playScene(0);
+        while (cutSceneManager.videoPlayer.isPlaying)
+        {
+            // set notebookbutton not active
+        }
     }
 
     void assignCharacterHandlers()
@@ -183,8 +195,7 @@ public class GameManager : MonoBehaviour
             setMode(GameMode.placementMode);
         }
         else
-            setMode(GameMode.playMode);
-
+            enterGameButton.gameObject.SetActive(true);
         tipManager.incrementTutorial();
     }
 
