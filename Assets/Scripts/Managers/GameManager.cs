@@ -7,23 +7,31 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject endScreen;
-    public Text endText;
-    public GameObject charactersParent;
-    public List<Character> characters;
-    public GameObject cursor;
-    public Character mary, james, officer, harry;
-    public GameObject officerPrefab, maryPrefab, jamesPrefab, harryPrefab;
+    [Header("Characters")]
     public Sprite officerPhoto, maryPhoto, jamesPhoto, harryPhoto;
-    public AudioSource musicSource;
-    public AudioClip gameMusic;
+
+    public GameObject officerPrefab, maryPrefab, jamesPrefab, harryPrefab;
+
+    public GameObject endScreen, charactersParent, cursor, accusePanel;
+    public Text endText;
+
+    [Header("Audio")]
+
     public GameMode currentMode;
-    public Button acceptScaleButton, notebookButton, backToTitleButton;
-    public ArManager arManager;
-    public int charactersDone = 0;
+    public Button acceptScaleButton, notebookButton, backToTitleButton, startGameButton;
+    int charactersDone = 0;
+
+    [Header("Sub managers")]
+    public CutsceneManager cutsceneManager;
     public TipManager tipManager;
+    public ArManager arManager;
     public CharacterHandler officerHandler, maryHandler, jamesHandler, harryHandler;
-    public GameObject accusePanel;
+
+    public Character mary, james, officer, harry;
+    public List<Character> characters;
+
+    // ******** CHANGE THIS FOR THE TWO VERSIONS ********
+    public bool isWithVideo = true;
 
     public void OnValidate()
     {
@@ -31,8 +39,8 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        arManager.tipManager.tutorialOverlay.SetActive(true);
         accusePanel.SetActive(false);
+
         mary = new Character(
             _firstName: "Mary",
             _photo: maryPhoto,
@@ -69,24 +77,31 @@ public class GameManager : MonoBehaviour
         loadActs();
 
         characters = new List<Character> { mary, james, officer, harry };
+        foreach (Character c in characters)
+            print(c.firstName);
 
         assignCharacterHandlers();
         cursor.SetActive(true);
         acceptScaleButton.onClick.AddListener(() => handleAccept());
         backToTitleButton.onClick.AddListener(() => goToTitleScreen());
+        startGameButton.onClick.AddListener(() => startGame());
 
-
-        musicSource.clip = gameMusic;
-        musicSource.loop = true;
-        musicSource.Play();
 
         setMode(GameMode.tutorialMode);
     }
 
-    void goToTitleScreen()
+    void startGame()
     {
-        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+        startGameButton.gameObject.SetActive(false);
+        notebookButton.gameObject.SetActive(false);
+        arManager.tipManager.tutorialOverlay.SetActive(false);
+
+        cutsceneManager.playScene(0);
     }
+
+    public void activateUI() => notebookButton.gameObject.SetActive(true);
+
+    void goToTitleScreen() => SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
 
     void loadActs()
     {
@@ -112,9 +127,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         if (currentMode == GameMode.placementMode)
-        {
             arManager.placeOnTap();
-        }
 
         else if (currentMode == GameMode.scalingMode)
         {
@@ -125,7 +138,6 @@ public class GameManager : MonoBehaviour
         else if (currentMode == GameMode.playMode)
         {
             arManager.tipManager.tutorialOverlay.SetActive(false);
-
             arManager.initConversationOnTap();
         }
     }
@@ -184,27 +196,27 @@ public class GameManager : MonoBehaviour
             setMode(GameMode.placementMode);
         }
         else
+        {
             setMode(GameMode.playMode);
+            startGameButton.gameObject.SetActive(true);
+        }
 
         tipManager.incrementTutorial();
+
     }
 
     public void endGame(Character character)
     {
         accusePanel.SetActive(false);
+        cutsceneManager.playScene(2);
 
         if (character == harry)
-        {
             endText.text = "You didn't catch the murderer. Play again to figure out who did it.";
-        }
         else if (character == mary)
-        {
             endText.text = "The murderer got away with the deed. Play again to find the murderer.";
-        }
         else if (character == james)
-        {
             endText.text = "You solved the murder, and won the game. Congratulations!";
-        }
+
         endScreen.SetActive(true);
     }
 
@@ -212,8 +224,5 @@ public class GameManager : MonoBehaviour
 
 public enum GameMode
 {
-    tutorialMode,
-    placementMode,
-    scalingMode,
-    playMode
+    tutorialMode, placementMode, scalingMode, playMode
 }

@@ -12,9 +12,9 @@ public class Character
     public List<Question> questionsAsked;
 
     // *************** CHARACTER PROPERTIES ***************
-    public bool hasBeenTalkedTo = false;
+    public bool hasMet = false;
     public string openingLine;
-    public Sprite photo; // TODO: this
+    public Sprite photo;
     public string firstName, middleName, lastName, description;
     public string gender;
     public string nothingToSayLine;
@@ -26,8 +26,6 @@ public class Character
         photo = _photo;
         model = _model;
 
-        isPlaced = false;
-        isScaled = false;
         openingLine = _openingLine;
         gender = _gender;
         nothingToSayLine = _nothingToSay;
@@ -45,33 +43,11 @@ public class Character
         currentAct = acts[0];
     }
 
-    public void setScale()
-    {
-        isScaled = true;
-    }
+    public void setScale() => isScaled = true;
+    public void scaleModel(Vector3 newScale) => model.transform.localScale = newScale;
+    public void goToAct(int actNumber) => currentAct = acts[actNumber];
 
+    public Question getLastAskedQuestion() => questionsAsked[questionsAsked.Count - 1];
 
-    public void scaleModel(Vector3 newScale)
-    {
-        this.model.transform.localScale = newScale;
-        Debug.Log("scaling character" + this.model.transform.localScale);
-    }
-
-    public void goToAct(int actNumber)
-    {
-        actNumber--;
-        currentAct = acts[actNumber];
-        Debug.Log($"{firstName} entered act {currentAct.actNumber}");
-    }
-
-    public Question getLastAskedQuestion()
-    {
-        return questionsAsked[questionsAsked.Count - 1];
-    }
-
-    public Question getLastAskedQuestionFromCurrentAct()
-    {
-        return currentAct.conversation.getLastAskedQuestion();
-    }
-
+    public Question getLastAskedQuestionFromCurrentAct() => currentAct.conversation.getLastAskedQuestion();
 }

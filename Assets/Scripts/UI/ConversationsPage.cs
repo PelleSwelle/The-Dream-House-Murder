@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class ConversationsPage : MonoBehaviour
 {
     public GameManager gameManager;
-    public ConversationManager conversationManager;
     public Button maryButton, jamesButton, officerButton, harryButton;
     public ConversationTile maryTile, jamesTile, officerTile, harryTile;
     public MessengerPage messengerPage;
@@ -31,7 +30,7 @@ public class ConversationsPage : MonoBehaviour
     void openConversationLog(Character character)
     {
         messengerPage.populate(character);
-        notebook.goToPage(notebook.conversationPage, withSound: true);
+        notebook.goToPage(notebook.messengerPage);
     }
 
     public void updateTileText(Character character)

@@ -2,59 +2,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
-/// <summary>
-/// The Notebook class contains the player's current knowledge
-/// this includes:
-///     character sheet
-///     conversation log
-///     clues log
-/// </summary>
 public class Notebook : MonoBehaviour
 {
-    public GameObject notebook, conversationsPage, conversationPage;
-    public Transform conversationsParent;
+    public GameObject conversationsPage, messengerPage;
 
     public List<GameObject> pages;
-    public AudioSource musicSource, soundFxSource;
-    // public Animator animator;
     public bool isOpen;
-    void OnValidate()
-    {
-        notebook = this.gameObject;
+    public static event Action onPageTurn;
 
-        pages = new List<GameObject> { conversationsPage, conversationPage };
-    }
-
-
-    void Start()
-    {
-        // closeAllPages();
-    }
+    void Start() => pages = new List<GameObject> { conversationsPage, messengerPage };
 
     void closeAllPages()
     {
         foreach (GameObject _page in pages)
-        {
             _page.SetActive(false);
-        }
     }
 
-    public void goToPage(GameObject page, bool withSound)
+    public void goToPage(GameObject page)
     {
-        if (withSound)
-            soundFxSource.Play();
+        onPageTurn?.Invoke();
 
         foreach (GameObject _page in this.pages)
         {
             if (_page == page)
-            {
                 _page.SetActive(true);
-            }
             else
-            {
                 _page.SetActive(false);
-            }
         }
     }
 }

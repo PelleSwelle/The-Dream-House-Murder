@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class MainMenuController : MonoBehaviour
 {
@@ -10,8 +11,8 @@ public class MainMenuController : MonoBehaviour
     public Button playButton, settingsButton, aboutButton, creditsButton, helpButton;
     public GameObject backObject;
     public List<GameObject> pages;
-    public AudioSource audioSource;
-    public AudioClip mainMenuMusic, openCloseSound, leafTurn;
+    public static event Action onButtonPress;
+    public static event Action onOpen;
 
     void Start()
     {
@@ -28,46 +29,26 @@ public class MainMenuController : MonoBehaviour
         backObject.GetComponent<Button>().onClick.AddListener(() => goToPage(titlePage));
 
         openMenu();
-        audioSource.clip = mainMenuMusic;
-        audioSource.loop = true;
-        audioSource.Play();
     }
+    void enterGame() => SceneManager.LoadScene("MainScene", LoadSceneMode.Single);
 
-    void OnValidate()
-    {
-        goToPage(titlePage);
-    }
-
-    /// <summary>
-    /// closes the intro screen and starts the game
-    /// </summary>
-    void enterGame()
-    {
-        SceneManager.LoadScene("MainScene", LoadSceneMode.Single);
-    }
-
-    void openMenu()
-    {
-        goToPage(titlePage);
-    }
+    void openMenu() => onOpen?.Invoke();
 
     public void goToPage(GameObject page)
     {
-        audioSource.PlayOneShot(openCloseSound);
-        if (page == titlePage) { backObject.SetActive(false); }
-        else { backObject.SetActive(true); }
+        onButtonPress?.Invoke();
 
-        // set active or not active to make sure on page does not cover the other
+        if (page == titlePage)
+            backObject.SetActive(false);
+        else
+            backObject.SetActive(true);
+
         foreach (GameObject _page in this.pages)
         {
             if (_page == page)
-            {
                 _page.SetActive(true);
-            }
             else
-            {
                 _page.SetActive(false);
-            }
         }
     }
 }

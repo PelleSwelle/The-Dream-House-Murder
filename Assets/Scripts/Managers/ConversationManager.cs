@@ -1,27 +1,26 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using System;
 
 public class ConversationManager : MonoBehaviour
 {
     public ConversationUI conversationUI;
     public ConversationsPage conversationPage;
 
-    public AudioClip[] voiceLinesMale, voiceLinesFemale;
-    public AudioSource voiceSource;
-
     public Character currentConversationCharacter;
     public List<Question> currentlyAvailableQuestions;
 
-    public GameManager gameManager;
+    public GameManager game;
     public GameObject notebookButton;
 
+    public static event Action<Character> onSpeak;
 
     void Start()
     {
         currentlyAvailableQuestions = new List<Question>();
     }
 
-    /// <summary> gets the unlocked question in the case there is only one </summary>
     Question getUnlockedQuestion(Character character)
     {
         Question previousQuestion = character.getLastAskedQuestionFromCurrentAct();
@@ -41,7 +40,6 @@ public class ConversationManager : MonoBehaviour
 
     }
 
-    /// <summary> gets a list of the unlocked questions in the case there are two </summary>
     List<Question> getUnlockedQuestions(Character character)
     {
         List<Question> unlockedQuestions = new List<Question>();
@@ -86,7 +84,7 @@ public class ConversationManager : MonoBehaviour
         else if (question.sentence.Contains("James"))
             characterName = "James";
 
-        Character characterToReturn = gameManager.characters.Find(x => x.firstName == characterName);
+        Character characterToReturn = game.characters.Find(x => x.firstName == characterName);
         return characterToReturn;
     }
 
@@ -104,7 +102,7 @@ public class ConversationManager : MonoBehaviour
         {
             if (talkPartner.currentAct.isFinished() == true)
             {
-                if (talkPartner == gameManager.officer && talkPartner.currentAct == talkPartner.acts[1])
+                if (talkPartner == game.officer && talkPartner.currentAct == talkPartner.acts[1])
                 {
                     Character characterToUnlock = getCharacterTalkedAbout();
                     talkPartner.currentAct.conversation.onFinish(characterToUnlock);
@@ -133,30 +131,30 @@ public class ConversationManager : MonoBehaviour
 
     public void askQuestion(Question question, Character character)
     {
-        playRandomVoiceClip(character);
+        onSpeak?.Invoke(character);
 
         character.questionsAsked.Add(question);
         question.hasBeenSaid = true;
 
         // act 1 is over for all
-        if (character.currentAct == character.acts[0] && gameManager.actIsOverForAll())
+        if (character.currentAct == character.acts[0] && game.actIsOverForAll())
         {
-            gameManager.officer.goToAct(2);
+            game.officer.goToAct(1);
         }
         // act 2 is over for Harry, Mary & James
-        if (gameManager.act2IsOverForThree() && character != gameManager.officer && character.currentAct == character.acts[1])
+        if (game.act2IsOverForThree() && character != game.officer && character.currentAct == character.acts[1])
         {
-            gameManager.officer.goToAct(3);
+            game.officer.goToAct(2);
         }
 
-        if (character == gameManager.officer && gameManager.officer.acts[2].conversation.Questions[0].hasBeenSaid)
+        if (character == game.officer && game.officer.acts[2].conversation.Questions[0].hasBeenSaid)
         {
-            gameManager.accusePanel.SetActive(true);
+            game.accusePanel.SetActive(true);
         }
 
         if (accusedSomeone())
         {
-            gameManager.endGame(gameManager.getAccusedCharacter());
+            game.endGame(game.getAccusedCharacter());
         }
 
         conversationUI.updateAnswerField(question.answer);
@@ -167,49 +165,48 @@ public class ConversationManager : MonoBehaviour
 
     bool accusedSomeone() // returns true if any of the "accuse" questions have been said
     {
-        return gameManager.officer.acts[2].conversation.getQuestionByID(2, 1, 0).hasBeenSaid
-            || gameManager.officer.acts[2].conversation.getQuestionByID(2, 2, 0).hasBeenSaid
-            || gameManager.officer.acts[2].conversation.getQuestionByID(2, 3, 0).hasBeenSaid;
+        return game.officer.acts[2].conversation.getQuestionByID(2, 1, 0).hasBeenSaid
+            || game.officer.acts[2].conversation.getQuestionByID(2, 2, 0).hasBeenSaid
+            || game.officer.acts[2].conversation.getQuestionByID(2, 3, 0).hasBeenSaid;
     }
 
 
-    private void playRandomVoiceClip(Character character)
-    {
-        voiceSource.Stop();
-        if (character.gender == "female")
-            playRandomFemaleVoiceClip();
-        else
-            playRandomMaleVoiceClip();
-    }
+    // private void playRandomVoiceClip(Character character)
+    // {
+    //     voiceSource.Stop();
+    //     if (character.gender == "female")
+    //         playRandomFemaleVoiceClip();
+    //     else
+    //         playRandomMaleVoiceClip();
+    // }
 
-    public void playRandomFemaleVoiceClip()
-    {
-        int i = Random.Range(0, voiceLinesFemale.Length);
-        voiceSource.PlayOneShot(voiceLinesFemale[i]);
-    }
+    // public void playRandomFemaleVoiceClip()
+    // {
+    //     int i = Random.Range(0, voiceLinesFemale.Length);
+    //     voiceSource.PlayOneShot(voiceLinesFemale[i]);
+    // }
 
-    public void playRandomMaleVoiceClip()
-    {
-        int i = Random.Range(0, voiceLinesMale.Length);
-        voiceSource.PlayOneShot(voiceLinesMale[i]);
-    }
+    // public void playRandomMaleVoiceClip()
+    // {
+    //     int i = Random.Range(0, voiceLinesMale.Length);
+    //     voiceSource.PlayOneShot(voiceLinesMale[i]);
+    // }
 
     public void initConversation(Character character)
     {
         notebookButton.SetActive(false);
-        playRandomVoiceClip(character);
+        onSpeak?.Invoke(character);
 
         currentConversationCharacter = character;
-        character.hasBeenTalkedTo = true;
+        character.hasMet = true;
 
-        conversationUI.setCharacterImage(character);
-        conversationUI.setCharacterName(character);
+        conversationUI.updateCharacterFields(character);
         conversationUI.toggleUI();
 
         // before the officer has been talked to.
-        if (currentConversationCharacter != gameManager.officer)
+        if (currentConversationCharacter != game.officer)
         {
-            if (gameManager.officer.hasBeenTalkedTo)
+            if (game.officer.hasMet)
             {
                 updateAvailableQuestions(character);
                 conversationUI.displayOpeningLine(character);
@@ -223,6 +220,11 @@ public class ConversationManager : MonoBehaviour
         {
             updateAvailableQuestions(character);
             conversationUI.displayOpeningLine(character);
+        }
+
+        if (character == game.officer && character.currentAct == character.acts[1])
+        {
+            game.cutsceneManager.playScene(1);
         }
     }
 

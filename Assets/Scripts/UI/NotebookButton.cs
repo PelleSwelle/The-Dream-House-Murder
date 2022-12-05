@@ -1,33 +1,30 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class NotebookButton : MonoBehaviour
 {
     public Animator animator;
     public GameObject notebookObject;
-    public AudioSource audioSource;
     public Notebook notebook;
+    public static event Action onToggle;
 
-    void Start()
-    {
-        this.GetComponent<Button>().onClick.AddListener(() => toggleNotebook());
-    }
+    void Start() => GetComponent<Button>().onClick.AddListener(() => toggleNotebook());
 
     public void toggleNotebook()
     {
+        onToggle?.Invoke();
         if (notebook.isOpen)
         {
             animator.Play("closeNotebook");
-            notebook.isOpen = false;
-            audioSource.Play();
         }
         else
         {
             animator.Play("openNotebook");
-            notebook.isOpen = true;
             // by default the opening page is the characters page
-            notebook.goToPage(notebookObject.GetComponent<Notebook>().conversationsPage, withSound: true);
+            notebook.goToPage(notebookObject.GetComponent<Notebook>().conversationsPage);
         }
+        notebook.isOpen = !notebook.isOpen;
     }
 
 }

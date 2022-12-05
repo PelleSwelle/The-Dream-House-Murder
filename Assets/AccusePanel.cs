@@ -15,8 +15,5 @@ public class AccusePanel : MonoBehaviour
         jamesButton.onClick.AddListener(() => accuse(gameManager.james));
     }
 
-    void accuse(Character character)
-    {
-        gameManager.endGame(character);
-    }
+    void accuse(Character character) => gameManager.endGame(character);
 }

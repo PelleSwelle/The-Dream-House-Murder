@@ -6,12 +6,10 @@ using System.Collections.Generic;
 public class ConversationUI : MonoBehaviour
 {
     public Animator animator;
-    public GameObject conversationObject;
-
-    public Button exitButton;
+    public GameObject exitButton;
     public Text answerField;
     public Image characterImage;
-    public Text characterNameText;
+    public Text nameField;
     public ConversationManager conversationManager;
     public GameObject notification;
     public bool isOpen;
@@ -21,7 +19,7 @@ public class ConversationUI : MonoBehaviour
 
     void Start()
     {
-        exitButton.onClick.AddListener(() => conversationManager.leaveConversation());
+        exitButton.GetComponentInChildren<Button>().onClick.AddListener(() => conversationManager.leaveConversation());
         notification.SetActive(false);
         isOpen = false;
     }
@@ -30,28 +28,24 @@ public class ConversationUI : MonoBehaviour
     public void toggleUI()
     {
         if (!isOpen)
-        {
             animator.Play("openConversation");
-        }
-
         else if (isOpen)
-        {
             animator.Play("closeConversation");
-        }
 
         isOpen = !isOpen;
     }
 
+    public void updateCharacterFields(Character character)
+    {
+        setCharacterImage(character);
+        setCharacterName(character);
+    }
 
     public void setCharacterImage(Character character)
-    {
-        characterImage.sprite = character.photo;
-    }
+        => characterImage.sprite = character.photo;
 
     public void setCharacterName(Character character)
-    {
-        characterNameText.text = character.firstName;
-    }
+        => nameField.text = character.firstName;
 
     public void updateAnswerField(Answer answer)
     {
@@ -60,21 +54,18 @@ public class ConversationUI : MonoBehaviour
     }
 
     public void displayOpeningLine(Character character)
-    {
-        answerField.text = character.openingLine;
-    }
+        => answerField.text = character.openingLine;
 
     public void displayNothingToSay(Character character)
-    {
-        answerField.text = character.nothingToSayLine;
-    }
+        => answerField.text = character.nothingToSayLine;
 
     public void updateQuestionButtons()
     {
         clearQuestions();
 
-        if (getAvailableQuestions() == null)
+        if (getAvailableQuestions().Count == 0)
         {
+            print("no more questions");
             questionsParent.gameObject.SetActive(false);
             exitButton.gameObject.SetActive(true);
         }
@@ -95,25 +86,19 @@ public class ConversationUI : MonoBehaviour
     {
         button.GetComponentInChildren<Text>().text = question.sentence;
 
-        button.GetComponent<Button>().onClick.AddListener(()
+        button.GetComponentInChildren<Button>().onClick.AddListener(()
             => conversationManager.askQuestion(question, conversationManager.currentConversationCharacter));
     }
 
     void clearQuestions()
     {
-        int numberOfQuestions = questionsParent.childCount;
-
         foreach (Transform child in questionsParent.transform)
-        {
             GameObject.Destroy(child.gameObject);
-        }
     }
 
 
-    List<Question> getAvailableQuestions()
-    {
-        return conversationManager.currentlyAvailableQuestions;
-    }
+
+    List<Question> getAvailableQuestions() => conversationManager.currentlyAvailableQuestions;
 
     public IEnumerator showNotification(string message, float delay)
     {
