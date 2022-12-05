@@ -73,10 +73,21 @@ public class ConversationUI : MonoBehaviour
     {
         clearQuestions();
 
-        foreach (Question q in getAvailableQuestions())
+        if (getAvailableQuestions() == null)
         {
-            GameObject questionButton = GameObject.Instantiate(questionPrefab, Vector3.zero, Quaternion.identity, questionsParent);
-            setQuestionButtonTextAndHandler(questionButton, q);
+            questionsParent.gameObject.SetActive(false);
+            exitButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            exitButton.gameObject.SetActive(false);
+            questionsParent.gameObject.SetActive(true);
+
+            foreach (Question q in getAvailableQuestions())
+            {
+                GameObject questionButton = GameObject.Instantiate(questionPrefab, Vector3.zero, Quaternion.identity, questionsParent);
+                setQuestionButtonTextAndHandler(questionButton, q);
+            }
         }
     }
 

@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
+        arManager.tipManager.tutorialOverlay.SetActive(true);
         accusePanel.SetActive(false);
         mary = new Character(
             _firstName: "Mary",
