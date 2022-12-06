@@ -13,6 +13,7 @@ public class ConversationManager : MonoBehaviour
 
     public GameManager game;
     public GameObject notebookButton;
+    public bool isInConversation = false;
 
     public static event Action<Character> onSpeak;
 
@@ -194,10 +195,11 @@ public class ConversationManager : MonoBehaviour
 
     public void initConversation(Character character)
     {
+        currentConversationCharacter = character;
+
         notebookButton.SetActive(false);
         onSpeak?.Invoke(character);
 
-        currentConversationCharacter = character;
         character.hasMet = true;
 
         conversationUI.updateCharacterFields(character);
@@ -222,16 +224,14 @@ public class ConversationManager : MonoBehaviour
             conversationUI.displayOpeningLine(character);
         }
 
-        if (character == game.officer && character.currentAct == character.acts[1])
-        {
+        if (character == game.officer && character.currentAct == character.acts[1] && game.isWithVideo)
             game.cutsceneManager.playScene(1);
-        }
     }
 
     public void leaveConversation()
     {
-        notebookButton.SetActive(true);
         currentConversationCharacter = null;
+        notebookButton.SetActive(true);
         conversationUI.toggleUI();
     }
 }

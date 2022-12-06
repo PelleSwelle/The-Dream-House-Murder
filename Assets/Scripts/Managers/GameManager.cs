@@ -30,8 +30,7 @@ public class GameManager : MonoBehaviour
     public Character mary, james, officer, harry;
     public List<Character> characters;
 
-    // ******** CHANGE THIS FOR THE TWO VERSIONS ********
-    public bool isWithVideo = true;
+    public bool isWithVideo;
 
     public void OnValidate()
     {
@@ -39,6 +38,10 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
+        // ******** CHANGE THIS FOR THE TWO VERSIONS ********
+        isWithVideo = false;
+
+
         accusePanel.SetActive(false);
 
         mary = new Character(
@@ -96,7 +99,8 @@ public class GameManager : MonoBehaviour
         notebookButton.gameObject.SetActive(false);
         arManager.tipManager.tutorialOverlay.SetActive(false);
 
-        cutsceneManager.playScene(0);
+        if (isWithVideo)
+            cutsceneManager.playScene(0);
     }
 
     public void activateUI() => notebookButton.gameObject.SetActive(true);
@@ -208,7 +212,8 @@ public class GameManager : MonoBehaviour
     public void endGame(Character character)
     {
         accusePanel.SetActive(false);
-        cutsceneManager.playScene(2);
+        if (isWithVideo)
+            cutsceneManager.playScene(2);
 
         if (character == harry)
             endText.text = "You didn't catch the murderer. Play again to figure out who did it.";

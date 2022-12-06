@@ -35,6 +35,17 @@ public class ConversationUI : MonoBehaviour
         isOpen = !isOpen;
     }
 
+    public void openUI()
+    {
+        animator.Play("openConversation");
+        isOpen = true;
+    }
+    public void closeUI()
+    {
+        animator.Play("closeConversation");
+        isOpen = false;
+    }
+
     public void updateCharacterFields(Character character)
     {
         setCharacterImage(character);

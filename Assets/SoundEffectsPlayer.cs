@@ -5,7 +5,7 @@ using UnityEngine;
 public class SoundEffectsPlayer : MonoBehaviour
 {
     AudioSource source;
-    AudioClip pageSound, bookSound;
+    public AudioClip pageSound, bookSound;
 
     void Awake() => source = GetComponent<AudioSource>();
 

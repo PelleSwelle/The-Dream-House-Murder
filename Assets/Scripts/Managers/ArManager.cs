@@ -29,8 +29,8 @@ public class ArManager : MonoBehaviour
     private Vector2 initialRotatePoint;
     public TipManager tipManager;
     int numberOfCharactersPlaced = 0;
-
-    // TODO: the marker is not showing for some reason.
+    public GameObject startGameButton;
+    public CutsceneManager cutsceneManager;
 
     void Start()
     {
