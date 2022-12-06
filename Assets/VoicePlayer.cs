@@ -9,7 +9,7 @@ public class VoicePlayer : MonoBehaviour
     void Awake() => source = GetComponent<AudioSource>();
     void OnEnable() => ConversationManager.onSpeak += playRandomVoiceClip;
     void OnDisable() => ConversationManager.onSpeak -= playRandomVoiceClip;
-    private void playRandomVoiceClip(Character character)
+    private void playRandomVoiceClip(ICharacter character)
     {
         source.Stop();
 

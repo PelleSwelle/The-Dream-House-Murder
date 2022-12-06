@@ -8,21 +8,21 @@ public class ConversationManager : MonoBehaviour
     public ConversationUI conversationUI;
     public ConversationsPage conversationPage;
 
-    public Character currentConversationCharacter;
+    public ICharacter currentConversationCharacter;
     public List<Question> currentlyAvailableQuestions;
 
     public GameManager game;
     public GameObject notebookButton;
     public bool isInConversation = false;
 
-    public static event Action<Character> onSpeak;
+    public static event Action<ICharacter> onSpeak;
 
     void Start()
     {
         currentlyAvailableQuestions = new List<Question>();
     }
 
-    Question getUnlockedQuestion(Character character)
+    Question getUnlockedQuestion(ICharacter character)
     {
         Question previousQuestion = character.getLastAskedQuestionFromCurrentAct();
         if (character.currentAct != character.acts[1]) // if character is not in second act
@@ -41,7 +41,7 @@ public class ConversationManager : MonoBehaviour
 
     }
 
-    List<Question> getUnlockedQuestions(Character character)
+    List<Question> getUnlockedQuestions(ICharacter character)
     {
         List<Question> unlockedQuestions = new List<Question>();
         Question question = character.getLastAskedQuestionFromCurrentAct();
@@ -89,7 +89,7 @@ public class ConversationManager : MonoBehaviour
         return characterToReturn;
     }
 
-    void updateAvailableQuestions(Character talkPartner)
+    void updateAvailableQuestions(ICharacter talkPartner)
     {
         currentlyAvailableQuestions.Clear();
         Question firstQuestionInCurrentRound = talkPartner.currentAct.conversation.getFirstQuestion();
@@ -130,11 +130,11 @@ public class ConversationManager : MonoBehaviour
         conversationUI.updateQuestionButtons();
     }
 
-    public void askQuestion(Question question, Character character)
+    public void askQuestion(Question question, ICharacter character)
     {
         onSpeak?.Invoke(character);
 
-        character.questionsAsked.Add(question);
+        character.askedQuestions.Add(question);
         question.hasBeenSaid = true;
 
         // act 1 is over for all
@@ -172,28 +172,7 @@ public class ConversationManager : MonoBehaviour
     }
 
 
-    // private void playRandomVoiceClip(Character character)
-    // {
-    //     voiceSource.Stop();
-    //     if (character.gender == "female")
-    //         playRandomFemaleVoiceClip();
-    //     else
-    //         playRandomMaleVoiceClip();
-    // }
-
-    // public void playRandomFemaleVoiceClip()
-    // {
-    //     int i = Random.Range(0, voiceLinesFemale.Length);
-    //     voiceSource.PlayOneShot(voiceLinesFemale[i]);
-    // }
-
-    // public void playRandomMaleVoiceClip()
-    // {
-    //     int i = Random.Range(0, voiceLinesMale.Length);
-    //     voiceSource.PlayOneShot(voiceLinesMale[i]);
-    // }
-
-    public void initConversation(Character character)
+    public void initConversation(ICharacter character)
     {
         currentConversationCharacter = character;
 

@@ -46,16 +46,16 @@ public class ConversationUI : MonoBehaviour
         isOpen = false;
     }
 
-    public void updateCharacterFields(Character character)
+    public void updateCharacterFields(ICharacter character)
     {
         setCharacterImage(character);
         setCharacterName(character);
     }
 
-    public void setCharacterImage(Character character)
+    public void setCharacterImage(ICharacter character)
         => characterImage.sprite = character.photo;
 
-    public void setCharacterName(Character character)
+    public void setCharacterName(ICharacter character)
         => nameField.text = character.firstName;
 
     public void updateAnswerField(Answer answer)
@@ -64,10 +64,10 @@ public class ConversationUI : MonoBehaviour
         answer.hasBeenSaid = true;
     }
 
-    public void displayOpeningLine(Character character)
+    public void displayOpeningLine(ICharacter character)
         => answerField.text = character.openingLine;
 
-    public void displayNothingToSay(Character character)
+    public void displayNothingToSay(ICharacter character)
         => answerField.text = character.nothingToSayLine;
 
     public void updateQuestionButtons()

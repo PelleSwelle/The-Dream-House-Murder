@@ -53,10 +53,10 @@ public class DebugMenu : MonoBehaviour
         Button pickupButton = pickupBtn.GetComponent<Button>();
         pickupButton.onClick.AddListener(() => pickup());
 
-        personButtons[0].onClick.AddListener(() => conversationManager.initConversation(gameManager.mary));
-        personButtons[1].onClick.AddListener(() => conversationManager.initConversation(gameManager.james));
-        personButtons[2].onClick.AddListener(() => conversationManager.initConversation(gameManager.officer));
-        personButtons[3].onClick.AddListener(() => conversationManager.initConversation(gameManager.harry));
+        personButtons[0].onClick.AddListener(() => conversationManager.initConversation(GameObject.Find("Mary").GetComponent<ICharacter>()));
+        personButtons[1].onClick.AddListener(() => conversationManager.initConversation(GameObject.Find("Harry").GetComponent<ICharacter>()));
+        personButtons[2].onClick.AddListener(() => conversationManager.initConversation(GameObject.Find("Officer").GetComponent<ICharacter>()));
+        personButtons[3].onClick.AddListener(() => conversationManager.initConversation(GameObject.Find("James").GetComponent<ICharacter>()));
     }
 
     void talk()

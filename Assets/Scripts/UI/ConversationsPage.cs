@@ -33,7 +33,7 @@ public class ConversationsPage : MonoBehaviour
         notebook.goToPage(notebook.messengerPage);
     }
 
-    public void updateTileText(Character character)
+    public void updateTileText(ICharacter character)
     {
         ConversationTile tile = tiles.Find(x => x.character == character);
         Answer answer = character.getLastAskedQuestion().answer;

@@ -77,8 +77,6 @@ public class GameManager : MonoBehaviour
             _nothingToSay: "I am not going to give you the entire story. Go get the basics from the officer."
         );
 
-        loadActs();
-
         characters = new List<Character> { mary, james, officer, harry };
         foreach (Character c in characters)
             print(c.firstName);
@@ -107,26 +105,6 @@ public class GameManager : MonoBehaviour
 
     void goToTitleScreen() => SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
 
-    void loadActs()
-    {
-        mary.loadActs(
-            new Act(1, new SingleRunConversation(Constants.maryQuestions)),
-            new Act(2, new SingleRunConversation(Constants.maryAct2))
-        );
-        james.loadActs(
-            new Act(1, new SingleRunConversation(Constants.jamesQuestions)),
-            new Act(2, new SingleRunConversation(Constants.jamesAct2))
-        );
-        officer.loadActs(
-            new Act(1, new SingleRunConversation(Constants.officerQuestions)),
-            new Act(2, new repeatableConversation(Constants.officerAct2)),
-            new Act(3, new SingleRunConversation(Constants.officerAct3))
-        );
-        harry.loadActs(
-            new Act(1, new SingleRunConversation(Constants.harryQuestions)),
-            new Act(2, new SingleRunConversation(Constants.harryAct2))
-        );
-    }
 
     void Update()
     {

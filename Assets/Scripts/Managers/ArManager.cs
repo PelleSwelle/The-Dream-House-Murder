@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class ArManager : MonoBehaviour
 {
+    public GameObject harryPrefab, maryPrefab, jamesPrefab, officerPrefab;
+    [HideInInspector] public List<GameObject> characters;
     public Button notebookButton;
     public ConversationManager conversationManager;
     public GameManager gameManager;
@@ -36,7 +38,7 @@ public class ArManager : MonoBehaviour
     {
         aRRaycastManager = FindObjectOfType<ARRaycastManager>();
         updateModelAndCharacterToPlace();
-
+        characters = new List<GameObject>() { officerPrefab, jamesPrefab, harryPrefab, maryPrefab };
     }
 
     void Update()
@@ -45,10 +47,12 @@ public class ArManager : MonoBehaviour
         UpdatePlacementIndicator();
     }
 
-    Character getCharacterFromRaycastHit(RaycastHit hit)
+    ICharacter getCharacterFromRaycastHit(RaycastHit hit)
     {
-        Character character = gameManager.characters.Find(x => x.model.name == hit.collider.name);
-        return character;
+        ICharacter characterHit = hit.collider.GetComponent<ICharacter>();
+        print($"character hit: {characterHit.firstName}");
+        // ICharacter character = characters.Find(x => x.GetComponent<ICharacter>().firstName == hit.collider.GetComponent<ICharacter>().firstName);
+        return characterHit;
     }
 
     public void placeOnTap()
@@ -57,7 +61,7 @@ public class ArManager : MonoBehaviour
         if (isReadyToPlace)
         {
             tipManager.setButtonText(tipManager.instructionLines[3]);
-            placeObject(currentObject, currentCharacter);
+            placeObject(currentObject);
         }
     }
 
@@ -70,7 +74,7 @@ public class ArManager : MonoBehaviour
             RaycastHit hitData;
             Physics.Raycast(ray, out hitData);
 
-            Character characterToTalkTo = getCharacterFromRaycastHit(hitData);
+            ICharacter characterToTalkTo = getCharacterFromRaycastHit(hitData);
             conversationManager.initConversation(characterToTalkTo);
         }
     }
@@ -157,13 +161,12 @@ public class ArManager : MonoBehaviour
             pose = hits[0].pose;
     }
 
-    void placeObject(GameObject model, Character character)
+    void placeObject(GameObject character)
     {
-        // TODO: get the character to turn towards the player.
         // Pose newPose = new Pose(pose.position, new Quaternion(0, 200, 0, 0));
-        spawnedObject = Instantiate(model, pose.position, pose.rotation);
-        character.model = spawnedObject;
-        character.isPlaced = true;
+        spawnedObject = Instantiate(character, pose.position, pose.rotation);
+        spawnedObject = character;
+        character.GetComponent<ICharacter>().isPlaced = true;
 
         gameManager.setMode(GameMode.scalingMode);
         numberOfCharactersPlaced++;
