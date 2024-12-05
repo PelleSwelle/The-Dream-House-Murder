@@ -17,19 +17,11 @@ public class Notebook : MonoBehaviour
 
     public List<GameObject> pages;
     public AudioSource musicSource, soundFxSource;
-    // public Animator animator;
     public bool isOpen;
     void OnValidate()
     {
         notebook = this.gameObject;
-
         pages = new List<GameObject> { conversationsPage, conversationPage };
-    }
-
-
-    void Start()
-    {
-        // closeAllPages();
     }
 
     void closeAllPages()
