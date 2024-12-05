@@ -7,6 +7,7 @@ public class MessengerTileCharacter : MonoBehaviour
 {
     public Text text;
     public Image image;
+    
     public void setText(Answer answer)
     {
         text.text = answer.sentence;
