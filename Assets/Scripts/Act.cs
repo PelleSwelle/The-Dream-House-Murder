@@ -5,7 +5,6 @@ public class Act
 {
     public int actNumber;
     public IConversation conversation;
-    // public List<Question> questions;
     public Act(int _actNumber, IConversation _conversation)
     {
         actNumber = _actNumber;
@@ -16,6 +15,7 @@ public class Act
     {
         List<Question> endPoints = conversation.getEndPoints();
         Question hasBeenSaid = endPoints.Find(x => x.hasBeenSaid == true);
+        
         if (hasBeenSaid == null)
             return false;
         else
@@ -23,6 +23,5 @@ public class Act
             Debug.Log($"finished act: {actNumber}");
             return true;
         }
-
     }
 }
